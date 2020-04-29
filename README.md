@@ -33,6 +33,8 @@ NewGRF for OpenTTD - Based on frosch's Manual Industries 2r5. Supports 16 cargos
     * Other features: Houses can accept Passengers, Mail, Goods, Food, Building Materials, Water. 
 
     * Parameters: hopefully are self-explanatory
+    
+    * [Industry Matrix](https://htmlpreview.github.io/?https://github.com/jrook1445/wannaroo-basic-industries/blob/master/src/docs/wrbi_industries.html)
 
 1. Development
 
