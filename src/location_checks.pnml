@@ -1,0 +1,813 @@
+/* location_checks.pnml */
+
+/*
+    License: GPL v2
+    https://github.com/jrook1445/wannaroo-basic-industries
+*/
+
+// @TODO: get clusters to work (eventually)
+//        RCYC industries: check depot/plant against each other, plant against factories, power plant
+
+// location checks not specifically implemented here; using either conflicting_ind_types property or less comprehensive location_check callback:
+// coal (partial), copper ore, bank, paper mill (partial), gold, diamond, iron ore, fruit (partial), rubber, water supply, farm tropic (partial), lumber mill
+
+// max number of industries of a given type is proportional to map size, 256x256 = 3 (maps < 256x256 will have max 2 each type)
+// affects: shop, superstore, recycling chain
+max_industries = max((map_size / (256 * 256)) * 3, 2);
+
+#define IND_DIST_CENTER		0x00, str2number("jdr\04")
+#define IND_DISTILLERY		0x04, str2number("jdr\04")
+#define IND_PETROL_PLANT	0x05, str2number("jdr\04")
+#define IND_HOTEL		    0x00, str2number("jdr\02")
+#define IND_TOWN_SQUARE		0x02, str2number("jdr\02")
+#define IND_CITY_HALL		0x65, str2number("jdr\05")
+
+switch (FEAT_INDUSTRIES, PARENT, town_below_500, population) {
+	0..499: return string(STR_TOWN_BELOW_500);
+	return CB_RESULT_LOCATION_ALLOW;
+}
+
+switch (FEAT_INDUSTRIES, PARENT, town_below_1200, population) {
+	0..1199: return string(STR_TOWN_BELOW_1200);
+	return CB_RESULT_LOCATION_ALLOW;
+}
+
+switch (FEAT_INDUSTRIES, PARENT, town_below_2000, population) {
+	0..1999: return string(STR_TOWN_BELOW_2000);
+	return CB_RESULT_LOCATION_ALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, industry_population_check, climate) {
+	CLIMATE_TEMPERATE: town_below_1200;
+	town_below_500;
+}
+
+switch (FEAT_INDUSTRIES, SELF, town_distance_check_30_40_2, town_euclidean_dist(0, 0)) {
+	900..1600: industry_population_check; //return CB_RESULT_LOCATION_ALLOW;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, town_distance_check_30_40, random_bits%8) {
+    //0: return CB_RESULT_LOCATION_ALLOW;
+    town_distance_check_30_40_2;
+}
+
+switch (FEAT_INDUSTRIES, SELF, town_distance_check_20_30_2, town_euclidean_dist(0, 0)) {
+	400..900: industry_population_check; //return CB_RESULT_LOCATION_ALLOW;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, town_distance_check_20_30, random_bits%8) {
+    //0: return CB_RESULT_LOCATION_ALLOW;
+    town_distance_check_20_30_2;
+}
+
+switch (FEAT_INDUSTRIES, SELF, town_distance_check_10_20_2, town_euclidean_dist(0, 0)) {
+	100..400: industry_population_check; //return CB_RESULT_LOCATION_ALLOW;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, town_distance_check_10_20, LOAD_TEMP(1)%8) {
+    //0: return CB_RESULT_LOCATION_ALLOW;
+    town_distance_check_10_20_2;
+}
+
+/*
+switch (FEAT_INDUSTRIES, SELF, town_distance_check_20, town_euclidean_dist(0, 0)) {
+	0..399: return string(STR_INDUSTRY_TOO_CLOSE_TO_TOWN);
+	return CB_RESULT_LOCATION_ALLOW;
+}
+*/
+
+// location checks to replace default OpenTTD CHECK_FOREST, CHECK_OIL_RIG, CHECK_FARM, CHECK_PLANTATION, CHECK_WATER, CHECK_LUMBERMILL in industry_cmd.cpp
+// CHECK_REFINERY replaced by oil_refinery_water_distance
+
+// CHECK_FOREST, CHECK_PLANTATION
+// we are allowing arctic forests below the snow line (to play very flat maps)
+// also allowing tropic forests
+switch (FEAT_INDUSTRIES, SELF, location_switch_no_desert, nearby_tile_terrain_type(0, 0)) {
+	TILETYPE_DESERT: return CB_RESULT_LOCATION_DISALLOW;
+	return CB_RESULT_LOCATION_ALLOW;
+}
+
+// CHECK_OIL_RIG
+// unable to find a way to get industry tile coordinates
+// so implementing a check similar to FIRS 3
+
+param_oil_rig_coastal_distance = 24;
+
+switch (FEAT_INDUSTRIES, SELF, location_switch_oil_rig, water_distance) {
+	0..param_oil_rig_coastal_distance: return CB_RESULT_LOCATION_ALLOW;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+/*
+switch (FEAT_INDUSTRIES, SELF, location_switch_oil_rig, nearby_tile_water_class(0, 0)) {
+	WATER_CLASS_SEA: location_switch_oil_rig_2;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+*/
+
+// CHECK_FARM
+switch (FEAT_INDUSTRIES, SELF, location_switch_no_snow, nearby_tile_terrain_type(0, 0)) {
+	TILETYPE_SNOW: return CB_RESULT_LOCATION_DISALLOW;
+	return CB_RESULT_LOCATION_ALLOW;
+}
+
+// CHECK_WATER
+switch (FEAT_INDUSTRIES, SELF, location_switch_desert, nearby_tile_terrain_type(0, 0)) {
+	TILETYPE_DESERT: return CB_RESULT_LOCATION_ALLOW;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+// CHECK_LUMBERMILL
+switch (FEAT_INDUSTRIES, SELF, location_switch_lumber_mill_2, nearby_tile_terrain_type(0, 0)) {
+	TILETYPE_RAIN_FOREST: return CB_RESULT_LOCATION_ALLOW;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, location_switch_lumber_mill, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: location_switch_no_desert; //return CB_RESULT_LOCATION_ALLOW;
+        location_switch_lumber_mill_2;
+}
+
+// Superstore location checks
+switch (FEAT_INDUSTRIES, SELF, superstore_town_population_check, climate) {
+	CLIMATE_TEMPERATE: town_below_2000;
+	town_below_1200;
+}
+
+/*
+switch (FEAT_INDUSTRIES, SELF, superstore_check_no_shop_in_town, industry_town_count(0xA5)) {
+	0: superstore_town_population_check;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+*/
+
+switch (FEAT_INDUSTRIES, SELF, superstore_count, industry_count(0xA6)) {
+	//0..max_industries: superstore_check_no_shop_in_town;
+	0..max_industries: superstore_town_population_check;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, superstore_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+	1: return CB_RESULT_LOCATION_ALLOW;
+	superstore_count;
+}
+
+// Shop location checks
+switch (FEAT_INDUSTRIES, SELF, shop_town_population_check, climate) {
+	CLIMATE_TEMPERATE: town_below_500;
+	town_below_500;
+}
+
+switch (FEAT_INDUSTRIES, SELF, shop_check_no_superstore_in_town, industry_town_count(0xA6)) {
+	0: shop_town_population_check;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, shop_count, industry_count(0xA5)) {
+	0..max_industries*2: shop_check_no_superstore_in_town;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, shop_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+	1: return CB_RESULT_LOCATION_ALLOW;
+	shop_count;
+}
+
+// Recycling Plant location checks, also see conflicting_ind_types[]
+switch (FEAT_INDUSTRIES, SELF, rcyc_town_distance_check_20_30, town_euclidean_dist(0, 0)) {
+	400..900: superstore_town_population_check;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, rcyc_plant_count_2, industry_count(0xA8)) {
+	0..max_industries: rcyc_town_distance_check_20_30;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, rcyc_plant_count, industry_count(0xA8)*100/industry_count(0xA7)) {
+	0..75: rcyc_plant_count_2;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, rcyc_plant_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+	1: return CB_RESULT_LOCATION_ALLOW;
+	rcyc_plant_count;
+}
+
+// Recycling Depot location checks, also see conflicting_ind_types[]
+switch (FEAT_INDUSTRIES, SELF, rcyc_depot_count, industry_count(0xA7)) {
+	0..max_industries: rcyc_town_distance_check_20_30;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, rcyc_depot_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+	1: return CB_RESULT_LOCATION_ALLOW;
+	rcyc_depot_count;
+}
+
+// Fruit Plantation + Farm Tropic location checks
+switch (FEAT_INDUSTRIES, SELF, farm_fruit_check_location, industry_distance(IND_DISTILLERY)) {
+    0..16: return CB_RESULT_LOCATION_DISALLOW;
+	location_switch_no_desert;
+}
+
+// Paper Mill location checks
+// jrook 20190810
+// conflicting_ind_types[] used in wannaroo-basic-industries.pnml (forest, refinery, factory)
+// eventually to be merged
+switch (FEAT_INDUSTRIES, SELF, paper_mill_min_distance_petrol_plant, industry_distance(IND_PETROL_PLANT)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        town_distance_check_30_40; //return CB_RESULT_LOCATION_ALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, paper_mill_min_distance_lumber_mill, industry_distance(0x19)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        paper_mill_min_distance_petrol_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, paper_mill_count, industry_count(0x0E)*100/(industry_count(0x03) + industry_count(0x19))) {
+	0..75: paper_mill_min_distance_lumber_mill;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, paper_mill_min_distance_paper_mill, industry_distance(0x0E)) {
+        0..49: return CB_RESULT_LOCATION_DISALLOW;
+        paper_mill_count;
+}
+
+switch (FEAT_INDUSTRIES, SELF, paper_mill_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: return CB_RESULT_LOCATION_ALLOW;
+        paper_mill_min_distance_paper_mill;
+}
+
+// Food Proc Plant location checks
+
+/*
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_min_distance_town_square, industry_distance(IND_TOWN_SQUARE)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+	location_switch_desert;
+}
+
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_min_distance_hotel, industry_distance(IND_HOTEL)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        food_proc_plant_min_distance_town_square;
+}
+*/
+
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_min_distance_dist_center, industry_distance(IND_DIST_CENTER)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        town_distance_check_20_30;
+}
+
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_min_distance_superstore, industry_distance(0xA6)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        food_proc_plant_min_distance_dist_center;
+}
+
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_min_distance_shop, industry_distance(0xA5)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        food_proc_plant_min_distance_superstore;
+}
+
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_min_distance_petrol_plant, industry_distance(IND_PETROL_PLANT)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        food_proc_plant_min_distance_shop;
+}
+
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_min_distance_oil_refinery, industry_distance(0x04)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        food_proc_plant_min_distance_petrol_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_min_distance_farm_fruit, industry_distance(0x13)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        food_proc_plant_min_distance_oil_refinery;
+}
+
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_min_distance_farm_tropic, industry_distance(0x18)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        food_proc_plant_min_distance_farm_fruit;
+}
+
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_min_distance_farm, industry_distance(0x09)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        food_proc_plant_min_distance_farm_tropic;
+}
+
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_min_distance_food_proc_plant, industry_distance(0x0D)) {
+        0..49: return CB_RESULT_LOCATION_DISALLOW;
+        food_proc_plant_min_distance_farm;
+}
+
+//switch (FEAT_INDUSTRIES, SELF, food_proc_plant_count, industry_count(0x0D)*100/(industry_count(0x09) + industry_count(0x18) + industry_count(0x13) + industry_count(0x04) + industry_count(IND_PETROL_PLANT))) {
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_count, industry_count(0x0D)*100/(industry_count(0x09) + industry_count(0x18) + industry_count(0x13))) {
+	0..75: food_proc_plant_min_distance_food_proc_plant;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, food_proc_plant_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: return CB_RESULT_LOCATION_ALLOW;
+        food_proc_plant_count;
+}
+
+// Oil Wells location checks
+switch (FEAT_INDUSTRIES, SELF, oil_wells_min_distance_petrol_plant, industry_distance(IND_PETROL_PLANT)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        return CB_RESULT_LOCATION_ALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_wells_min_distance_oil_refinery, industry_distance(0x04)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_wells_min_distance_petrol_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_wells_min_distance_power_plant, industry_distance(0x01)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_wells_min_distance_oil_refinery;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_wells_min_distance_oil_wells, industry_distance(0x0B)) {
+        0..20: return CB_RESULT_LOCATION_DISALLOW;
+        oil_wells_min_distance_power_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_wells_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: return CB_RESULT_LOCATION_ALLOW;
+        oil_wells_min_distance_oil_wells;
+}
+
+// Temp/Arctic Farm location checks
+switch (FEAT_INDUSTRIES, SELF, farm_min_distance_distillery, industry_distance(IND_DISTILLERY)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        location_switch_no_snow;
+}
+
+switch (FEAT_INDUSTRIES, SELF, farm_min_distance_food_proc_plant, industry_distance(0x0D)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        farm_min_distance_distillery;
+}
+
+switch (FEAT_INDUSTRIES, SELF, farm_min_distance_farm, industry_distance(0x09)) {
+        0..20: return CB_RESULT_LOCATION_DISALLOW;
+        farm_min_distance_food_proc_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, farm_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: return CB_RESULT_LOCATION_ALLOW;
+        farm_min_distance_farm;
+}
+
+// Steel Mill location checks
+switch (FEAT_INDUSTRIES, SELF, steel_mill_min_distance_coal_mine, industry_distance(0x00)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        //return CB_RESULT_LOCATION_ALLOW;
+        town_distance_check_30_40;
+}
+
+switch (FEAT_INDUSTRIES, SELF, steel_mill_min_distance_factory_temp, industry_distance(0x06)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        steel_mill_min_distance_coal_mine;
+}
+
+switch (FEAT_INDUSTRIES, SELF, steel_mill_min_distance_iron_ore_mine, industry_distance(0x12)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        steel_mill_min_distance_factory_temp;
+}
+
+switch (FEAT_INDUSTRIES, SELF, steel_mill_min_distance_steel_mill, industry_distance(0x08)) {
+        0..49: return CB_RESULT_LOCATION_DISALLOW;
+        steel_mill_min_distance_iron_ore_mine;
+}
+
+switch (FEAT_INDUSTRIES, SELF, steel_mill_count, industry_count(0x08)*100/industry_count(0x12)) {
+	0..75: steel_mill_min_distance_steel_mill;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, steel_mill_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: return CB_RESULT_LOCATION_ALLOW;
+        steel_mill_count;
+}
+
+// Factory location checks (Factories all 3 climates)
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_dist_center, industry_distance(IND_DIST_CENTER)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        town_distance_check_20_30;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_petrol_plant, industry_distance(IND_PETROL_PLANT)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_dist_center;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_superstore, industry_distance(0xA6)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_petrol_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_lumber_mill, industry_distance(0x19)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_superstore;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_iron_ore_mine, industry_distance(0x12)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_lumber_mill;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_diamond_mine, industry_distance(0x11)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_iron_ore_mine;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_bank_sub, industry_distance(0x10)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_diamond_mine;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_gold_mine, industry_distance(0x0F)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_bank_sub;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_paper_mill, industry_distance(0x0E)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_gold_mine;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_bank_temp, industry_distance(0x0C)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_paper_mill;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_copper_ore_mine, industry_distance(0x0A)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_bank_temp;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_steel_mill, industry_distance(0x08)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_copper_ore_mine;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_oil_refinery, industry_distance(0x04)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_steel_mill;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_sawmill, industry_distance(0x02)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_oil_refinery;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_coal_mine, industry_distance(0x00)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        factory_min_distance_sawmill;
+}
+
+// not more than 75% number of (steel mill + paper mill + refinery + sawmill + petrol plant + coal mines + copper ore mines)
+switch (FEAT_INDUSTRIES, SELF, factory_count, (industry_count(0x06) + industry_count(0x07) + industry_count(0x17))*100/(industry_count(0x08) + industry_count(0x0E) + industry_count(0x04) + industry_count(0x02) + industry_count(IND_PETROL_PLANT) + industry_count(0x00) + industry_count(0x0A))) {
+	0..75: factory_min_distance_coal_mine;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_min_distance_factory, (climate == CLIMATE_TROPIC ? industry_distance(0x17) : climate == CLIMATE_ARCTIC ? industry_distance(0x07) : industry_distance(0x06))) {
+        0..49: return CB_RESULT_LOCATION_DISALLOW;
+        factory_count;
+}
+
+switch (FEAT_INDUSTRIES, SELF, factory_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: return CB_RESULT_LOCATION_ALLOW;
+        factory_min_distance_factory;
+}
+
+// Oil Rig location checks
+switch (FEAT_INDUSTRIES, SELF, oil_rig_min_distance_petrol_plant, industry_distance(IND_PETROL_PLANT)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        location_switch_oil_rig;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_rig_min_distance_oil_refinery, industry_distance(0x04)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_rig_min_distance_petrol_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_rig_min_distance_power_plant, industry_distance(0x01)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_rig_min_distance_oil_refinery;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_rig_min_distance_oil_rig, industry_distance(0x05)) {
+        0..49: return CB_RESULT_LOCATION_DISALLOW;
+        oil_rig_min_distance_power_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_rig_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: return CB_RESULT_LOCATION_ALLOW;
+        oil_rig_min_distance_oil_rig;
+}
+
+
+// Oil Refinery location checks
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_dist_center, industry_distance(IND_DIST_CENTER)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        town_distance_check_30_40;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_superstore, industry_distance(0xA6)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_dist_center;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_shop, industry_distance(0xA5)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_superstore;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_lumber_mill, industry_distance(0x19)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_shop;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_factory_tropic, industry_distance(0x17)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_lumber_mill;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_rubber_plantation, industry_distance(0x14)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_factory_tropic;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_paper_mill, industry_distance(0x0E)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_rubber_plantation;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_food_proc_plant, industry_distance(0x0D)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_paper_mill;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_oil_wells, industry_distance(0x0B)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_food_proc_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_copper_ore_mine, industry_distance(0x0A)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_oil_wells;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_factory_arctic, industry_distance(0x07)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_copper_ore_mine;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_factory_temp, industry_distance(0x06)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_factory_arctic;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_oil_rig, industry_distance(0x05)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_factory_temp;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_forest, industry_distance(0x03)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_oil_rig;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_power_plant, industry_distance(0x01)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_forest;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_coal_mine, industry_distance(0x00)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_power_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_min_distance_oil_refinery, industry_distance(0x04)) {
+        0..49: return CB_RESULT_LOCATION_DISALLOW;
+        oil_refinery_min_distance_coal_mine;
+}
+
+// number of refineries not more than 75% number of (oil wells + oil rigs + coal mines + forests)
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_count, industry_count(0x04)*100/(industry_count(0x0B) + industry_count(0x05) + industry_count(0x00) + industry_count(0x03))) {
+        0..75: oil_refinery_min_distance_oil_refinery;
+        return CB_RESULT_LOCATION_DISALLOW;
+}
+
+/*
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_water_distance, water_distance) {
+	0..32: oil_refinery_count;
+	return CB_RESULT_LOCATION_DISALLOW;
+}
+*/
+
+switch (FEAT_INDUSTRIES, SELF, oil_refinery_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: return CB_RESULT_LOCATION_ALLOW;
+        //oil_refinery_water_distance;
+        oil_refinery_count;
+}
+
+// Forest location checks
+switch (FEAT_INDUSTRIES, SELF, forest_min_distance_petrol_plant, industry_distance(IND_PETROL_PLANT)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        location_switch_no_desert;
+}
+
+switch (FEAT_INDUSTRIES, SELF, forest_min_distance_power_plant, industry_distance(0x01)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        forest_min_distance_petrol_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, forest_min_distance_oil_refinery, industry_distance(0x04)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        forest_min_distance_power_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, forest_min_distance_paper_mill, industry_distance(0x0E)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        forest_min_distance_oil_refinery;
+}
+
+switch (FEAT_INDUSTRIES, SELF, forest_min_distance_sawmill, industry_distance(0x02)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        forest_min_distance_paper_mill;
+}
+
+switch (FEAT_INDUSTRIES, SELF, forest_min_distance_forest, industry_distance(0x03)) {
+        0..20: return CB_RESULT_LOCATION_DISALLOW;
+        forest_min_distance_sawmill;
+}
+
+/*
+switch (FEAT_INDUSTRIES, SELF, forest_cluster, industry_count(IND_FOREST) >= (3 * industry_clusters) && industry_distance(IND_FOREST) > 39) {
+	1: return CB_RESULT_LOCATION_DISALLOW;
+	forest_min_distance_forest;
+}
+*/
+
+switch (FEAT_INDUSTRIES, SELF, forest_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: location_switch_no_desert; //return CB_RESULT_LOCATION_ALLOW;
+        forest_min_distance_forest;
+        //forest_cluster;
+}
+
+// Sawmill location checks
+switch (FEAT_INDUSTRIES, SELF, sawmill_min_distance_lumber_mill, industry_distance(0x19)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        town_distance_check_20_30;
+}
+
+switch (FEAT_INDUSTRIES, SELF, sawmill_min_distance_factory_arctic, industry_distance(0x07)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        sawmill_min_distance_lumber_mill;
+}
+
+switch (FEAT_INDUSTRIES, SELF, sawmill_min_distance_factory_temp, industry_distance(0x06)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        sawmill_min_distance_factory_arctic;
+}
+
+switch (FEAT_INDUSTRIES, SELF, sawmill_min_distance_forest, industry_distance(0x03)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        sawmill_min_distance_factory_temp;
+}
+
+switch (FEAT_INDUSTRIES, SELF, sawmill_min_distance_sawmill, industry_distance(0x02)) {
+        0..49: return CB_RESULT_LOCATION_DISALLOW;
+        sawmill_min_distance_forest;
+}
+
+// number of sawmills not more than 75% number of (forests + lumber mills)
+switch (FEAT_INDUSTRIES, SELF, sawmill_count, industry_count(0x02)*100/(industry_count(0x03) + industry_count(0x19))) {
+        0..75: sawmill_min_distance_sawmill;
+        return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, sawmill_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: return CB_RESULT_LOCATION_ALLOW;
+        sawmill_count;
+}
+
+// Power Plant location checks
+
+//switch (FEAT_INDUSTRIES, SELF, power_plant_population_check, climate) {
+//	CLIMATE_TEMPERATE: town_below_1200;
+//	town_below_500;
+//}
+
+switch (FEAT_INDUSTRIES, SELF, power_plant_min_distance_petrol_plant, industry_distance(IND_PETROL_PLANT)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        town_distance_check_10_20; //power_plant_population_check;
+}
+
+switch (FEAT_INDUSTRIES, SELF, power_plant_min_distance_lumber_mill, industry_distance(0x19)) {
+	0..16: return CB_RESULT_LOCATION_DISALLOW;
+	power_plant_min_distance_petrol_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, power_plant_min_distance_forest, industry_distance(0x03)) {
+	0..16: return CB_RESULT_LOCATION_DISALLOW;
+	power_plant_min_distance_lumber_mill;
+}
+
+switch (FEAT_INDUSTRIES, SELF, power_plant_min_distance_oil_wells, industry_distance(0x0B)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        power_plant_min_distance_forest;
+}
+
+switch (FEAT_INDUSTRIES, SELF, power_plant_min_distance_oil_rig, industry_distance(0x05)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        power_plant_min_distance_oil_wells;
+}
+
+switch (FEAT_INDUSTRIES, SELF, power_plant_min_distance_oil_refinery, industry_distance(0x04)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        power_plant_min_distance_oil_rig;
+}
+
+switch (FEAT_INDUSTRIES, SELF, power_plant_min_distance_coal_mine, industry_distance(0x00)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        power_plant_min_distance_oil_refinery;
+}
+
+switch (FEAT_INDUSTRIES, SELF, power_plant_min_distance_power_plant, [STORE_TEMP(industry_distance(0x01), 1), industry_distance(0x01)]) {
+        0..49: return CB_RESULT_LOCATION_DISALLOW;
+        power_plant_min_distance_coal_mine;
+}
+
+// number of power plants not more than 75% number of coal mines + oil sources
+switch (FEAT_INDUSTRIES, SELF, power_plant_count, industry_count(0x01)*100/(industry_count(0x0B) + industry_count(0x05) + industry_count(0x00))) {
+        0..75: power_plant_min_distance_power_plant;
+        return CB_RESULT_LOCATION_DISALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, power_plant_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+        1: return CB_RESULT_LOCATION_ALLOW;
+        power_plant_count;
+}
+
+// Coal Mine location checks
+switch (FEAT_INDUSTRIES, SELF, coal_mine_min_distance_petrol_plant, industry_distance(IND_PETROL_PLANT)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        return CB_RESULT_LOCATION_ALLOW;
+}
+
+switch (FEAT_INDUSTRIES, SELF, coal_mine_min_distance_steel_mill, industry_distance(0x08)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        coal_mine_min_distance_petrol_plant;
+}
+
+switch (FEAT_INDUSTRIES, SELF, coal_mine_min_distance_oil_refinery, industry_distance(0x04)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        coal_mine_min_distance_steel_mill;
+}
+
+switch (FEAT_INDUSTRIES, SELF, coal_mine_min_distance_power_plant, industry_distance(0x01)) {
+        0..16: return CB_RESULT_LOCATION_DISALLOW;
+        coal_mine_min_distance_oil_refinery;
+}
+
+switch (FEAT_INDUSTRIES, SELF, coal_mine_min_distance_coal_mine, industry_distance(0x00)) {
+        0..20: return CB_RESULT_LOCATION_DISALLOW;
+        coal_mine_min_distance_power_plant;
+}
+
+/*
+switch (FEAT_INDUSTRIES, SELF, coal_mine_cluster, industry_count(IND_COAL_MINE) >= (4 * industry_clusters) && industry_distance(IND_COAL_MINE) > 39) {
+	1: return CB_RESULT_LOCATION_DISALLOW;
+	coal_mine_min_distance_coal_mine;
+}
+*/
+
+switch (FEAT_INDUSTRIES, SELF, coal_mine_check_location, ((extra_callback_info2 == IND_CREATION_FUND) || (extra_callback_info2 == IND_CREATION_PROSPECT))) {
+	1: return CB_RESULT_LOCATION_ALLOW;
+	coal_mine_min_distance_coal_mine;
+	//coal_mine_cluster;
+}
+
+#define TOWN_INDUSTRY_LOCATION_SWITCHES(industry_id) \
+switch (FEAT_INDUSTRIES, SELF, industry_##industry_id##_population_check, climate) { \
+	CLIMATE_TEMPERATE: (industry_id == IND_SHOP) ? town_below_500 : town_below_2000; \
+	town_below_500; \
+} \
+\
+switch (FEAT_INDUSTRIES, SELF, industry_##industry_id##_monopoly_check, industry_town_count(industry_id)) { \
+	0: industry_##industry_id##_population_check; \
+	return string(STR_ONE_INDUSTRY_PER_TOWN); \
+} \
+\
+switch (FEAT_INDUSTRIES, SELF, check_nearby_##industry_id##_industry, industry_distance(industry_id)) { \
+	0..19: return string(STR_TOWN_INDUSTRY_TOO_CLOSE); \
+	industry_##industry_id##_monopoly_check; \
+} \
+\
+

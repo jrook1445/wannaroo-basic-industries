@@ -1,0 +1,230 @@
+/* header.pnml */
+
+/*
+    License: GPL v2
+    https://github.com/jrook1445/wannaroo-basic-industries
+*/
+
+if (openttd_version < version_openttd(1, 9, 0)) {
+	error(FATAL, REQUIRES_OPENTTD, "1.9.0");
+}
+
+grf {
+	grfid: "jdr\83";
+	name: string(STR_GRF_NAME);
+	desc: string(STR_GRF_DESCRIPTION);
+	version: 10;
+	min_compatible_version: 10;
+	url: string(STR_GRF_URL);
+
+	param {
+		param_primary_creation {
+			type: int;
+			name: string(STR_PARAM_PRIMARY_CREATION);
+			desc: string(STR_PARAM_CREATION_DESC);
+			min_value: 0;
+			max_value: 2;
+			def_value: 2;
+			names: {
+				0: string(STR_PARAM_CREATION_START);
+				1: string(STR_PARAM_CREATION_MANUAL);
+				2: string(STR_PARAM_CREATION_NORMAL);
+			};
+		}
+	}
+	param {
+		param_secondary_creation {
+			type: int;
+			name: string(STR_PARAM_SECONDARY_CREATION);
+			desc: string(STR_PARAM_CREATION_DESC);
+			min_value: 0;
+			max_value: 2;
+			def_value: 2;
+			names: {
+				0: string(STR_PARAM_CREATION_START);
+				1: string(STR_PARAM_CREATION_MANUAL);
+				2: string(STR_PARAM_CREATION_NORMAL);
+			};
+		}
+	}
+	param {
+		param_black_creation {
+			type: int;
+			name: string(STR_PARAM_BLACK_CREATION);
+			desc: string(STR_PARAM_BLACK_DESC);
+			min_value: 0;
+			max_value: 2;
+			def_value: 2;
+			names: {
+				0: string(STR_PARAM_CREATION_START);
+				1: string(STR_PARAM_CREATION_MANUAL);
+				2: string(STR_PARAM_CREATION_NORMAL);
+			};
+		}
+	}
+	param {
+		param_primary_changes {
+			type: int;
+			name: string(STR_PARAM_PRIMARY_CHANGES);
+			desc: string(STR_PARAM_PRIMARY_CHANGES_DESC);
+			min_value: 0;
+			max_value: 2;
+			names: {
+				0: string(STR_PARAM_PRIMARY_CHANGES_NONE);
+				1: string(STR_PARAM_PRIMARY_CHANGES_NORMAL);
+				2: string(STR_PARAM_PRIMARY_CHANGES_OILWELL);
+			};
+		}
+	}
+	param {
+		param_secondary_changes {
+			type: bool;
+			name: string(STR_PARAM_SECONDARY_CHANGES);
+		}
+	}
+	param {
+		param_primary_cost {
+			type: bool;
+			name: string(STR_PARAM_PRIMARY_COST);
+		}
+	}
+	param {
+		param_secondary_cost {
+			type: bool;
+			name: string(STR_PARAM_SECONDARY_COST);
+		}
+	}
+	param {
+		param_black_cost {
+			type: bool;
+			name: string(STR_PARAM_BLACK_COST);
+			desc: string(STR_PARAM_BLACK_DESC);
+		}
+	}
+	param {
+	    /*
+		param_climate_creation {
+			type: bool;
+			name: string(STR_PARAM_CLIMATE_CREATION);
+			desc: string(STR_PARAM_CLIMATE_CREATION_DESC);
+			def_value: 1;
+			bit: 0;
+		}
+		*/
+		param_town_placement {
+			type: bool;
+			name: string(STR_PARAM_TOWN_PLACEMENT);
+			desc: string(STR_PARAM_TOWN_PLACEMENT_DESC);
+			bit: 1;
+			def_value: 1;
+		}
+		param_oilwell_date {
+			type: bool;
+			name: string(STR_PARAM_OILWELL_DATE);
+			bit: 2;
+		}
+		param_oilrig_date {
+			type: bool;
+			name: string(STR_PARAM_OILRIG_DATE);
+			bit: 3;
+		}
+		param_tg_food {
+			type: bool;
+			name: string(STR_PARAM_TG_FOOD);
+			bit: 4;
+			def_value: 1;
+		}
+		param_tg_watr {
+			type: bool;
+			name: string(STR_PARAM_TG_WATR);
+			bit: 5;
+			def_value: 1;
+		}
+	}
+	param {
+		param_burn_rate {
+			type: int;
+			name: string(STR_PARAM_BURN_RATE);
+			desc: string(STR_PARAM_BURN_RATE_DESC);
+			min_value: 16;
+			max_value: 256;
+			def_value: 64;
+		}
+	}
+	param {
+		param_tree_base_temperate {
+			type: int;
+			name: string(STR_PARAM_TREE_BASE_TEMPERATE);
+			def_value: 1716;
+		}
+	}
+	param {
+		param_tree_base_arctic {
+			type: int;
+			name: string(STR_PARAM_TREE_BASE_ARCTIC);
+			def_value: 1744;
+		}
+	}
+
+	param {
+		param_tree_base_tropic {
+			type: int;
+			name: string(STR_PARAM_TREE_BASE_TROPIC);
+			def_value: 1884;
+		}
+	}
+
+	param {
+		param_enable_rcyc {
+			type: bool;
+			name: string(STR_PARAM_ENABLE_RCYC);
+			desc: string(STR_PARAM_ENABLE_RCYC_DESC);
+			def_value: 0;
+		}
+	}
+
+}
+
+param_climate_creation = 1;
+
+cargotable {
+	BDMT,
+	BEER,
+	COAL,
+	COPR,
+	CORE,
+	DIAM,
+	FOOD,
+	FRUT,
+	GOLD,
+	GOOD,
+	GRAI,
+	GRVL,
+	IORE,
+	LVST,
+	MAIL,
+	MAIZ,
+	OIL_,
+	PAPR,
+	PASS,
+	PETR,
+	PLST,
+	RFPR,
+	RUBR,
+	STEL,
+	RCYC,
+	VALU,
+	WATR,
+	WDPR,
+	WHEA,
+	WOOD,
+	WSTE
+}
+
+// Define trees for the forest
+
+#define tree_base_sprite param[30]
+tree_base_sprite = (climate == CLIMATE_TROPIC) ? param_tree_base_tropic : (climate == CLIMATE_ARCTIC) ? param_tree_base_arctic : param_tree_base_temperate;
+
+#define param_rcyc_intro_year 1950
+

@@ -1,0 +1,217 @@
+/* rcyc.pnml */
+
+/*
+    License: GPL v2
+    https://github.com/jrook1445/wannaroo-basic-industries
+*/
+
+/*
+	perm storage
+
+	0x01: random value stored on monthly_prod_change to vary RCYC production rate (rcyc depot)
+	      transported_last_month_pct("WSTE") (rcyc plant)
+	0x02: RCYC production rate (rcyc depot)
+
+	temp storage
+
+*/
+
+/* recycling depot */
+
+tilelayout jrrcycdepot_tilelayout1 {
+	0, 0: jrrcycdepot_tile_N;
+	0, 1: jrrcycdepot_tile_E;
+	1, 1: jrrcycdepot_tile_S;
+	1, 0: jrrcycdepot_tile_W;
+}
+
+/* recycling plant */
+
+tilelayout jrrcycplant_tilelayout1 {
+	0, 0: jrrcycplant_tile_N;
+	0, 1: jrrcycplant_tile_E;
+	1, 1: jrrcycplant_tile_S;
+	1, 0: jrrcycplant_tile_W;
+}
+
+/* RCYC production */
+
+produce (RCYC_produce_1_cargo_a, [], [RCYC: LOAD_PERM(0x02);], 0)
+produce (RCYC_produce_1_cargo_b, [], [RCYC: LOAD_PERM(0x02)-3;], 0)
+produce (RCYC_produce_1_cargo_c, [], [RCYC: LOAD_PERM(0x02)-2;], 0)
+produce (RCYC_produce_1_cargo_d, [], [RCYC: LOAD_PERM(0x02)-1;], 0)
+produce (RCYC_produce_1_cargo_e, [], [RCYC: LOAD_PERM(0x02)+1;], 0)
+produce (RCYC_produce_1_cargo_f, [], [RCYC: LOAD_PERM(0x02)+2;], 0)
+produce (RCYC_produce_1_cargo_g, [], [RCYC: LOAD_PERM(0x02)+3;], 0)
+
+// RCYC depot produce_256_ticks
+switch (FEAT_INDUSTRIES, SELF, RCYC_produce_1_cargo_1, LOAD_PERM(0x01)) {
+	0..1: RCYC_produce_1_cargo_a;
+	2: RCYC_produce_1_cargo_b;
+	3: RCYC_produce_1_cargo_c;
+	4: RCYC_produce_1_cargo_d;
+	5: RCYC_produce_1_cargo_e;
+	6: RCYC_produce_1_cargo_f;
+	7: RCYC_produce_1_cargo_g;
+	return CB_FAILED;
+}
+
+switch (FEAT_INDUSTRIES, SELF, RCYC_production_change_3, LOAD_TEMP(1)) {
+	0..4238: return [STORE_PERM(16, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	4239..5994: return [STORE_PERM(17, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	5995..7341: return [STORE_PERM(18, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	7342..8477: return [STORE_PERM(19, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	8478..10382: return [STORE_PERM(20, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	10383..11989: return [STORE_PERM(22, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	11990..13404: return [STORE_PERM(24, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	13405..14683: return [STORE_PERM(26, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	14684..15860: return [STORE_PERM(28, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	15861..16955: return [STORE_PERM(30, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	16956..17984: return [STORE_PERM(32, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	17985..19425: return [STORE_PERM(34, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	19426..20766: return [STORE_PERM(37, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	20767..22026: return [STORE_PERM(40, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	22027..23217: return [STORE_PERM(43, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	23218..24350: return [STORE_PERM(46, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	24351..25433: return [STORE_PERM(49, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	25434..26472: return [STORE_PERM(52, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	26473..27796: return [STORE_PERM(55, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	27797..29060: return [STORE_PERM(59, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	29061..30272: return [STORE_PERM(63, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	30273..31437: return [STORE_PERM(67, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	31438..32560: return [STORE_PERM(71, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	32561..33645: return [STORE_PERM(75, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	33646..34697: return [STORE_PERM(79, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	34698..35718: return [STORE_PERM(83, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	35719..36954: return [STORE_PERM(87, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	36955..38150: return [STORE_PERM(92, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	38151..39310: return [STORE_PERM(97, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	39311..40437: return [STORE_PERM(102, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	40438..41533: return [STORE_PERM(107, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	41534..42601: return [STORE_PERM(112, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	42602..43643: return [STORE_PERM(117, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	43644..44660: return [STORE_PERM(122, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	44661..45851: return [STORE_PERM(127, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	45852..47012: return [STORE_PERM(133, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	47013..48145: return [STORE_PERM(139, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	48146..49252: return [STORE_PERM(145, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	49253..50335: return [STORE_PERM(151, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	50336..51395: return [STORE_PERM(157, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	51396..52433: return [STORE_PERM(163, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	52434..53452: return [STORE_PERM(169, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	53453..54616: return [STORE_PERM(175, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	54617..55755: return [STORE_PERM(182, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	55756..56872: return [STORE_PERM(189, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	56873..57967: return [STORE_PERM(196, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	57968..59042: return [STORE_PERM(203, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	59043..60098: return [STORE_PERM(210, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	60099..61136: return [STORE_PERM(217, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	61137..62156: return [STORE_PERM(224, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	62157..63160: return [STORE_PERM(231, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	63161..64288: return [STORE_PERM(238, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	64289..65534: return [STORE_PERM(246, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+	return [STORE_PERM(255, 0x02), CB_RESULT_IND_PROD_NO_CHANGE];
+}
+
+switch (FEAT_INDUSTRIES, SELF, RCYC_production_change_2, [STORE_PERM(getbits(extra_callback_info2, 0, 3), 0x01), 1]) {
+	RCYC_production_change_3;
+}
+
+// RCYC depot monthly_prod_change
+switch (FEAT_INDUSTRIES, PARENT, RCYC_production_change_1, STORE_TEMP(population, 1)) {
+	RCYC_production_change_2;
+}
+
+// RCYC plant production
+produce (rcyc_plant_produce_steel, [RCYC: incoming_cargo_waiting("RCYC");], [WSTE: incoming_cargo_waiting("RCYC")/3; PLST: incoming_cargo_waiting("RCYC")/3; STEL: incoming_cargo_waiting("RCYC")/3;], 0)
+produce (rcyc_plant_produce_paper, [RCYC: incoming_cargo_waiting("RCYC");], [WSTE: incoming_cargo_waiting("RCYC")/3; PLST: incoming_cargo_waiting("RCYC")/3; PAPR: incoming_cargo_waiting("RCYC")/3;], 0)
+produce (rcyc_plant_produce_copper, [RCYC: incoming_cargo_waiting("RCYC");], [WSTE: incoming_cargo_waiting("RCYC")/3; PLST: incoming_cargo_waiting("RCYC")/3; COPR: incoming_cargo_waiting("RCYC")/3;], 0)
+
+produce (rcyc_plant_produce_plastic, [RCYC: incoming_cargo_waiting("RCYC");], [WSTE: incoming_cargo_waiting("RCYC")/2; PLST: incoming_cargo_waiting("RCYC")/2;], 0)
+
+produce (rcyc_plant_produce_waste, [RCYC: incoming_cargo_waiting("RCYC");], [WSTE: incoming_cargo_waiting("RCYC");], 0)
+
+switch (FEAT_INDUSTRIES, SELF, rcyc_plant_produce_climate, climate) {
+    CLIMATE_TEMPERATE:  rcyc_plant_produce_steel;
+    CLIMATE_ARCTIC:     rcyc_plant_produce_paper;
+    CLIMATE_TROPIC:     rcyc_plant_produce_copper;
+}
+
+switch (FEAT_INDUSTRIES, SELF, rcyc_plant_produce_256, LOAD_PERM(1)) {
+    0..49:  rcyc_plant_produce_waste;
+    50..66: rcyc_plant_produce_plastic;
+    rcyc_plant_produce_climate;
+}
+
+//switch (FEAT_INDUSTRIES, SELF, rcyc_plant_monthly_prod_change, STORE_PERM(transported_last_month_pct("WSTE"), 1)) {
+switch (FEAT_INDUSTRIES, SELF, rcyc_plant_monthly_prod_change, STORE_PERM((last_month_transported("WSTE")*100+50)/last_month_production("WSTE"), 1)) {
+    return CB_RESULT_IND_PROD_NO_CHANGE;
+}
+
+switch (FEAT_INDUSTRIES, SELF, rcyc_intro_year, (current_date-date(param_rcyc_intro_year,1,1) >= 0)) {
+	0: return CB_RESULT_IND_NO_CONSTRUCTION;
+	1: return CB_RESULT_IND_PROBABILITY_FROM_PROPERTY;
+	return CB_FAILED;
+}
+
+if (param_enable_rcyc && (climate != CLIMATE_TOYLAND)) {
+
+	item (FEAT_INDUSTRIES, industry_rcycdepot, 0x27) {
+		property {
+			substitute:		        INDUSTRYTYPE_COAL_MINE;
+			layouts:		        [jrrcycdepot_tilelayout1];
+			life_type:		        param_primary_changes ? IND_LIFE_TYPE_EXTRACTIVE : IND_LIFE_TYPE_BLACK_HOLE;
+			// costs from FIRS 3 recycling depot/plant
+			fund_cost_multiplier:	param_primary_cost ? 118 : 0;
+			remove_cost_multiplier:	0;
+			min_cargo_distr:	    5;
+			cargo_types:            [produce_cargo("RCYC", 0)];
+			conflicting_ind_types:	[industry_type(IND_TYPE_NEW, 0x27), industry_type(IND_TYPE_NEW, 0x28)];
+			prob_map_gen:		    (param_primary_creation == 1) ? 0 : 4;
+			prob_in_game:		    (param_primary_creation != 2) ? 0 : 6;
+			prospect_chance:	    1.0;
+			map_colour:		        164; //191;
+			name:			        string(STR_INDUSTRY_NAME_0x27);
+			nearby_station_name:	string(STR_STATION_NAME_0x27);
+		}
+		graphics {
+		    build_prod_change:          [STORE_PERM(0, 0x01), STORE_PERM(16, 0x02), 16];
+			location_check:		        rcyc_depot_check_location;
+			construction_probability:	rcyc_intro_year;
+			produce_256_ticks:          RCYC_produce_1_cargo_1;
+			monthly_prod_change:	    RCYC_production_change_1;
+		}
+	}
+
+	item (FEAT_INDUSTRIES, industry_rcycplant, 0x28) {
+		property {
+			substitute:		        INDUSTRYTYPE_TEMPERATE_FACTORY;
+			layouts:		        [jrrcycplant_tilelayout1];
+			life_type:		        param_secondary_changes ? IND_LIFE_TYPE_PROCESSING : IND_LIFE_TYPE_BLACK_HOLE;
+			// costs from FIRS 3 recycling depot/plant
+			fund_cost_multiplier:	param_secondary_cost ? 118 : 0;
+			remove_cost_multiplier:	0;
+			min_cargo_distr:	    5;
+			cargo_types:            [accept_cargo("RCYC"), produce_cargo("STEL", 0), produce_cargo("PLST", 0), produce_cargo("WSTE", 0)];
+
+			//conflicting: factories?
+			conflicting_ind_types:	[industry_type(IND_TYPE_NEW, 0x27), industry_type(IND_TYPE_NEW, 0x28), industry_type(IND_TYPE_NEW, 0x01)];
+			prob_map_gen:		    (param_secondary_creation == 1) ? 0 : 3;
+			prob_in_game:		    (param_secondary_creation != 2) ? 0 : 3;
+			prospect_chance:	    1.0;
+			map_colour:		        186; //164;
+			name:			        string(STR_INDUSTRY_NAME_0x28);
+			nearby_station_name:	string(STR_STATION_NAME_0x28);
+		}
+		if (climate == CLIMATE_TROPIC) { property { cargo_types: [accept_cargo("RCYC"), produce_cargo("COPR", 0), produce_cargo("PLST", 0), produce_cargo("WSTE", 0)]; } }
+		if (climate == CLIMATE_ARCTIC) { property { cargo_types: [accept_cargo("RCYC"), produce_cargo("PAPR", 0), produce_cargo("PLST", 0), produce_cargo("WSTE", 0)]; } }
+		graphics {
+		    build_prod_change:          [STORE_PERM(0, 0x01), 16];
+			location_check:		        rcyc_plant_check_location;
+			construction_probability:	rcyc_intro_year;
+			produce_256_ticks:	        rcyc_plant_produce_256;
+			monthly_prod_change:        rcyc_plant_monthly_prod_change;
+		}
+	}
+
+}

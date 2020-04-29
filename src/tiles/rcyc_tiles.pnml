@@ -1,0 +1,162 @@
+/* rcyc_tiles.pnml */
+
+/*
+    License: GPL v2
+    https://github.com/jrook1445/wannaroo-basic-industries
+*/
+
+/* recycling depot */
+
+spritelayout jrrcycdepot_tile_N_spritelayout {
+	ground { sprite: 4675; }
+	building { sprite: 4103; xoffset: 0; yoffset: -16; }
+	building { sprite: 4102; xoffset: -16; yoffset: 0; }
+	building { sprite: (construction_state==0 ? 2037 : construction_state==3 ? 2039 : 2038); xoffset: 2; yoffset: 1; }
+}
+
+spritelayout jrrcycdepot_tile_E_spritelayout {
+	ground { sprite: 4675; }
+	building { sprite: 4102; xoffset: -16; yoffset: 0; }
+	building { sprite: (construction_state==0 ? 2031 : construction_state==3 ? 2033 : 2032); xoffset: 8; yoffset: 4; }
+	building { sprite: (construction_state==0 ? 2034 : construction_state==3 ? 2036 : 2035); xoffset: 2; yoffset: 4; }
+	building { sprite: 4103; xoffset: 0; yoffset: 0; }
+}
+
+spritelayout jrrcycdepot_tile_S_spritelayout {
+	ground { sprite: 4675; }
+	building { sprite: 4103; xoffset: 0; yoffset: 0; }
+	building { sprite: 4102; xoffset: 0; yoffset: 0; }
+}
+
+spritelayout jrrcycdepot_tile_W_spritelayout {
+	ground { sprite: 4675; }
+	building { sprite: 4103; xoffset: 0; yoffset: -16; }
+	building { sprite: (construction_state==0 ? 2037 : construction_state==3 ? 2039 : 2038); xoffset: 2; yoffset: 1; }
+	building { sprite: 4102; xoffset: 0; yoffset: 0; }
+}
+
+item (FEAT_INDUSTRYTILES, jrrcycdepot_tile_N, 180) {
+	property {
+		substitute: 0;
+	}
+	graphics {
+		autoslope: return CB_RESULT_AUTOSLOPE;
+		tile_check: return CB_RESULT_LOCATION_ALLOW;
+		jrrcycdepot_tile_N_spritelayout;
+	}
+}
+
+item (FEAT_INDUSTRYTILES, jrrcycdepot_tile_E, 181) {
+	property {
+		substitute: 0;
+	}
+	graphics {
+		autoslope: return CB_RESULT_AUTOSLOPE;
+		tile_check: return CB_RESULT_LOCATION_ALLOW;
+		jrrcycdepot_tile_E_spritelayout;
+	}
+}
+
+item (FEAT_INDUSTRYTILES, jrrcycdepot_tile_S, 182) {
+	property {
+		substitute: 0;
+	}
+	graphics {
+		autoslope: return CB_RESULT_AUTOSLOPE;
+		tile_check: return CB_RESULT_LOCATION_ALLOW;
+		jrrcycdepot_tile_S_spritelayout;
+	}
+}
+
+item (FEAT_INDUSTRYTILES, jrrcycdepot_tile_W, 183) {
+	property {
+		substitute: 0;
+	}
+	graphics {
+		autoslope: return CB_RESULT_AUTOSLOPE;
+		tile_check: return CB_RESULT_LOCATION_ALLOW;
+		jrrcycdepot_tile_W_spritelayout;
+	}
+}
+
+/* recycling plant */
+
+spritelayout jrrcycplant_tile_N_spritelayout {
+	ground { sprite: 2210; }
+	building { sprite: 1301; xoffset: 0; yoffset: 0; recolour_mode: RECOLOUR_REMAP; palette: PALETTE_CC_GREY; }
+	building { sprite: 1302; xoffset: 0; yoffset: 0; recolour_mode: RECOLOUR_REMAP; palette: PALETTE_CC_GREY; }
+	building { sprite: 2115; xoffset: 0; }
+	building { sprite: 2115; xoffset: 6; }
+	building { sprite: 2115; xoffset: 12; }
+}
+
+spritelayout jrrcycplant_tile_E_spritelayout {
+	ground { sprite: 2210; }
+	building { sprite: 1302; xoffset: 0; yoffset: 0; recolour_mode: RECOLOUR_REMAP; palette: PALETTE_CC_GREY; }
+	building { sprite: 2351; xoffset: 1; yoffset: 0; }
+	building { sprite: 1301; xoffset: 0; yoffset: 16; recolour_mode: RECOLOUR_REMAP; palette: PALETTE_CC_GREY; }
+}
+
+spritelayout jrrcycplant_tile_S_spritelayout {
+	ground { sprite: 2210; }
+	building { sprite: 1301; xoffset: 0; yoffset: 16; recolour_mode: RECOLOUR_REMAP; palette: PALETTE_CC_GREY; }
+	building { sprite: 1302; xoffset: 16; yoffset: 0; recolour_mode: RECOLOUR_REMAP; palette: PALETTE_CC_GREY; }
+}
+
+spritelayout jrrcycplant_tile_W_spritelayout {
+	ground { sprite: 2210; }
+	building { sprite: 1301; xoffset: 0; yoffset: 0; recolour_mode: RECOLOUR_REMAP; palette: PALETTE_CC_GREY; }
+	building { sprite: (construction_state==0 ? 2093 : construction_state==3 ? 2095 : 2094); xoffset: 6; yoffset: 2; }
+	building { sprite: (construction_state==0 ? 2093 : construction_state==3 ? 2095 : 2094); xoffset: 6; yoffset: 10; }
+	building { sprite: (construction_state==0 ? 2093 : construction_state==3 ? 2095 : 2094); xoffset: 6; yoffset: 18; }
+	building { sprite: 1302; xoffset: 16; yoffset: 0; recolour_mode: RECOLOUR_REMAP; palette: PALETTE_CC_GREY; }
+}
+
+item (FEAT_INDUSTRYTILES, jrrcycplant_tile_N, 184) {
+	property {
+		substitute: 0;
+		accepted_cargos: [[RCYC, 8]];
+	}
+	graphics {
+		autoslope: return CB_RESULT_AUTOSLOPE;
+		tile_check: return CB_RESULT_LOCATION_ALLOW;
+		jrrcycplant_tile_N_spritelayout;
+	}
+}
+
+item (FEAT_INDUSTRYTILES, jrrcycplant_tile_E, 185) {
+	property {
+		substitute: 0;
+		accepted_cargos: [[RCYC, 8]];
+	}
+	graphics {
+		autoslope: return CB_RESULT_AUTOSLOPE;
+		tile_check: return CB_RESULT_LOCATION_ALLOW;
+		jrrcycplant_tile_E_spritelayout;
+	}
+}
+
+item (FEAT_INDUSTRYTILES, jrrcycplant_tile_S, 186) {
+	property {
+		substitute: 0;
+		accepted_cargos: [[RCYC, 8]];
+	}
+	graphics {
+		autoslope: return CB_RESULT_AUTOSLOPE;
+		tile_check: return CB_RESULT_LOCATION_ALLOW;
+		jrrcycplant_tile_S_spritelayout;
+	}
+}
+
+item (FEAT_INDUSTRYTILES, jrrcycplant_tile_W, 187) {
+	property {
+		substitute: 0;
+		accepted_cargos: [[RCYC, 8]];
+	}
+	graphics {
+		autoslope: return CB_RESULT_AUTOSLOPE;
+		tile_check: return CB_RESULT_LOCATION_ALLOW;
+		jrrcycplant_tile_W_spritelayout;
+	}
+}
+

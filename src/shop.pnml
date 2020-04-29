@@ -1,0 +1,63 @@
+/* shop.pnml */
+
+/*
+    License: GPL v2
+    https://github.com/jrook1445/wannaroo-basic-industries
+*/
+
+spriteset(shop_sprite) {
+	[0, 0, 64, 36, -31, -4, "src/gfx/shop.png"]
+}
+
+spritelayout shop_tile_1_layout {
+	ground { sprite: GROUNDSPRITE_CONCRETE; }
+	building { sprite: shop_sprite; }
+}
+
+tilelayout shop_layout_1 {
+	0, 0: shop_tile_1;
+}
+
+item(FEAT_INDUSTRYTILES, shop_tile_1, 175) {
+	property {
+		substitute: 0;
+		special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+	}
+	graphics {
+		shop_tile_1_layout;
+	}
+}
+
+switch (FEAT_INDUSTRIES, SELF, close_if_superstore_in_town, industry_town_count(0xA6)) {
+    0: return CB_RESULT_IND_PROD_NO_CHANGE;
+    return CB_RESULT_IND_PROD_CLOSE;
+}
+
+if (climate != CLIMATE_TOYLAND) {
+
+item(FEAT_INDUSTRIES, industry_shop, 0x25) {
+	property {
+		substitute:			            INDUSTRYTYPE_POWER_PLANT;
+		layouts:                        [shop_layout_1];
+		life_type:                      IND_LIFE_TYPE_BLACK_HOLE;
+		spec_flags:                     bitmask(IND_FLAG_ONLY_IN_TOWNS);
+		fund_cost_multiplier:           param_black_cost ? 100 : 0;
+		remove_cost_multiplier:		    0;
+		min_cargo_distr:                5;
+		cargo_types:                    [accept_cargo("FOOD"), accept_cargo("PETR"), accept_cargo("BEER"), accept_cargo("WATR")];
+		conflicting_ind_types:          [0xA6];
+		prob_map_gen:			        (param_black_creation == 1) ? 0 : 3;
+		prob_in_game:			        (param_black_creation != 2) ? 0 : 5;
+		prospect_chance:                1.0;
+		map_colour:                     168; //184;
+		name:				            string(STR_INDUSTRY_NAME_0x25);
+		nearby_station_name:		    string(STR_STATION_NAME_0x25);
+	}
+	graphics {
+		location_check:			        shop_check_location;
+		random_prod_change:             close_if_superstore_in_town; // if a superstore has been built in this town, then close the shop
+	}
+}
+
+}
+

@@ -1,0 +1,16 @@
+/* wannaroo-basic-industries.pnml */
+
+/*
+    License: GPL v2
+    https://github.com/jrook1445/wannaroo-basic-industries
+*/
+
+#include "src/header.pnml"
+#include "src/cargo_definition.pnml"
+#include "src/location_checks.pnml"
+#include "src/industries.pnml"
+#include "src/shop.pnml"
+#include "src/superstore.pnml"
+#include "src/tiles/rcyc_tiles.pnml"
+#include "src/rcyc.pnml"
+

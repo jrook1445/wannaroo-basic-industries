@@ -1,0 +1,549 @@
+/* cargo_definition.pnml */
+
+/*
+    License: GPL v2
+    https://github.com/jrook1445/wannaroo-basic-industries
+*/
+
+spriteset(cargoicon_recyclables) {
+	[10 + 20 * 10, 10 + 20 * 3, 10, 10, 0, 0, "src/gfx/cargoicons.png"]
+}
+
+spriteset(cargoicon_petrol) {
+	[10 + 20 * 12, 10 + 20 * 1, 10, 10, 0, 0, "src/gfx/cargoicons.png"]
+}
+
+spriteset(cargoicon_alcohol) {
+        [10 + 20 * 7, 10 + 20 * 0, 10, 10, 0, 0, "src/gfx/cargoicons.png"]
+}
+
+spriteset(cargoicon_chemicals) {
+	[10 + 20 * 10, 10 + 20 * 1, 10, 10, 0, 0, "src/gfx/cargoicons.png"]
+}
+
+spriteset(cargoicon_lumber) {
+	[10 + 20 * 6, 10 + 20 * 1, 10, 10, 0, 0, "src/gfx/cargoicons.png"]
+}
+
+spriteset(cargoicon_copper) {
+	[10 + 20 * 8, 10 + 20 * 2, 10, 10, 0, 0, "src/gfx/cargoicons.png"]
+}
+
+spriteset(cargoicon_building_materials) {
+	[10 + 20 * 1, 10 + 20 * 1, 10, 10, 0, 0,  "src/gfx/cargoicons.png"]
+}
+
+spriteset(cargoicon_stone) {
+	[10 + 20 * 5, 10 + 20 * 1, 10, 10, 0, 0,  "src/gfx/cargoicons.png"]
+}
+
+#define SET_CARGO_STRINGS(text_id) \
+	type_name:                      text_id; \
+	unit_name:                      text_id + 0x20; \
+	units_of_cargo:                 text_id + 0x40; \
+	items_of_cargo:                 text_id + 0x60; \
+	type_abbreviation:              text_id + 0x80; \
+	is_freight:                     1;
+
+#define CONVERT_PRICE_FACTOR(number) \
+	(number * 10.0 * 20 * 255) / (1 << 21)
+
+if (climate == CLIMATE_TEMPERATE || climate == CLIMATE_ARCTIC) {
+	item(FEAT_CARGOS, cargo_coal, 0x01) {
+		property {
+			number:                         0x01;
+			station_list_colour:            1;
+			cargo_payment_list_colour:      1;
+		}
+	}
+}
+
+if (climate != CLIMATE_TOYLAND) {
+    item(FEAT_CARGOS, cargo_oil, 0x03) {
+	    property {
+		    number:                         0x03;
+		    station_list_colour:            171;
+		    cargo_payment_list_colour:      171;
+	    }
+	    if (climate == CLIMATE_TROPIC) {
+		    property {
+			    price_factor:                   CONVERT_PRICE_FACTOR(4892);
+		    }
+	    }
+	    else {
+		    property {
+			    price_factor:                   CONVERT_PRICE_FACTOR(4437);
+		    }
+	    }
+    }
+}
+
+if (climate == CLIMATE_TEMPERATE || climate == CLIMATE_ARCTIC) {
+	item(FEAT_CARGOS, cargo_livestock, 0x04) {
+		property {
+			number:                         0x04;
+			station_list_colour:            75;
+			cargo_payment_list_colour:      75;
+		}
+	}
+}
+
+// jrook 20190126
+// copied from ogfx-industries-6392
+// tropic wood price depends on climate instead of producer
+if (climate != CLIMATE_TOYLAND) {
+    item(FEAT_CARGOS, cargo_wood, 0x07) {
+	    property {
+		    number:                         0x07;
+		    station_list_colour:            55;
+		    cargo_payment_list_colour:      55;
+	    }
+	    if (climate == CLIMATE_TROPIC) {
+		    property {
+			    price_factor:                   CONVERT_PRICE_FACTOR(7964);
+		    }
+	    }
+	    else {
+		    property {
+			    price_factor:                   CONVERT_PRICE_FACTOR(5005);
+		    }
+	    }
+    }
+}
+
+if (climate == CLIMATE_TEMPERATE) {
+	item(FEAT_CARGOS, cargo_iron_ore, 0x08) {
+		property {
+			number:                         0x08;
+			station_list_colour:            118;
+			cargo_payment_list_colour:      118;
+		}
+	}
+}
+
+// my own color as 10 was illegible on the cargo payment graph
+if (climate == CLIMATE_TEMPERATE) {
+	item(FEAT_CARGOS, cargo_steel, 0x09) {
+		property {
+			number:                         0x09;
+			station_list_colour:            19;
+			cargo_payment_list_colour:      19;
+		}
+	}
+}
+
+if (climate == CLIMATE_ARCTIC) {
+	item(FEAT_CARGOS, cargo_paper, 0x09) {
+		property {
+			number:                         0x09;
+			station_list_colour:            23;
+			cargo_payment_list_colour:      23;
+		}
+	}
+}
+
+// my own color or from OpenGFX+ Industries, can't remember from 2017...
+if (climate == CLIMATE_ARCTIC) {
+	item(FEAT_CARGOS, cargo_gold, 0x0A) {
+		property {
+			number:                         0x0A;
+			station_list_colour:            0x33;
+			cargo_payment_list_colour:      0x33;
+		}
+	}
+}
+
+if (climate == CLIMATE_TROPIC) {
+	item(FEAT_CARGOS, cargo_rubber, 0x01) {
+		property {
+			number:                         0x01;
+			station_list_colour:            0x06;
+			cargo_payment_list_colour:      0x06;
+		}
+	}
+}
+
+if (climate == CLIMATE_TROPIC) {
+	item(FEAT_CARGOS, cargo_fruit, 0x04) {
+		property {
+			number:                         0x04;
+			station_list_colour:            84;
+			cargo_payment_list_colour:      84;
+		}
+	}
+}
+
+if (climate == CLIMATE_TROPIC) {
+	item(FEAT_CARGOS, cargo_copper_ore, 0x08) {
+		property {
+			number:                         0x08;
+			station_list_colour:            99;
+			cargo_payment_list_colour:      99;
+		}
+	}
+}
+
+if (climate == CLIMATE_TROPIC) {
+	item(FEAT_CARGOS, cargo_water_tropic, 0x09) {
+		property {
+			number:                         0x09;
+			station_list_colour:            0xA0;
+			cargo_payment_list_colour:      0xA0;
+			town_growth_effect:             (param_tg_watr ? TOWNGROWTH_WATER : TOWNGROWTH_NONE);
+		}
+	}
+}
+
+if (climate == CLIMATE_TROPIC) {
+	item(FEAT_CARGOS, cargo_diamonds, 0x0A) {
+		property {
+			number:                         0x0A;
+			station_list_colour:            0x17;
+			cargo_payment_list_colour:      0x17;
+		}
+	}
+}
+
+// jrook 20190303
+// copied from ogfx-industries-6392
+// for temperate food
+// jrook 20190826
+// for all climates so we can disable town_growth_effect for arctic & tropic
+//if (climate == CLIMATE_TEMPERATE) {
+if (climate != CLIMATE_TOYLAND) {
+	item(FEAT_CARGOS, cargo_food, 0x0B) {
+		property {
+			SET_CARGO_STRINGS(0x001E)
+			sprite:                         4312;
+			number:                         0x0B;
+			cargo_label:                    "FOOD";
+			cargo_classes:                  bitmask(CC_EXPRESS, CC_REFRIGERATED);
+			weight:                         1;
+			penalty_lowerbound:             0;
+			single_penalty_length:          30;
+			price_factor:                   CONVERT_PRICE_FACTOR(5688);
+			station_list_colour:            162; //0x30;
+			cargo_payment_list_colour:      162; //0x30;
+			town_growth_effect:             (param_tg_food ? TOWNGROWTH_FOOD : TOWNGROWTH_NONE);
+			town_growth_multiplier:         1;
+			capacity_multiplier:		    1;
+		}
+	}
+}
+//}
+
+// jrook 20190303
+// copied from ogfx-industries-6392
+// for arctic/tropic banks
+if (climate != CLIMATE_TEMPERATE) {
+	item(FEAT_CARGOS, cargo_valuables, 0x0C) {
+		property {
+			SET_CARGO_STRINGS(0x0019)
+			sprite:                         4307;
+			number:                         0x0C;
+			cargo_label:                    "VALU";
+			cargo_classes:                  bitmask(CC_ARMOURED);
+			weight:                         0.125; // 2 / 16
+			penalty_lowerbound:             1;
+			single_penalty_length:          32;
+			price_factor:                   CONVERT_PRICE_FACTOR(7509);
+			station_list_colour:            0xCA;
+			cargo_payment_list_colour:      0xCA;
+			town_growth_effect:             TOWNGROWTH_NONE;
+			town_growth_multiplier:         1;
+			capacity_multiplier:		    1;
+		}
+	}
+}
+
+if (param_enable_rcyc) {
+
+	item(FEAT_CARGOS, cargo_waste, 30) {
+		property {
+			type_name: string(STR_CARGO_NAME_WASTE);
+			unit_name: string(STR_CARGO_NAME_WASTE);
+			type_abbreviation: string(STR_CID_WASTE);
+			sprite: 4319;
+			weight: 1;
+			station_list_colour: 0x10;
+			cargo_payment_list_colour: 0x10;
+			is_freight: 1;
+			cargo_classes: bitmask(CC_BULK, CC_PIECE_GOODS);
+			town_growth_effect: TOWNGROWTH_NONE;
+			town_growth_multiplier: 1.0;
+			units_of_cargo: 80;
+			items_of_cargo: string(STR_CARGO_UNIT_WASTE);
+			penalty_lowerbound: 10;
+			single_penalty_length: 128;
+			price_factor: 50;
+			capacity_multiplier: 1;
+			cargo_label: "WSTE";
+			number: 30;
+		}
+	}
+
+	item(FEAT_CARGOS, cargo_rcyc, 23) {
+    		property {
+        		type_name: string(STR_CARGO_NAME_RECYCLABLES);
+        		unit_name: string(STR_CARGO_NAME_RECYCLABLES);
+        		type_abbreviation: string(STR_CID_RECYCLABLES);
+        		sprite: NEW_CARGO_SPRITE;
+        		weight: 1.0;
+        		station_list_colour: 165;
+        		cargo_payment_list_colour: 165;
+        		is_freight: 1;
+        		cargo_classes: bitmask(CC_BULK, CC_PIECE_GOODS);
+        		town_growth_effect: TOWNGROWTH_NONE;
+        		town_growth_multiplier: 1.0;
+        		units_of_cargo: 80;
+        		items_of_cargo: string(STR_CARGO_UNIT_RECYCLABLES);
+        		penalty_lowerbound: 10;
+        		single_penalty_length: 128;
+        		price_factor: 100;
+        		capacity_multiplier: 1;
+        		cargo_label: "RCYC";
+        		number: 23;
+    		}
+		graphics {
+			cargoicon_recyclables;
+		}
+	}
+
+}
+
+// jrook 20190424
+// copied from FIRS 3
+item(FEAT_CARGOS, cargo_petrol, 29) {
+	property {
+		type_name: string(STR_CARGO_NAME_PETROL);
+		unit_name: string(STR_CARGO_NAME_PETROL);
+		type_abbreviation: string(STR_CID_PETROL);
+		sprite: NEW_CARGO_SPRITE;
+		weight: 0.8;
+		station_list_colour: 175;
+		cargo_payment_list_colour: 175;
+		is_freight: 1;
+		cargo_classes: bitmask(CC_LIQUID);
+		town_growth_effect: TOWNGROWTH_GOODS;
+		town_growth_multiplier: 0.5;
+		units_of_cargo: 82;
+		items_of_cargo: string(STR_CARGO_UNIT_PETROL);
+		penalty_lowerbound: 18;
+		single_penalty_length: 255;
+		price_factor: 143;
+		capacity_multiplier: 1;
+		cargo_label: "PETR";
+		number: 29;
+	}
+	graphics {
+		cargoicon_petrol;
+	}
+}
+
+// jrook 20190424
+// copied from FIRS 3
+item(FEAT_CARGOS, cargo_alcohol, 28) {
+	property {
+		type_name: string(STR_CARGO_NAME_ALCOHOL);
+		unit_name: string(STR_CARGO_NAME_ALCOHOL);
+		type_abbreviation: string(STR_CID_ALCOHOL);
+		sprite: NEW_CARGO_SPRITE;
+		weight: 1.1;
+		station_list_colour: 180;
+		cargo_payment_list_colour: 180;
+		is_freight: 1;
+		cargo_classes: bitmask(CC_EXPRESS, CC_PIECE_GOODS, CC_LIQUID);
+		town_growth_effect: (param_tg_food ? TOWNGROWTH_FOOD : TOWNGROWTH_NONE);
+		town_growth_multiplier: 0.5;
+		units_of_cargo: 82;
+		items_of_cargo: string(STR_CARGO_UNIT_ALCOHOL);
+		penalty_lowerbound: 10;
+		single_penalty_length: 128;
+		price_factor: 160;
+		capacity_multiplier: 1;
+		cargo_label: "BEER";
+		number: 28;
+	}
+	graphics {
+		cargoicon_alcohol;
+	}
+}
+
+// jrook 20190305
+// copied from FIRS 3
+item(FEAT_CARGOS, cargo_chemicals, 27) {
+	property {
+		type_name: string(STR_CARGO_NAME_CHEMICALS);
+		unit_name: string(STR_CARGO_NAME_CHEMICALS);
+		type_abbreviation: string(STR_CID_CHEMICALS);
+		sprite: NEW_CARGO_SPRITE; //4314;
+		weight: 1.2;
+		station_list_colour: 173; //177;
+		cargo_payment_list_colour: 173; //177;
+		is_freight: 1;
+		cargo_classes: bitmask(CC_LIQUID);
+		town_growth_effect: TOWNGROWTH_NONE;
+		town_growth_multiplier: 1.0;
+		units_of_cargo: 82;
+		items_of_cargo: string(STR_CARGO_UNIT_CHEMICALS);
+		penalty_lowerbound: 20;
+		single_penalty_length: 255;
+		price_factor: 117;
+		capacity_multiplier: 1;
+		cargo_label: "RFPR";
+		number: 27;
+	}
+	graphics {
+		cargoicon_chemicals;
+	}
+}
+
+// jrook 20190809
+// added WDPR 26, PLST 25, COPR 24
+
+// copied from FIRS 3
+// not in tropic
+if (climate != CLIMATE_TROPIC) {
+
+	item(FEAT_CARGOS, cargo_lumber, 26) {
+		property {
+			type_name: string(STR_CARGO_NAME_LUMBER);
+			unit_name: string(STR_CARGO_NAME_LUMBER);
+			type_abbreviation: string(STR_CID_LUMBER);
+			sprite: NEW_CARGO_SPRITE;
+			weight: 1.0;
+			station_list_colour: 58;
+			cargo_payment_list_colour: 58;
+			is_freight: 1;
+			cargo_classes: bitmask(CC_BULK, CC_PIECE_GOODS);
+			town_growth_effect: TOWNGROWTH_NONE;
+			town_growth_multiplier: 1.0;
+			units_of_cargo: TTD_STR_TONS;
+			items_of_cargo: string(STR_CARGO_UNIT_LUMBER);
+			penalty_lowerbound: 18;
+			single_penalty_length: 255;
+			price_factor: 124;
+			capacity_multiplier: 1;
+			cargo_label: "WDPR";
+			number: 26;
+		}
+		graphics {
+			cargoicon_lumber;
+		}
+	}
+
+}
+
+// from OpenTTD source code
+item(FEAT_CARGOS, cargo_plastic, 25) {
+	property {
+		SET_CARGO_STRINGS(0x002C)
+		sprite:                         4322;
+		number:                         25;
+		cargo_label:                    "PLST";
+		cargo_classes:                  bitmask(CC_BULK, CC_PIECE_GOODS);
+		weight:                         1;
+		penalty_lowerbound:             30;
+		single_penalty_length:          255;
+		price_factor:                   CONVERT_PRICE_FACTOR(4664);
+		station_list_colour:            205;
+		cargo_payment_list_colour:      205;
+		town_growth_effect:             TOWNGROWTH_NONE;
+		town_growth_multiplier:         1;
+		capacity_multiplier:		    1;
+		units_of_cargo:			        TTD_STR_TONS;
+		items_of_cargo:			        string(STR_CARGO_UNIT_PLASTIC);
+	}
+}
+
+// copied from FIRS 3
+if (climate == CLIMATE_TROPIC) {
+	item(FEAT_CARGOS, cargo_copper, 24) {
+		property {
+			type_name: string(STR_CARGO_NAME_COPPER);
+			unit_name: string(STR_CARGO_NAME_COPPER);
+			type_abbreviation: string(STR_CID_COPPER);
+			sprite: NEW_CARGO_SPRITE;
+			weight: 1.0;
+			station_list_colour: 192;
+			cargo_payment_list_colour: 192;
+			is_freight: 1;
+			cargo_classes: bitmask(CC_PIECE_GOODS);
+			town_growth_effect: TOWNGROWTH_NONE;
+			town_growth_multiplier: 1.0;
+			units_of_cargo: TTD_STR_TONS;
+			items_of_cargo: string(STR_CARGO_UNIT_COPPER);
+			penalty_lowerbound: 7;
+			single_penalty_length: 255;
+			price_factor: 142;
+			capacity_multiplier: 1;
+			cargo_label: "COPR";
+			number: 24;
+		}
+		graphics {
+			cargoicon_copper;
+		}
+	}
+}
+
+item(FEAT_CARGOS, cargo_building_materials, 0x16) {
+	property {
+		type_name: string(STR_CARGO_NAME_BUILDING_MATERIALS);
+		unit_name: string(STR_CARGO_NAME_BUILDING_MATERIALS);
+		type_abbreviation: string(STR_CID_BUILDING_MATERIALS);
+		sprite: NEW_CARGO_SPRITE;
+		weight: 1.0;
+		station_list_colour: 44;
+		cargo_payment_list_colour: 44;
+		is_freight: 1;
+		cargo_classes: bitmask(CC_EXPRESS, CC_PIECE_GOODS, CC_BULK);
+		//town_growth_effect: TOWNGROWTH_NONE;
+		town_growth_effect: TOWNGROWTH_GOODS;
+		town_growth_multiplier: 1.5;
+		units_of_cargo: TTD_STR_TONS;
+		items_of_cargo: string(STR_CARGO_UNIT_BUILDING_MATERIALS);
+		penalty_lowerbound: 12;
+		single_penalty_length: 255;
+		price_factor: 146;
+		capacity_multiplier: 1;
+		cargo_label: "BDMT";
+		number: 0x16;
+	}
+	graphics {
+		cargoicon_building_materials;
+	}
+}
+
+item(FEAT_CARGOS, cargo_stone, 0x15) {
+	property {
+		type_name: string(STR_CARGO_NAME_STONE);
+		unit_name: string(STR_CARGO_NAME_STONE);
+		type_abbreviation: string(STR_CID_STONE);
+		sprite: NEW_CARGO_SPRITE;
+		weight: 1.0;
+		station_list_colour: 36;
+		cargo_payment_list_colour: 36;
+		is_freight: 1;
+		cargo_classes: bitmask(CC_BULK);
+		town_growth_effect: TOWNGROWTH_NONE;
+		town_growth_multiplier: 1.0;
+		units_of_cargo: TTD_STR_TONS;
+		items_of_cargo: string(STR_CARGO_UNIT_STONE);
+		penalty_lowerbound: 30;
+		single_penalty_length: 255;
+		price_factor: 68;
+		capacity_multiplier: 1;
+		cargo_label: "GRVL";
+		number: 0x15;
+	}
+	graphics {
+		cargoicon_stone;
+	}
+}
+
+// if Toyland, we don't want: PETR, BEER, RFPR, WDPR, PLST, COPR, BDMT, GRVL, RCYC, WSTE, VALU
+if (climate == CLIMATE_TOYLAND) {
+    disable_item(FEAT_CARGOS, 21, 30);
+    disable_item(FEAT_CARGOS, 0x0C);
+}
+

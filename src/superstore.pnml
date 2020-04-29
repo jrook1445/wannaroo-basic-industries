@@ -1,0 +1,104 @@
+/* superstore.pnml */
+
+/*
+    License: GPL v2
+    https://github.com/jrook1445/wannaroo-basic-industries
+*/
+
+spritelayout jrsuperstore_tile_N_spritelayout {
+	ground { sprite: 4406; }
+	building { sprite: 4411; }
+	building { sprite: 4412; }
+}
+
+spritelayout jrsuperstore_tile_E_spritelayout {
+	ground { sprite: 4408; }
+	building { sprite: 4413; }
+	building { sprite: 4414; }
+}
+
+spritelayout jrsuperstore_tile_S_spritelayout {
+	ground { sprite: 4410; }
+	building { sprite: 4417; }
+}
+
+spritelayout jrsuperstore_tile_W_spritelayout {
+	ground { sprite: 4409; }
+	building { sprite: 4415; }
+	building { sprite: 4416; }
+}
+
+item (FEAT_INDUSTRYTILES, jrsuperstore_tile_N, 176) {
+	property {
+		substitute: 0;
+		special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+	}
+	graphics {
+		jrsuperstore_tile_N_spritelayout;
+	}
+}
+
+item (FEAT_INDUSTRYTILES, jrsuperstore_tile_E, 177) {
+	property {
+		substitute: 0;
+		special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+	}
+	graphics {
+		jrsuperstore_tile_E_spritelayout;
+	}
+}
+
+item (FEAT_INDUSTRYTILES, jrsuperstore_tile_S, 178) {
+	property {
+		substitute: 0;
+		special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+	}
+	graphics {
+		jrsuperstore_tile_S_spritelayout;
+	}
+}
+
+item (FEAT_INDUSTRYTILES, jrsuperstore_tile_W, 179) {
+	property {
+		substitute: 0;
+		special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+	}
+	graphics {
+		jrsuperstore_tile_W_spritelayout;
+	}
+}
+
+tilelayout jrsuperstore_tilelayout1 {
+	0, 0: jrsuperstore_tile_N;
+	0, 1: jrsuperstore_tile_E;
+	1, 1: jrsuperstore_tile_S;
+	1, 0: jrsuperstore_tile_W;
+}
+
+if (climate != CLIMATE_TOYLAND) {
+
+item (FEAT_INDUSTRIES, industry_superstore, 0x26) {
+	property {
+		substitute:                 INDUSTRYTYPE_POWER_PLANT;
+		layouts:		            [jrsuperstore_tilelayout1];
+		life_type:		            IND_LIFE_TYPE_BLACK_HOLE;
+		spec_flags:		            bitmask(IND_FLAG_BUILT_NEAR_TOWN);
+		fund_cost_multiplier:	    param_black_cost ? 152 : 0;
+		remove_cost_multiplier:	    0;
+		min_cargo_distr:	        5;
+		cargo_types:                [accept_cargo("FOOD"), accept_cargo("GOOD"), accept_cargo("PETR"), accept_cargo("BEER"), accept_cargo("BDMT"), accept_cargo("WATR")];
+		conflicting_ind_types:	    [0xA5];
+		prob_map_gen:		        (param_black_creation == 1) ? 0 : 3;
+		prob_in_game:		        (param_black_creation != 2) ? 0 : 5;
+		prospect_chance:	        1.0;
+		map_colour:		            168;
+		name:			            string(STR_INDUSTRY_NAME_0x26);
+		nearby_station_name:	    string(STR_STATION_NAME_0x26);
+	}
+	graphics {
+		location_check:		        superstore_check_location;
+	}
+}
+
+}
+

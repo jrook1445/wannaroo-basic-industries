@@ -1,0 +1,153 @@
+##grflangid 0x01
+
+STR_GRF_NAME                                                    :Wannaroo Basic Industries (WRBI)
+STR_GRF_DESCRIPTION                                             :{}Based on frosch's Manual Industries 2r5.{}{}Supports 16 cargos in/out. Adds some new industries, cargos, and cargo chains.{}{}License: GPL v2
+STR_GRF_URL                                                     :https://github.com/jrook1445/wannaroo-basic-industries
+
+STR_PARAM_PRIMARY_CREATION                                      :Random construction of primary industries
+STR_PARAM_SECONDARY_CREATION                                    :Random construction of secondary industries
+STR_PARAM_BLACK_CREATION                                        :Random construction of other industries
+STR_PARAM_CREATION_DESC                                         :Allow/disallow random construction of industries during game or on map creation.
+STR_PARAM_BLACK_DESC                                            :Power Plant, Bank, Shop, Superstore, Toy Shop
+STR_PARAM_CREATION_START                                        :Only on map creation
+STR_PARAM_CREATION_MANUAL                                       :Off
+STR_PARAM_CREATION_NORMAL                                       :On
+
+STR_PARAM_PRIMARY_CHANGES                                       :Production changes/closure of primary industries
+STR_PARAM_PRIMARY_CHANGES_NONE                                  :None
+STR_PARAM_PRIMARY_CHANGES_NORMAL                                :Normal
+STR_PARAM_PRIMARY_CHANGES_OILWELL                               :Normal, but oil wells can also increase production
+STR_PARAM_PRIMARY_CHANGES_DESC                                  :None: Enable modifying production values in the cheat menu to manually control primary production.
+STR_PARAM_SECONDARY_CHANGES                                     :Closure of secondary industries
+
+STR_PARAM_PRIMARY_COST                                          :Construction costs for primary industries
+STR_PARAM_SECONDARY_COST                                        :Construction costs for secondary industries
+STR_PARAM_BLACK_COST                                            :Construction costs for other industries
+
+#STR_PARAM_CLIMATE_CREATION                                      :Climate restrictions
+#STR_PARAM_CLIMATE_CREATION_DESC                                 :Disabling this allows construction of industries from other climates. They will not appear randomly on their own though. And they will also produce wrong cargos. So, not really useful :p
+
+STR_PARAM_TOWN_PLACEMENT                                        :Bank location restriction
+STR_PARAM_TOWN_PLACEMENT_DESC                                   :On: in towns, replacing houses{}Off: near towns
+
+STR_PARAM_OILWELL_DATE                                          :Random construction of oil wells only before 1950
+STR_PARAM_OILRIG_DATE                                           :Random construction of oil rigs only after 1960
+
+STR_PARAM_TG_FOOD			                        			:Require food to grow towns in arctic/tropic
+STR_PARAM_TG_WATR			                        			:Require water to grow towns in tropic
+
+STR_PARAM_BURN_RATE                                             :Burn rate
+STR_PARAM_BURN_RATE_DESC                                        :Amount of cargo consumed every production tick when not needed for production{}{}Steel Mill: Coal{}Paper Mill: Chemicals{}Food Processing Plant: Chemicals{}{}default 64, max 256, min 16
+
+STR_PARAM_TREE_BASE_TEMPERATE                                   :Forest tree base sprite: Temperate
+STR_PARAM_TREE_BASE_ARCTIC                                      :Forest tree base sprite: Arctic
+STR_PARAM_TREE_BASE_TROPIC                                      :Forest tree base sprite: Tropic
+
+STR_PARAM_ENABLE_RCYC                                           :Recycling Chain
+STR_PARAM_ENABLE_RCYC_DESC                                      :available from 1950
+
+STR_STATION_NAME			                        			:{STRING} New Station Name
+
+STR_STATION_NAME_0x00		                                    :{STRING} Coal Mine
+STR_STATION_NAME_0x01                                           :{STRING} Power Plant
+STR_STATION_NAME_0x02                                           :{STRING} Sawmill
+STR_STATION_NAME_0x03                                           :{STRING} Forest
+STR_STATION_NAME_0x04                                           :{STRING} Refinery
+STR_STATION_NAME_0x05                                           :{STRING} Oil Rig
+STR_STATION_NAME_0x06                                           :{STRING} Factory
+STR_STATION_NAME_0x07                                           :{STRING} Factory
+STR_STATION_NAME_0x08                                           :{STRING} Steel Mill
+STR_STATION_NAME_0x09                                           :{STRING} Farm
+STR_STATION_NAME_0x0A                                           :{STRING} Copper Ore Mine
+STR_STATION_NAME_0x0B                                           :{STRING} Oil Wells
+STR_STATION_NAME_0x0C                                           :{STRING} Bank
+STR_STATION_NAME_0x0D                                           :{STRING} Food Processing Plant
+STR_STATION_NAME_0x0E                                           :{STRING} Paper Mill
+STR_STATION_NAME_0x0F                                           :{STRING} Gold Mine
+STR_STATION_NAME_0x10                                           :{STRING} Bank
+STR_STATION_NAME_0x11                                           :{STRING} Diamond Mine
+STR_STATION_NAME_0x12                                           :{STRING} Iron Ore Mine
+STR_STATION_NAME_0x13                                           :{STRING} Fruit Plantation
+STR_STATION_NAME_0x14                                           :{STRING} Rubber Plantation
+STR_STATION_NAME_0x15                                           :{STRING} Water Supply
+STR_STATION_NAME_0x16                                           :{STRING} Water Tower
+STR_STATION_NAME_0x17                                           :{STRING} Factory
+STR_STATION_NAME_0x18                                           :{STRING} Farm
+STR_STATION_NAME_0x19                                           :{STRING} Lumber Mill
+STR_STATION_NAME_0x1A                                           :{STRING} Candyfloss Forest
+STR_STATION_NAME_0x1B                                           :{STRING} Sweet Factory
+STR_STATION_NAME_0x1C                                           :{STRING} Battery Farm
+STR_STATION_NAME_0x1D                                           :{STRING} Cola Wells
+STR_STATION_NAME_0x1E                                           :{STRING} Toy Shop
+STR_STATION_NAME_0x1F                                           :{STRING} Toy Factory
+STR_STATION_NAME_0x20                                           :{STRING} Plastic Fountains
+STR_STATION_NAME_0x21                                           :{STRING} Fizzy Drink Factory
+STR_STATION_NAME_0x22                                           :{STRING} Bubble Generator
+STR_STATION_NAME_0x23                                           :{STRING} Toffee Quarry
+STR_STATION_NAME_0x24                                           :{STRING} Sugar Mine
+STR_STATION_NAME_0x25                                           :{STRING} Shop
+STR_STATION_NAME_0x26                                           :{STRING} Superstore
+STR_STATION_NAME_0x27                                           :{STRING} Recycling Depot
+STR_STATION_NAME_0x28                                           :{STRING} Recycling Plant
+
+STR_EMPTY_STRING	                        :
+
+STR_INDUSTRY_NAME_0x04						:Refinery
+STR_INDUSTRY_NAME_0x07						:Factory
+STR_INDUSTRY_NAME_0x25						:Shop
+STR_INDUSTRY_NAME_0x26						:Superstore
+STR_INDUSTRY_NAME_0x27                      :Recycling Depot
+STR_INDUSTRY_NAME_0x28                      :Recycling Plant
+
+#Validation messages
+
+STR_TOWN_BELOW_500						:Town is too small (below 500 population) for building this industry.
+STR_TOWN_BELOW_1200						:Town is too small (below 1200 population) for building this industry.
+STR_TOWN_BELOW_2000						:Town is too small (below 2000 population) for building this industry.
+#STR_INDUSTRY_TOO_CLOSE					:Too close to another similar industry, minimum distance is 50 tiles.
+#STR_TOWN_INDUSTRY_TOO_CLOSE			:Too close to another similar industry, minimum distance is 20 tiles.
+STR_INDUSTRY_TOO_CLOSE_TO_TOWN			:Industry should be located away from the town center, minimum distance is 20 tiles.
+#STR_ONE_INDUSTRY_PER_TOWN				:Only one industry of this type allowed per town.
+
+#Cargo
+
+STR_CARGO_NAME_WASTE					:Waste
+STR_CID_WASTE							:{TINYFONT}WS
+STR_CARGO_UNIT_WASTE					:{WEIGHT} of waste
+
+STR_CARGO_NAME_RECYCLABLES              :Recyclables
+STR_CID_RECYCLABLES                     :{TINYFONT}RC
+STR_CARGO_UNIT_RECYCLABLES              :{WEIGHT} of recyclables
+
+STR_CARGO_NAME_PETROL					:Petrol
+STR_CID_PETROL							:{TINYFONT}PT
+STR_CARGO_UNIT_PETROL					:{VOLUME} of petrol
+
+STR_CARGO_NAME_ALCOHOL					:Alcohol
+STR_CID_ALCOHOL							:{TINYFONT}AL
+STR_CARGO_UNIT_ALCOHOL					:{VOLUME} of alcohol
+
+STR_CARGO_NAME_CHEMICALS				:Chemicals
+STR_CID_CHEMICALS						:{TINYFONT}CH
+STR_CARGO_UNIT_CHEMICALS				:{VOLUME} of chemicals
+
+STR_CARGO_NAME_LUMBER					:Lumber
+STR_CID_LUMBER							:{TINYFONT}LU
+STR_CARGO_UNIT_LUMBER					:{WEIGHT} of lumber
+
+STR_CARGO_NAME_PLASTIC					:Plastic
+STR_CID_PLASTIC							:{TINYFONT}PL
+STR_CARGO_UNIT_PLASTIC					:{WEIGHT} of plastic
+
+STR_CARGO_NAME_COPPER					:Copper
+STR_CID_COPPER							:{TINYFONT}CR
+STR_CARGO_UNIT_COPPER					:{WEIGHT} of copper
+
+STR_CARGO_NAME_BUILDING_MATERIALS		:Building Materials
+STR_CID_BUILDING_MATERIALS				:{TINYFONT}BM
+STR_CARGO_UNIT_BUILDING_MATERIALS		:{WEIGHT} of building materials
+
+STR_CARGO_NAME_STONE					:Stone
+STR_CID_STONE							:{TINYFONT}ST
+STR_CARGO_UNIT_STONE					:{WEIGHT} of stone
+
