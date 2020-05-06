@@ -37,7 +37,7 @@ STR_PARAM_TG_FOOD			                        			:Require food to grow towns in ar
 STR_PARAM_TG_WATR			                        			:Require water to grow towns in tropic
 
 STR_PARAM_BURN_RATE                                             :Burn rate
-STR_PARAM_BURN_RATE_DESC                                        :Amount of cargo consumed every production tick when not needed for production{}{}Steel Mill: Coal{}Paper Mill: Chemicals{}Food Processing Plant: Chemicals{}{}default 64, max 256, min 16
+STR_PARAM_BURN_RATE_DESC                                        :Amount of cargo consumed every production tick when not needed for production.{}{}Steel Mill: Coal{}Paper Mill: Chemicals{}Food Processing Plant: Chemicals{}{}default 64, max 256, min 16
 
 STR_PARAM_TREE_BASE_TEMPERATE                                   :Forest tree base sprite: Temperate
 STR_PARAM_TREE_BASE_ARCTIC                                      :Forest tree base sprite: Arctic
@@ -45,6 +45,9 @@ STR_PARAM_TREE_BASE_TROPIC                                      :Forest tree bas
 
 STR_PARAM_ENABLE_RCYC                                           :Recycling Chain
 STR_PARAM_ENABLE_RCYC_DESC                                      :available from 1950
+
+STR_PARAM_ENABLE_HOUSES                                         :Modified Houses
+STR_PARAM_ENABLE_HOUSES_DESC                                    :On: Default houses accept food (temperate), building materials, water (tropic). Muted colours on house IDs 17, 50-55.
 
 STR_STATION_NAME			                        			:{STRING} New Station Name
 

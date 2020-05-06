@@ -5,7 +5,7 @@
 // Escapes: D= = DR D+ = DF D- = DC Du* = DM D* = DnF Du<< = DnC D<< = DO D& D| Du/ D/ Du% D%
 // Format: spritenum imagefile depth xpos ypos xsize ysize xrel yrel zoom flags
 
-0 * 4 \d1906
+0 * 4 \d1915
 
 // param[123] = param[161]
 1 * 5 0D 7B \D= A1 00
@@ -20,11 +20,11 @@
 
 5 * 10 0B 03 7F 06 "1.9.0" 00
 
-6 * 2377 14 "C" "INFO"
+6 * 2559 14 "C" "INFO"
 "T" "URL_" 7F "https://github.com/jrook1445/wannaroo-basic-industries" 00
 "B" "VRSN" \w4 \dx0000000A
 "B" "MINV" \w4 \dx0000000A
-"B" "NPAR" \w1 12
+"B" "NPAR" \w1 13
 "C" "PARA"
 "C" \d0
 "T" "NAME" 7F "Random construction of primary industries" 00
@@ -125,7 +125,7 @@
 00
 "C" \d13
 "T" "NAME" 7F "Burn rate" 00
-"T" "DESC" 7F "Amount of cargo consumed every production tick when not needed for production\0D\0DSteel Mill: Coal\0DPaper Mill: Chemicals\0DFood Processing Plant: Chemicals\0D\0Ddefault 64, max 256, min 16" 00
+"T" "DESC" 7F "Amount of cargo consumed every production tick when not needed for production.\0D\0DSteel Mill: Coal\0DPaper Mill: Chemicals\0DFood Processing Plant: Chemicals\0D\0Ddefault 64, max 256, min 16" 00
 "B" "MASK" \w1 09
 "B" "LIMI" \w8 \d16 \d256
 "B" "DFLT" \w4 \dx00000040
@@ -154,6 +154,13 @@
 "B" "TYPE" \w1 01
 "B" "MASK" \w3 \b13 \b0 \b1
 "B" "DFLT" \w4 \dx00000000
+00
+"C" \d18
+"T" "NAME" 7F "Modified Houses" 00
+"T" "DESC" 7F "On: Default houses accept food (temperate), building materials, water (tropic). Muted colours on house IDs 17, 50-55." 00
+"B" "TYPE" \w1 01
+"B" "MASK" \w3 \b14 \b0 \b1
+"B" "DFLT" \w4 \dx00000001
 00
 00
 "B" "PALS" \w1 "D"
@@ -7144,7 +7151,17 @@ FF
 \wx00F2 \dx00000000 \dx00000000
 \wx00F2 //
 
-1558 * 55 00 07 \b14 01 FF \wx0011
+// param[124] = 0
+1558 * 9 0D 7C \D= FF 00 \dx00000000
+
+1559 * 6 09 0E 01 \70 00 01
+
+// param[124] = 1
+1560 * 9 0D 7C \D= FF 00 \dx00000001
+
+1561 * 9 07 7C 04 \7= \dx00000000 01
+
+1562 * 55 00 07 \b14 01 FF \wx0011
 08 11
 15 11
 0B 82
@@ -7162,7 +7179,7 @@ FF
 \wx0812 \wx030E \wx0609 \wx0606 \wx0600 \wx061A
 
 // Name: @action3_29
-1559 * 37 02 07 ED 89
+1563 * 37 02 07 ED 89
 1A 20 \dx11000000
 \2sto 1A 20 \dx000000FF
 \2r 0C 00 \dx0000FFFF
@@ -7170,10 +7187,12 @@ FF
 \wx00ED \dx00000000 \dx00000000 	// item_0x11_layout;
 \wx00ED // item_0x11_layout;
 
-1560 * 7 03 07 01 11 \b0
+1564 * 9 07 7C 04 \7= \dx00000000 02
+
+1565 * 7 03 07 01 11 \b0
 \wx00ED 	// @action3_29;
 
-1561 * 55 00 07 \b14 01 FF \wx0032
+1566 * 55 00 07 \b14 01 FF \wx0032
 08 32
 15 32
 0B 87
@@ -7191,7 +7210,7 @@ FF
 \wx0812 \wx030E \wx0409 \wx0406 \wx0400 \wx041A
 
 // Name: @action3_30
-1562 * 37 02 07 E9 89
+1567 * 37 02 07 E9 89
 1A 20 \dx32000000
 \2sto 1A 20 \dx000000FF
 \2r 0C 00 \dx0000FFFF
@@ -7199,10 +7218,12 @@ FF
 \wx00E9 \dx00000000 \dx00000000 	// item_0x32_layout;
 \wx00E9 // item_0x32_layout;
 
-1563 * 7 03 07 01 32 \b0
+1568 * 9 07 7C 04 \7= \dx00000000 02
+
+1569 * 7 03 07 01 32 \b0
 \wx00E9 	// @action3_30;
 
-1564 * 55 00 07 \b14 01 FF \wx0034
+1570 * 55 00 07 \b14 01 FF \wx0034
 08 34
 15 34
 0B AA
@@ -7220,7 +7241,7 @@ FF
 \wx0812 \wx030E \wx0409 \wx0406 \wx0400 \wx041A
 
 // Name: @action3_31
-1565 * 37 02 07 F9 89
+1571 * 37 02 07 F9 89
 1A 20 \dx34000000
 \2sto 1A 20 \dx000000FF
 \2r 0C 00 \dx0000FFFF
@@ -7228,10 +7249,12 @@ FF
 \wx00F9 \dx00000000 \dx00000000 	// item_0x34_layout;
 \wx00F9 // item_0x34_layout;
 
-1566 * 7 03 07 01 34 \b0
+1572 * 9 07 7C 04 \7= \dx00000000 02
+
+1573 * 7 03 07 01 34 \b0
 \wx00F9 	// @action3_31;
 
-1567 * 55 00 07 \b14 01 FF \wx0036
+1574 * 55 00 07 \b14 01 FF \wx0036
 08 36
 15 36
 0B D2
@@ -7249,7 +7272,7 @@ FF
 \wx0812 \wx030E \wx0509 \wx0506 \wx0500 \wx051A
 
 // Name: @action3_32
-1568 * 37 02 07 F2 89
+1575 * 37 02 07 F2 89
 1A 20 \dx36000000
 \2sto 1A 20 \dx000000FF
 \2r 0C 00 \dx0000FFFF
@@ -7257,35 +7280,37 @@ FF
 \wx00F2 \dx00000000 \dx00000000 	// item_0x36_layout;
 \wx00F2 // item_0x36_layout;
 
-1569 * 7 03 07 01 36 \b0
+1576 * 9 07 7C 04 \7= \dx00000000 04
+
+1577 * 7 03 07 01 36 \b0
 \wx00F2 	// @action3_32;
 
-1570 * 9 00 07 \b1 01 FF \wx0033
+1578 * 9 00 07 \b1 01 FF \wx0033
 08 FF
 
-1571 * 9 00 07 \b1 01 FF \wx0035
+1579 * 9 00 07 \b1 01 FF \wx0035
 08 FF
 
-1572 * 9 00 07 \b1 01 FF \wx0037
+1580 * 9 00 07 \b1 01 FF \wx0037
 08 FF
 
-1573 * 6 01 09 \b1 FF \wx0001
+1581 * 6 01 09 \b1 FF \wx0001
 
-1574 src/gfx/shop.png 8bpp 0 0 64 36 -31 -4 normal
+1582 src/gfx/shop.png 8bpp 0 0 64 36 -31 -4 normal
 
 // Name: shop_tile_1_layout - feature 09
-1575 * 18 02 09 F2 \b1 \dx0000058C
+1583 * 18 02 09 F2 \b1 \dx0000058C
 \dx80000000 \b0 \b0 \b0 \b16 \b16 \b16
 
-1576 * 11 00 09 \b2 01 FF \wx00AF
+1584 * 11 00 09 \b2 01 FF \wx00AF
 08 00
 12 02
 
-1577 * 7 03 09 01 AF \b0
+1585 * 7 03 09 01 AF \b0
 \wx00F2 	// shop_tile_1_layout;
 
 // Name: close_if_superstore_in_town
-1578 * 52 02 0A F2 89
+1586 * 52 02 0A F2 89
 1A 20 \dxFFFFFFFF
 \2sto 1A 20 \dx00000100
 \2r 1A 20 \dx00000100
@@ -7296,55 +7321,55 @@ FF
 \wx8003 // default: return 3;
 
 // param[124] = (param[131] & 255)
-1579 * 9 0D 7C \D& 83 FF \dx000000FF
+1587 * 9 0D 7C \D& 83 FF \dx000000FF
 
-1580 * 9 09 7C 04 \7= \dx00000003 10
+1588 * 9 09 7C 04 \7= \dx00000003 10
 
 // param[123] = 0
-1581 * 9 0D 7B \D= FF 00 \dx00000000
-
-// param[122] = 0
-1582 * 9 0D 7A \D= FF 00 \dx00000000
-
-1583 * 6 09 07 01 \70 00 01
-
-// param[122] = 1
-1584 * 9 0D 7A \D= FF 00 \dx00000001
-
-1585 * 9 09 7A 04 \7= \dx00000000 01
-
-// param[123] = 100
-1586 * 9 0D 7B \D= FF 00 \dx00000064
-
-// param[122] = 3
-1587 * 9 0D 7A \D= FF 00 \dx00000003
-
-// param[121] = param[2]
-1588 * 5 0D 79 \D= 02 00
-
-1589 * 9 09 79 04 \7! \dx00000001 01
+1589 * 9 0D 7B \D= FF 00 \dx00000000
 
 // param[122] = 0
 1590 * 9 0D 7A \D= FF 00 \dx00000000
 
+1591 * 6 09 07 01 \70 00 01
+
+// param[122] = 1
+1592 * 9 0D 7A \D= FF 00 \dx00000001
+
+1593 * 9 09 7A 04 \7= \dx00000000 01
+
+// param[123] = 100
+1594 * 9 0D 7B \D= FF 00 \dx00000064
+
+// param[122] = 3
+1595 * 9 0D 7A \D= FF 00 \dx00000003
+
+// param[121] = param[2]
+1596 * 5 0D 79 \D= 02 00
+
+1597 * 9 09 79 04 \7! \dx00000001 01
+
+// param[122] = 0
+1598 * 9 0D 7A \D= FF 00 \dx00000000
+
 // param[121] = 5
-1591 * 9 0D 79 \D= FF 00 \dx00000005
+1599 * 9 0D 79 \D= FF 00 \dx00000005
 
 // param[120] = param[2]
-1592 * 5 0D 78 \D= 02 00
+1600 * 5 0D 78 \D= 02 00
 
-1593 * 9 09 78 04 \7= \dx00000002 01
+1601 * 9 09 78 04 \7= \dx00000002 01
 
 // param[121] = 0
-1594 * 9 0D 79 \D= FF 00 \dx00000000
+1602 * 9 0D 79 \D= FF 00 \dx00000000
 
-1595 * 17 06
+1603 * 17 06
 7B 01 FF \wx001E
 7A 01 FF \wx0038
 79 01 FF \wx003A
 FF
 
-1596 * 72 00 0A \b18 01 FF \wx0025
+1604 * 72 00 0A \b18 01 FF \wx0025
 08 01
 0A \b1 \d7
 00 00 FE \wx00AF
@@ -7367,122 +7392,122 @@ FF
 1F \wxDC42
 24 \wxDC43
 
-1597 * 11 00 0A \b2 01 FF \wx0025
+1605 * 11 00 0A \b2 01 FF \wx0025
 21 18
 22 00
 
-1598 * 2 10 10
+1606 * 2 10 10
 
 // Name: @action3_33
-1599 * 33 02 0A F2 89
+1607 * 33 02 0A F2 89
 0C 00 \dx0000FFFF
 \b2
 \wx00FF \dx00000028 \dx00000028 	// shop_check_location;
 \wx00F2 \dx00000029 \dx00000029 	// close_if_superstore_in_town;
 \wx00E8 // @CB_FAILED0A;
 
-1600 * 9 07 7C 04 \7= \dx00000003 01
+1608 * 9 07 7C 04 \7= \dx00000003 01
 
-1601 * 7 03 0A 01 25 \b0
+1609 * 7 03 0A 01 25 \b0
 \wx00F2 	// @action3_33;
 
 // Name: jrsuperstore_tile_N_spritelayout - feature 09
-1602 * 28 02 09 F2 \b2 \dx00001136
+1610 * 28 02 09 F2 \b2 \dx00001136
 \dx0000113B \b0 \b0 \b0 \b16 \b16 \b16
 \dx0000113C \b0 \b0 \b0 \b16 \b16 \b16
 
 // Name: jrsuperstore_tile_E_spritelayout - feature 09
-1603 * 28 02 09 FF \b2 \dx00001138
+1611 * 28 02 09 FF \b2 \dx00001138
 \dx0000113D \b0 \b0 \b0 \b16 \b16 \b16
 \dx0000113E \b0 \b0 \b0 \b16 \b16 \b16
 
 // Name: jrsuperstore_tile_S_spritelayout - feature 09
-1604 * 18 02 09 F9 \b1 \dx0000113A
+1612 * 18 02 09 F9 \b1 \dx0000113A
 \dx00001141 \b0 \b0 \b0 \b16 \b16 \b16
 
 // Name: jrsuperstore_tile_W_spritelayout - feature 09
-1605 * 28 02 09 E9 \b2 \dx00001139
+1613 * 28 02 09 E9 \b2 \dx00001139
 \dx0000113F \b0 \b0 \b0 \b16 \b16 \b16
 \dx00001140 \b0 \b0 \b0 \b16 \b16 \b16
 
-1606 * 11 00 09 \b2 01 FF \wx00B0
+1614 * 11 00 09 \b2 01 FF \wx00B0
 08 00
 12 02
 
-1607 * 7 03 09 01 B0 \b0
+1615 * 7 03 09 01 B0 \b0
 \wx00F2 	// jrsuperstore_tile_N_spritelayout;
 
-1608 * 11 00 09 \b2 01 FF \wx00B1
+1616 * 11 00 09 \b2 01 FF \wx00B1
 08 00
 12 02
 
-1609 * 7 03 09 01 B1 \b0
+1617 * 7 03 09 01 B1 \b0
 \wx00FF 	// jrsuperstore_tile_E_spritelayout;
 
-1610 * 11 00 09 \b2 01 FF \wx00B2
+1618 * 11 00 09 \b2 01 FF \wx00B2
 08 00
 12 02
 
-1611 * 7 03 09 01 B2 \b0
+1619 * 7 03 09 01 B2 \b0
 \wx00F9 	// jrsuperstore_tile_S_spritelayout;
 
-1612 * 11 00 09 \b2 01 FF \wx00B3
+1620 * 11 00 09 \b2 01 FF \wx00B3
 08 00
 12 02
 
-1613 * 7 03 09 01 B3 \b0
+1621 * 7 03 09 01 B3 \b0
 \wx00E9 	// jrsuperstore_tile_W_spritelayout;
 
 // param[124] = (param[131] & 255)
-1614 * 9 0D 7C \D& 83 FF \dx000000FF
+1622 * 9 0D 7C \D& 83 FF \dx000000FF
 
-1615 * 9 09 7C 04 \7= \dx00000003 10
+1623 * 9 09 7C 04 \7= \dx00000003 10
 
 // param[123] = 0
-1616 * 9 0D 7B \D= FF 00 \dx00000000
-
-// param[122] = 0
-1617 * 9 0D 7A \D= FF 00 \dx00000000
-
-1618 * 6 09 07 01 \70 00 01
-
-// param[122] = 1
-1619 * 9 0D 7A \D= FF 00 \dx00000001
-
-1620 * 9 09 7A 04 \7= \dx00000000 01
-
-// param[123] = 152
-1621 * 9 0D 7B \D= FF 00 \dx00000098
-
-// param[122] = 3
-1622 * 9 0D 7A \D= FF 00 \dx00000003
-
-// param[121] = param[2]
-1623 * 5 0D 79 \D= 02 00
-
-1624 * 9 09 79 04 \7! \dx00000001 01
+1624 * 9 0D 7B \D= FF 00 \dx00000000
 
 // param[122] = 0
 1625 * 9 0D 7A \D= FF 00 \dx00000000
 
+1626 * 6 09 07 01 \70 00 01
+
+// param[122] = 1
+1627 * 9 0D 7A \D= FF 00 \dx00000001
+
+1628 * 9 09 7A 04 \7= \dx00000000 01
+
+// param[123] = 152
+1629 * 9 0D 7B \D= FF 00 \dx00000098
+
+// param[122] = 3
+1630 * 9 0D 7A \D= FF 00 \dx00000003
+
+// param[121] = param[2]
+1631 * 5 0D 79 \D= 02 00
+
+1632 * 9 09 79 04 \7! \dx00000001 01
+
+// param[122] = 0
+1633 * 9 0D 7A \D= FF 00 \dx00000000
+
 // param[121] = 5
-1626 * 9 0D 79 \D= FF 00 \dx00000005
+1634 * 9 0D 79 \D= FF 00 \dx00000005
 
 // param[120] = param[2]
-1627 * 5 0D 78 \D= 02 00
+1635 * 5 0D 78 \D= 02 00
 
-1628 * 9 09 78 04 \7= \dx00000002 01
+1636 * 9 09 78 04 \7= \dx00000002 01
 
 // param[121] = 0
-1629 * 9 0D 79 \D= FF 00 \dx00000000
+1637 * 9 0D 79 \D= FF 00 \dx00000000
 
-1630 * 17 06
+1638 * 17 06
 7B 01 FF \wx002D
 7A 01 FF \wx0049
 79 01 FF \wx004B
 FF
 
-1631 * 89 00 0A \b18 01 FF \wx0026
+1639 * 89 00 0A \b18 01 FF \wx0026
 08 01
 0A \b1 \d22
 00 00 FE \wx00B0
@@ -7508,32 +7533,32 @@ FF
 1F \wxDC44
 24 \wxDC45
 
-1632 * 11 00 0A \b2 01 FF \wx0026
+1640 * 11 00 0A \b2 01 FF \wx0026
 21 08
 22 00
 
-1633 * 2 10 10
+1641 * 2 10 10
 
 // Name: @action3_34
-1634 * 23 02 0A FD 89
+1642 * 23 02 0A FD 89
 0C 00 \dx0000FFFF
 \b1
 \wx00FD \dx00000028 \dx00000028 	// superstore_check_location;
 \wx00E8 // @CB_FAILED0A;
 
-1635 * 9 07 7C 04 \7= \dx00000003 01
+1643 * 9 07 7C 04 \7= \dx00000003 01
 
-1636 * 7 03 0A 01 26 \b0
+1644 * 7 03 0A 01 26 \b0
 \wx00FD 	// @action3_34;
 
 // Name: jrrcycdepot_tile_N_spritelayout - feature 09
-1637 * 47 02 09 FD \b67 \dx00001243 \wx0000
+1645 * 47 02 09 FD \b67 \dx00001243 \wx0000
 \dx00001007 \wx0000 \b0 \b240 \b0 \b16 \b16 \b16
 \dx00001006 \wx0000 \b240 \b0 \b0 \b16 \b16 \b16
 \dx00000000 \wx0002 \b2 \b1 \b0 \b16 \b16 \b16 83
 
 // Name: jrrcycdepot_tile_N_spritelayout@registers - feature 09
-1638 * 138 02 09 FD 89
+1646 * 138 02 09 FD 89
 40 20 \dx00000003
 \2cmp 1A 20 \dx00000000
 \2& 1A 20 \dx00000001
@@ -7556,14 +7581,14 @@ FF
 \wx00FD //
 
 // Name: jrrcycdepot_tile_E_spritelayout - feature 09
-1639 * 60 02 09 E9 \b68 \dx00001243 \wx0000
+1647 * 60 02 09 E9 \b68 \dx00001243 \wx0000
 \dx00001006 \wx0000 \b240 \b0 \b0 \b16 \b16 \b16
 \dx00000000 \wx0002 \b8 \b4 \b0 \b16 \b16 \b16 83
 \dx00000000 \wx0002 \b2 \b4 \b0 \b16 \b16 \b16 87
 \dx00001007 \wx0000 \b0 \b0 \b0 \b16 \b16 \b16
 
 // Name: jrrcycdepot_tile_E_spritelayout@registers - feature 09
-1640 * 260 02 09 E9 89
+1648 * 260 02 09 E9 89
 40 20 \dx00000003
 \2cmp 1A 20 \dx00000000
 \2& 1A 20 \dx00000001
@@ -7603,18 +7628,18 @@ FF
 \wx00E9 //
 
 // Name: jrrcycdepot_tile_S_spritelayout - feature 09
-1641 * 28 02 09 F9 \b2 \dx00001243
+1649 * 28 02 09 F9 \b2 \dx00001243
 \dx00001007 \b0 \b0 \b0 \b16 \b16 \b16
 \dx00001006 \b0 \b0 \b0 \b16 \b16 \b16
 
 // Name: jrrcycdepot_tile_W_spritelayout - feature 09
-1642 * 47 02 09 FF \b67 \dx00001243 \wx0000
+1650 * 47 02 09 FF \b67 \dx00001243 \wx0000
 \dx00001007 \wx0000 \b0 \b240 \b0 \b16 \b16 \b16
 \dx00000000 \wx0002 \b2 \b1 \b0 \b16 \b16 \b16 83
 \dx00001006 \wx0000 \b0 \b0 \b0 \b16 \b16 \b16
 
 // Name: jrrcycdepot_tile_W_spritelayout@registers - feature 09
-1643 * 138 02 09 FF 89
+1651 * 138 02 09 FF 89
 40 20 \dx00000003
 \2cmp 1A 20 \dx00000000
 \2& 1A 20 \dx00000001
@@ -7636,76 +7661,76 @@ FF
 \wx00FF \dx00000000 \dx00000000
 \wx00FF //
 
-1644 * 9 00 09 \b1 01 FF \wx00B4
+1652 * 9 00 09 \b1 01 FF \wx00B4
 08 00
 
-1645 * 9 00 09 \b1 01 FF \wx00B4
+1653 * 9 00 09 \b1 01 FF \wx00B4
 0E 50
 
 // Name: @action3_35
-1646 * 33 02 09 FD 89
+1654 * 33 02 09 FD 89
 0C 00 \dx0000FFFF
 \b2
 \wx8400 \dx0000002F \dx0000002F 	// return 1024;
 \wx8000 \dx0000003C \dx0000003C 	// return 0;
 \wx00FD // jrrcycdepot_tile_N_spritelayout;
 
-1647 * 7 03 09 01 B4 \b0
+1655 * 7 03 09 01 B4 \b0
 \wx00FD 	// @action3_35;
 
-1648 * 9 00 09 \b1 01 FF \wx00B5
+1656 * 9 00 09 \b1 01 FF \wx00B5
 08 00
 
-1649 * 9 00 09 \b1 01 FF \wx00B5
+1657 * 9 00 09 \b1 01 FF \wx00B5
 0E 50
 
 // Name: @action3_36
-1650 * 33 02 09 E9 89
+1658 * 33 02 09 E9 89
 0C 00 \dx0000FFFF
 \b2
 \wx8400 \dx0000002F \dx0000002F 	// return 1024;
 \wx8000 \dx0000003C \dx0000003C 	// return 0;
 \wx00E9 // jrrcycdepot_tile_E_spritelayout;
 
-1651 * 7 03 09 01 B5 \b0
+1659 * 7 03 09 01 B5 \b0
 \wx00E9 	// @action3_36;
 
-1652 * 9 00 09 \b1 01 FF \wx00B6
+1660 * 9 00 09 \b1 01 FF \wx00B6
 08 00
 
-1653 * 9 00 09 \b1 01 FF \wx00B6
+1661 * 9 00 09 \b1 01 FF \wx00B6
 0E 50
 
 // Name: @action3_37
-1654 * 33 02 09 F9 89
+1662 * 33 02 09 F9 89
 0C 00 \dx0000FFFF
 \b2
 \wx8400 \dx0000002F \dx0000002F 	// return 1024;
 \wx8000 \dx0000003C \dx0000003C 	// return 0;
 \wx00F9 // jrrcycdepot_tile_S_spritelayout;
 
-1655 * 7 03 09 01 B6 \b0
+1663 * 7 03 09 01 B6 \b0
 \wx00F9 	// @action3_37;
 
-1656 * 9 00 09 \b1 01 FF \wx00B7
+1664 * 9 00 09 \b1 01 FF \wx00B7
 08 00
 
-1657 * 9 00 09 \b1 01 FF \wx00B7
+1665 * 9 00 09 \b1 01 FF \wx00B7
 0E 50
 
 // Name: @action3_38
-1658 * 33 02 09 FF 89
+1666 * 33 02 09 FF 89
 0C 00 \dx0000FFFF
 \b2
 \wx8400 \dx0000002F \dx0000002F 	// return 1024;
 \wx8000 \dx0000003C \dx0000003C 	// return 0;
 \wx00FF // jrrcycdepot_tile_W_spritelayout;
 
-1659 * 7 03 09 01 B7 \b0
+1667 * 7 03 09 01 B7 \b0
 \wx00FF 	// @action3_38;
 
 // Name: jrrcycplant_tile_N_spritelayout - feature 09
-1660 * 58 02 09 FF \b5 \dx000008A2
+1668 * 58 02 09 FF \b5 \dx000008A2
 \dx03158515 \b0 \b0 \b0 \b16 \b16 \b16
 \dx03158516 \b0 \b0 \b0 \b16 \b16 \b16
 \dx00000843 \b0 \b0 \b0 \b16 \b16 \b16
@@ -7713,18 +7738,18 @@ FF
 \dx00000843 \b12 \b0 \b0 \b16 \b16 \b16
 
 // Name: jrrcycplant_tile_E_spritelayout - feature 09
-1661 * 38 02 09 F9 \b3 \dx000008A2
+1669 * 38 02 09 F9 \b3 \dx000008A2
 \dx03158516 \b0 \b0 \b0 \b16 \b16 \b16
 \dx0000092F \b1 \b0 \b0 \b16 \b16 \b16
 \dx03158515 \b0 \b16 \b0 \b16 \b16 \b16
 
 // Name: jrrcycplant_tile_S_spritelayout - feature 09
-1662 * 28 02 09 E9 \b2 \dx000008A2
+1670 * 28 02 09 E9 \b2 \dx000008A2
 \dx03158515 \b0 \b16 \b0 \b16 \b16 \b16
 \dx03158516 \b16 \b0 \b0 \b16 \b16 \b16
 
 // Name: jrrcycplant_tile_W_spritelayout - feature 09
-1663 * 73 02 09 FD \b69 \dx000008A2 \wx0000
+1671 * 73 02 09 FD \b69 \dx000008A2 \wx0000
 \dx03158515 \wx0000 \b0 \b0 \b0 \b16 \b16 \b16
 \dx00000000 \wx0002 \b6 \b2 \b0 \b16 \b16 \b16 83
 \dx00000000 \wx0002 \b6 \b10 \b0 \b16 \b16 \b16 87
@@ -7732,7 +7757,7 @@ FF
 \dx03158516 \wx0000 \b16 \b0 \b0 \b16 \b16 \b16
 
 // Name: jrrcycplant_tile_W_spritelayout@registers - feature 09
-1664 * 382 02 09 FD 89
+1672 * 382 02 09 FD 89
 40 20 \dx00000003
 \2cmp 1A 20 \dx00000000
 \2& 1A 20 \dx00000001
@@ -7788,87 +7813,87 @@ FF
 \wx00FD \dx00000000 \dx00000000
 \wx00FD //
 
-1665 * 13 00 09 \b2 01 FF \wx00B8
+1673 * 13 00 09 \b2 01 FF \wx00B8
 08 00
 13 \b1
 \wx0818
 
-1666 * 9 00 09 \b1 01 FF \wx00B8
+1674 * 9 00 09 \b1 01 FF \wx00B8
 0E 50
 
 // Name: @action3_39
-1667 * 33 02 09 FF 89
+1675 * 33 02 09 FF 89
 0C 00 \dx0000FFFF
 \b2
 \wx8400 \dx0000002F \dx0000002F 	// return 1024;
 \wx8000 \dx0000003C \dx0000003C 	// return 0;
 \wx00FF // jrrcycplant_tile_N_spritelayout;
 
-1668 * 7 03 09 01 B8 \b0
+1676 * 7 03 09 01 B8 \b0
 \wx00FF 	// @action3_39;
 
-1669 * 13 00 09 \b2 01 FF \wx00B9
+1677 * 13 00 09 \b2 01 FF \wx00B9
 08 00
 13 \b1
 \wx0818
 
-1670 * 9 00 09 \b1 01 FF \wx00B9
+1678 * 9 00 09 \b1 01 FF \wx00B9
 0E 50
 
 // Name: @action3_40
-1671 * 33 02 09 F9 89
+1679 * 33 02 09 F9 89
 0C 00 \dx0000FFFF
 \b2
 \wx8400 \dx0000002F \dx0000002F 	// return 1024;
 \wx8000 \dx0000003C \dx0000003C 	// return 0;
 \wx00F9 // jrrcycplant_tile_E_spritelayout;
 
-1672 * 7 03 09 01 B9 \b0
+1680 * 7 03 09 01 B9 \b0
 \wx00F9 	// @action3_40;
 
-1673 * 13 00 09 \b2 01 FF \wx00BA
+1681 * 13 00 09 \b2 01 FF \wx00BA
 08 00
 13 \b1
 \wx0818
 
-1674 * 9 00 09 \b1 01 FF \wx00BA
+1682 * 9 00 09 \b1 01 FF \wx00BA
 0E 50
 
 // Name: @action3_41
-1675 * 33 02 09 E9 89
+1683 * 33 02 09 E9 89
 0C 00 \dx0000FFFF
 \b2
 \wx8400 \dx0000002F \dx0000002F 	// return 1024;
 \wx8000 \dx0000003C \dx0000003C 	// return 0;
 \wx00E9 // jrrcycplant_tile_S_spritelayout;
 
-1676 * 7 03 09 01 BA \b0
+1684 * 7 03 09 01 BA \b0
 \wx00E9 	// @action3_41;
 
-1677 * 13 00 09 \b2 01 FF \wx00BB
+1685 * 13 00 09 \b2 01 FF \wx00BB
 08 00
 13 \b1
 \wx0818
 
-1678 * 9 00 09 \b1 01 FF \wx00BB
+1686 * 9 00 09 \b1 01 FF \wx00BB
 0E 50
 
 // Name: @action3_42
-1679 * 33 02 09 FD 89
+1687 * 33 02 09 FD 89
 0C 00 \dx0000FFFF
 \b2
 \wx8400 \dx0000002F \dx0000002F 	// return 1024;
 \wx8000 \dx0000003C \dx0000003C 	// return 0;
 \wx00FD // jrrcycplant_tile_W_spritelayout;
 
-1680 * 7 03 09 01 BB \b0
+1688 * 7 03 09 01 BB \b0
 \wx00FD 	// @action3_42;
 
 // Name: RCYC_produce_1_cargo_a
-1681 * 9 02 0A FD 02 \b0 \b1 18 80 81
+1689 * 9 02 0A FD 02 \b0 \b1 18 80 81
 
 // Name: RCYC_produce_1_cargo_a@registers
-1682 * 45 02 0A FD 89
+1690 * 45 02 0A FD 89
 7C 02 20 \dxFFFFFFFF
 \2sto 1A 20 \dx00000080
 \2r 1A 20 \dx00000000
@@ -7878,10 +7903,10 @@ FF
 \wx00FD //
 
 // Name: RCYC_produce_1_cargo_b
-1683 * 9 02 0A E9 02 \b0 \b1 18 80 81
+1691 * 9 02 0A E9 02 \b0 \b1 18 80 81
 
 // Name: RCYC_produce_1_cargo_b@registers
-1684 * 52 02 0A E9 89
+1692 * 52 02 0A E9 89
 7C 02 20 \dxFFFFFFFF
 \2- 1A 20 \dx00000003
 \2sto 1A 20 \dx00000080
@@ -7892,10 +7917,10 @@ FF
 \wx00E9 //
 
 // Name: RCYC_produce_1_cargo_c
-1685 * 9 02 0A F9 02 \b0 \b1 18 80 81
+1693 * 9 02 0A F9 02 \b0 \b1 18 80 81
 
 // Name: RCYC_produce_1_cargo_c@registers
-1686 * 52 02 0A F9 89
+1694 * 52 02 0A F9 89
 7C 02 20 \dxFFFFFFFF
 \2- 1A 20 \dx00000002
 \2sto 1A 20 \dx00000080
@@ -7906,10 +7931,10 @@ FF
 \wx00F9 //
 
 // Name: RCYC_produce_1_cargo_d
-1687 * 9 02 0A FF 02 \b0 \b1 18 80 81
+1695 * 9 02 0A FF 02 \b0 \b1 18 80 81
 
 // Name: RCYC_produce_1_cargo_d@registers
-1688 * 52 02 0A FF 89
+1696 * 52 02 0A FF 89
 7C 02 20 \dxFFFFFFFF
 \2- 1A 20 \dx00000001
 \2sto 1A 20 \dx00000080
@@ -7920,10 +7945,10 @@ FF
 \wx00FF //
 
 // Name: RCYC_produce_1_cargo_e
-1689 * 9 02 0A F2 02 \b0 \b1 18 80 81
+1697 * 9 02 0A F2 02 \b0 \b1 18 80 81
 
 // Name: RCYC_produce_1_cargo_e@registers
-1690 * 52 02 0A F2 89
+1698 * 52 02 0A F2 89
 7C 02 20 \dxFFFFFFFF
 \2+ 1A 20 \dx00000001
 \2sto 1A 20 \dx00000080
@@ -7934,10 +7959,10 @@ FF
 \wx00F2 //
 
 // Name: RCYC_produce_1_cargo_f
-1691 * 9 02 0A ED 02 \b0 \b1 18 80 81
+1699 * 9 02 0A ED 02 \b0 \b1 18 80 81
 
 // Name: RCYC_produce_1_cargo_f@registers
-1692 * 52 02 0A ED 89
+1700 * 52 02 0A ED 89
 7C 02 20 \dxFFFFFFFF
 \2+ 1A 20 \dx00000002
 \2sto 1A 20 \dx00000080
@@ -7948,10 +7973,10 @@ FF
 \wx00ED //
 
 // Name: RCYC_produce_1_cargo_g
-1693 * 9 02 0A EF 02 \b0 \b1 18 80 81
+1701 * 9 02 0A EF 02 \b0 \b1 18 80 81
 
 // Name: RCYC_produce_1_cargo_g@registers
-1694 * 52 02 0A EF 89
+1702 * 52 02 0A EF 89
 7C 02 20 \dxFFFFFFFF
 \2+ 1A 20 \dx00000003
 \2sto 1A 20 \dx00000080
@@ -7962,7 +7987,7 @@ FF
 \wx00EF //
 
 // Name: RCYC_produce_1_cargo_1
-1695 * 84 02 0A EF 89
+1703 * 84 02 0A EF 89
 7C 01 00 \dxFFFFFFFF
 \b7
 \wx00FD \dx00000000 \dx00000001 	// 0 .. 1: RCYC_produce_1_cargo_a;
@@ -7975,7 +8000,7 @@ FF
 \wx00E8 // default: @CB_FAILED0A;
 
 // Name: @return_action_0
-1696 * 27 02 0A ED 89
+1704 * 27 02 0A ED 89
 1A 20 \dx00000010
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -7983,7 +8008,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_1
-1697 * 27 02 0A F2 89
+1705 * 27 02 0A F2 89
 1A 20 \dx00000011
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -7991,7 +8016,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_2
-1698 * 27 02 0A FF 89
+1706 * 27 02 0A FF 89
 1A 20 \dx00000012
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -7999,7 +8024,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_3
-1699 * 27 02 0A F9 89
+1707 * 27 02 0A F9 89
 1A 20 \dx00000013
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8007,7 +8032,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_4
-1700 * 27 02 0A E9 89
+1708 * 27 02 0A E9 89
 1A 20 \dx00000014
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8015,7 +8040,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_5
-1701 * 27 02 0A FD 89
+1709 * 27 02 0A FD 89
 1A 20 \dx00000016
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8023,7 +8048,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_6
-1702 * 27 02 0A F0 89
+1710 * 27 02 0A F0 89
 1A 20 \dx00000018
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8031,7 +8056,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_7
-1703 * 27 02 0A F6 89
+1711 * 27 02 0A F6 89
 1A 20 \dx0000001A
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8039,7 +8064,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_8
-1704 * 27 02 0A F5 89
+1712 * 27 02 0A F5 89
 1A 20 \dx0000001C
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8047,7 +8072,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_9
-1705 * 27 02 0A F1 89
+1713 * 27 02 0A F1 89
 1A 20 \dx0000001E
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8055,7 +8080,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_10
-1706 * 27 02 0A F3 89
+1714 * 27 02 0A F3 89
 1A 20 \dx00000020
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8063,7 +8088,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_11
-1707 * 27 02 0A EE 89
+1715 * 27 02 0A EE 89
 1A 20 \dx00000022
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8071,7 +8096,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_12
-1708 * 27 02 0A F7 89
+1716 * 27 02 0A F7 89
 1A 20 \dx00000025
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8079,7 +8104,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_13
-1709 * 27 02 0A F8 89
+1717 * 27 02 0A F8 89
 1A 20 \dx00000028
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8087,7 +8112,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_14
-1710 * 27 02 0A FC 89
+1718 * 27 02 0A FC 89
 1A 20 \dx0000002B
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8095,7 +8120,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_15
-1711 * 27 02 0A FB 89
+1719 * 27 02 0A FB 89
 1A 20 \dx0000002E
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8103,7 +8128,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_16
-1712 * 27 02 0A EC 89
+1720 * 27 02 0A EC 89
 1A 20 \dx00000031
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8111,7 +8136,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_17
-1713 * 27 02 0A FA 89
+1721 * 27 02 0A FA 89
 1A 20 \dx00000034
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8119,7 +8144,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_18
-1714 * 27 02 0A EA 89
+1722 * 27 02 0A EA 89
 1A 20 \dx00000037
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8127,7 +8152,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_19
-1715 * 27 02 0A EB 89
+1723 * 27 02 0A EB 89
 1A 20 \dx0000003B
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8135,7 +8160,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_20
-1716 * 27 02 0A E7 89
+1724 * 27 02 0A E7 89
 1A 20 \dx0000003F
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8143,7 +8168,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_21
-1717 * 27 02 0A E6 89
+1725 * 27 02 0A E6 89
 1A 20 \dx00000043
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8151,7 +8176,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_22
-1718 * 27 02 0A E5 89
+1726 * 27 02 0A E5 89
 1A 20 \dx00000047
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8159,7 +8184,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_23
-1719 * 27 02 0A E4 89
+1727 * 27 02 0A E4 89
 1A 20 \dx0000004B
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8167,7 +8192,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_24
-1720 * 27 02 0A E3 89
+1728 * 27 02 0A E3 89
 1A 20 \dx0000004F
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8175,7 +8200,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_25
-1721 * 27 02 0A E2 89
+1729 * 27 02 0A E2 89
 1A 20 \dx00000053
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8183,7 +8208,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_26
-1722 * 27 02 0A E1 89
+1730 * 27 02 0A E1 89
 1A 20 \dx00000057
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8191,7 +8216,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_27
-1723 * 27 02 0A E0 89
+1731 * 27 02 0A E0 89
 1A 20 \dx0000005C
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8199,7 +8224,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_28
-1724 * 27 02 0A DF 89
+1732 * 27 02 0A DF 89
 1A 20 \dx00000061
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8207,7 +8232,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_29
-1725 * 27 02 0A DE 89
+1733 * 27 02 0A DE 89
 1A 20 \dx00000066
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8215,7 +8240,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_30
-1726 * 27 02 0A DD 89
+1734 * 27 02 0A DD 89
 1A 20 \dx0000006B
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8223,7 +8248,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_31
-1727 * 27 02 0A DC 89
+1735 * 27 02 0A DC 89
 1A 20 \dx00000070
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8231,7 +8256,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_32
-1728 * 27 02 0A DB 89
+1736 * 27 02 0A DB 89
 1A 20 \dx00000075
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8239,7 +8264,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_33
-1729 * 27 02 0A DA 89
+1737 * 27 02 0A DA 89
 1A 20 \dx0000007A
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8247,7 +8272,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_34
-1730 * 27 02 0A D9 89
+1738 * 27 02 0A D9 89
 1A 20 \dx0000007F
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8255,7 +8280,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_35
-1731 * 27 02 0A D8 89
+1739 * 27 02 0A D8 89
 1A 20 \dx00000085
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8263,7 +8288,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_36
-1732 * 27 02 0A D7 89
+1740 * 27 02 0A D7 89
 1A 20 \dx0000008B
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8271,7 +8296,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_37
-1733 * 27 02 0A D6 89
+1741 * 27 02 0A D6 89
 1A 20 \dx00000091
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8279,7 +8304,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_38
-1734 * 27 02 0A D5 89
+1742 * 27 02 0A D5 89
 1A 20 \dx00000097
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8287,7 +8312,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_39
-1735 * 27 02 0A D4 89
+1743 * 27 02 0A D4 89
 1A 20 \dx0000009D
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8295,7 +8320,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_40
-1736 * 27 02 0A D3 89
+1744 * 27 02 0A D3 89
 1A 20 \dx000000A3
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8303,7 +8328,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_41
-1737 * 27 02 0A D2 89
+1745 * 27 02 0A D2 89
 1A 20 \dx000000A9
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8311,7 +8336,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_42
-1738 * 27 02 0A D1 89
+1746 * 27 02 0A D1 89
 1A 20 \dx000000AF
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8319,7 +8344,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_43
-1739 * 27 02 0A D0 89
+1747 * 27 02 0A D0 89
 1A 20 \dx000000B6
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8327,7 +8352,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_44
-1740 * 27 02 0A CF 89
+1748 * 27 02 0A CF 89
 1A 20 \dx000000BD
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8335,7 +8360,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_45
-1741 * 27 02 0A CE 89
+1749 * 27 02 0A CE 89
 1A 20 \dx000000C4
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8343,7 +8368,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_46
-1742 * 27 02 0A CD 89
+1750 * 27 02 0A CD 89
 1A 20 \dx000000CB
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8351,7 +8376,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_47
-1743 * 27 02 0A CC 89
+1751 * 27 02 0A CC 89
 1A 20 \dx000000D2
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8359,7 +8384,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_48
-1744 * 27 02 0A CB 89
+1752 * 27 02 0A CB 89
 1A 20 \dx000000D9
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8367,7 +8392,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_49
-1745 * 27 02 0A CA 89
+1753 * 27 02 0A CA 89
 1A 20 \dx000000E0
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8375,7 +8400,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_50
-1746 * 27 02 0A C9 89
+1754 * 27 02 0A C9 89
 1A 20 \dx000000E7
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8383,7 +8408,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_51
-1747 * 27 02 0A C8 89
+1755 * 27 02 0A C8 89
 1A 20 \dx000000EE
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8391,7 +8416,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_52
-1748 * 27 02 0A C7 89
+1756 * 27 02 0A C7 89
 1A 20 \dx000000F6
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8399,7 +8424,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @return_action_53
-1749 * 27 02 0A C6 89
+1757 * 27 02 0A C6 89
 1A 20 \dx000000FF
 \2psto 1A 20 \dx00000002
 \2r 1A 00 \dx00000000
@@ -8407,7 +8432,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: RCYC_production_change_3
-1750 * 544 02 0A C6 89
+1758 * 544 02 0A C6 89
 7D 01 00 \dxFFFFFFFF
 \b53
 \wx00ED \dx00000000 \dx0000108E 	// 0 .. 4238: return [STORE_PERM(16, 2), 0]
@@ -8466,7 +8491,7 @@ FF
 \wx00C6 // default: return [STORE_PERM(255, 2), 0]
 
 // Name: RCYC_production_change_2
-1751 * 51 02 0A C6 89
+1759 * 51 02 0A C6 89
 18 20 \dxFFFFFFFF
 \2u>> 1A 20 \dx00000000
 \2& 1A 20 \dx00000007
@@ -8477,7 +8502,7 @@ FF
 \wx00C6 // default: RCYC_production_change_3;
 
 // Name: RCYC_production_change_1
-1752 * 30 02 0A C6 8A
+1760 * 30 02 0A C6 8A
 82 20 \dx0000FFFF
 \2sto 1A 00 \dx00000001
 \b1
@@ -8485,10 +8510,10 @@ FF
 \wx00C6 // default: RCYC_production_change_2;
 
 // Name: rcyc_plant_produce_steel
-1753 * 15 02 0A C7 02 \b1 18 80 \b3 1E 81 14 82 17 83 84
+1761 * 15 02 0A C7 02 \b1 18 80 \b3 1E 81 14 82 17 83 84
 
 // Name: rcyc_plant_produce_steel@registers
-1754 * 114 02 0A C7 89
+1762 * 114 02 0A C7 89
 6F 18 20 \dxFFFFFFFF
 \2sto 1A 20 \dx00000080
 \2r 6F 18 60 \dxFFFFFFFF \dx00000000 \dx00000003
@@ -8504,10 +8529,10 @@ FF
 \wx00C7 //
 
 // Name: rcyc_plant_produce_paper
-1755 * 15 02 0A C8 02 \b1 18 80 \b3 1E 81 14 82 11 83 84
+1763 * 15 02 0A C8 02 \b1 18 80 \b3 1E 81 14 82 11 83 84
 
 // Name: rcyc_plant_produce_paper@registers
-1756 * 114 02 0A C8 89
+1764 * 114 02 0A C8 89
 6F 18 20 \dxFFFFFFFF
 \2sto 1A 20 \dx00000080
 \2r 6F 18 60 \dxFFFFFFFF \dx00000000 \dx00000003
@@ -8523,10 +8548,10 @@ FF
 \wx00C8 //
 
 // Name: rcyc_plant_produce_copper
-1757 * 15 02 0A C9 02 \b1 18 80 \b3 1E 81 14 82 03 83 84
+1765 * 15 02 0A C9 02 \b1 18 80 \b3 1E 81 14 82 03 83 84
 
 // Name: rcyc_plant_produce_copper@registers
-1758 * 114 02 0A C9 89
+1766 * 114 02 0A C9 89
 6F 18 20 \dxFFFFFFFF
 \2sto 1A 20 \dx00000080
 \2r 6F 18 60 \dxFFFFFFFF \dx00000000 \dx00000003
@@ -8542,10 +8567,10 @@ FF
 \wx00C9 //
 
 // Name: rcyc_plant_produce_plastic
-1759 * 13 02 0A CA 02 \b1 18 80 \b2 1E 81 14 82 83
+1767 * 13 02 0A CA 02 \b1 18 80 \b2 1E 81 14 82 83
 
 // Name: rcyc_plant_produce_plastic@registers
-1760 * 91 02 0A CA 89
+1768 * 91 02 0A CA 89
 6F 18 20 \dxFFFFFFFF
 \2sto 1A 20 \dx00000080
 \2r 6F 18 60 \dxFFFFFFFF \dx00000000 \dx00000002
@@ -8559,10 +8584,10 @@ FF
 \wx00CA //
 
 // Name: rcyc_plant_produce_waste
-1761 * 11 02 0A CB 02 \b1 18 80 \b1 1E 81 82
+1769 * 11 02 0A CB 02 \b1 18 80 \b1 1E 81 82
 
 // Name: rcyc_plant_produce_waste@registers
-1762 * 60 02 0A CB 89
+1770 * 60 02 0A CB 89
 6F 18 20 \dxFFFFFFFF
 \2sto 1A 20 \dx00000080
 \2r 6F 18 20 \dxFFFFFFFF
@@ -8574,14 +8599,14 @@ FF
 \wx00CB //
 
 // param[124] = (param[131] & 255)
-1763 * 9 0D 7C \D& 83 FF \dx000000FF
+1771 * 9 0D 7C \D& 83 FF \dx000000FF
 
-1764 * 7 06
+1772 * 7 06
 7C 04 FF \wx0006
 FF
 
 // Name: rcyc_plant_produce_climate
-1765 * 43 02 0A C9 89
+1773 * 43 02 0A C9 89
 1A 00 \dx00000000 	// param[124]
 \b3
 \wx00C7 \dx00000000 \dx00000000 	// 0 .. 0: rcyc_plant_produce_steel;
@@ -8590,7 +8615,7 @@ FF
 \wx00E8 // No default specified -> fail callback
 
 // Name: rcyc_plant_produce_256
-1766 * 34 02 0A C9 89
+1774 * 34 02 0A C9 89
 7C 01 00 \dxFFFFFFFF
 \b2
 \wx00CB \dx00000000 \dx00000031 	// 0 .. 49: rcyc_plant_produce_waste;
@@ -8598,7 +8623,7 @@ FF
 \wx00C9 // default: rcyc_plant_produce_climate;
 
 // Name: rcyc_plant_monthly_prod_change
-1767 * 53 02 0A CA 89
+1775 * 53 02 0A CA 89
 6D 1E 20 \dxFFFFFFFF
 \2* 1A 20 \dx00000064
 \2+ 1A 20 \dx00000032
@@ -8609,7 +8634,7 @@ FF
 \wx8000 // default: return 0;
 
 // Name: rcyc_intro_year
-1768 * 55 02 0A CB 89
+1776 * 55 02 0A CB 89
 23 60 \dxFFFFFFFF \dxFFF521E1 \dx00000001
 \2cmp 1A 20 \dx00000000
 \2< 1A 00 \dx00000001
@@ -8619,84 +8644,84 @@ FF
 \wx00E8 // default: @CB_FAILED0A;
 
 // param[123] = 0
-1769 * 9 0D 7B \D= FF 00 \dx00000000
-
-1770 * 6 09 0D 01 \70 00 01
-
-// param[123] = 1
-1771 * 9 0D 7B \D= FF 00 \dx00000001
-
-// param[121] = (param[131] & 255)
-1772 * 9 0D 79 \D& 83 FF \dx000000FF
-
-// param[122] = (param[121] - 3)
-1773 * 9 0D 7A \D- 79 FF \dx00000003
-
-// param[122] = (param[122] / param[122])
-1774 * 5 0D 7A \D/ 7A 7A
-
-// param[124] = (param[123] & param[122])
-1775 * 5 0D 7C \D& 7B 7A
-
-1776 * 9 09 7C 04 \7= \dx00000000 10
-
-// param[123] = 0
 1777 * 9 0D 7B \D= FF 00 \dx00000000
 
-// param[122] = param[3]
-1778 * 5 0D 7A \D= 03 00
-
-1779 * 9 09 7A 04 \7= \dx00000000 01
+1778 * 6 09 0D 01 \70 00 01
 
 // param[123] = 1
-1780 * 9 0D 7B \D= FF 00 \dx00000001
+1779 * 9 0D 7B \D= FF 00 \dx00000001
+
+// param[121] = (param[131] & 255)
+1780 * 9 0D 79 \D& 83 FF \dx000000FF
+
+// param[122] = (param[121] - 3)
+1781 * 9 0D 7A \D- 79 FF \dx00000003
+
+// param[122] = (param[122] / param[122])
+1782 * 5 0D 7A \D/ 7A 7A
+
+// param[124] = (param[123] & param[122])
+1783 * 5 0D 7C \D& 7B 7A
+
+1784 * 9 09 7C 04 \7= \dx00000000 10
+
+// param[123] = 0
+1785 * 9 0D 7B \D= FF 00 \dx00000000
+
+// param[122] = param[3]
+1786 * 5 0D 7A \D= 03 00
+
+1787 * 9 09 7A 04 \7= \dx00000000 01
+
+// param[123] = 1
+1788 * 9 0D 7B \D= FF 00 \dx00000001
 
 // param[122] = 0
-1781 * 9 0D 7A \D= FF 00 \dx00000000
-
-// param[121] = 0
-1782 * 9 0D 79 \D= FF 00 \dx00000000
-
-1783 * 6 09 05 01 \70 00 01
-
-// param[121] = 1
-1784 * 9 0D 79 \D= FF 00 \dx00000001
-
-1785 * 9 09 79 04 \7= \dx00000000 01
-
-// param[122] = 118
-1786 * 9 0D 7A \D= FF 00 \dx00000076
-
-// param[121] = 4
-1787 * 9 0D 79 \D= FF 00 \dx00000004
-
-// param[120] = param[0]
-1788 * 5 0D 78 \D= 00 00
-
-1789 * 9 09 78 04 \7! \dx00000001 01
+1789 * 9 0D 7A \D= FF 00 \dx00000000
 
 // param[121] = 0
 1790 * 9 0D 79 \D= FF 00 \dx00000000
 
+1791 * 6 09 05 01 \70 00 01
+
+// param[121] = 1
+1792 * 9 0D 79 \D= FF 00 \dx00000001
+
+1793 * 9 09 79 04 \7= \dx00000000 01
+
+// param[122] = 118
+1794 * 9 0D 7A \D= FF 00 \dx00000076
+
+// param[121] = 4
+1795 * 9 0D 79 \D= FF 00 \dx00000004
+
+// param[120] = param[0]
+1796 * 5 0D 78 \D= 00 00
+
+1797 * 9 09 78 04 \7! \dx00000001 01
+
+// param[121] = 0
+1798 * 9 0D 79 \D= FF 00 \dx00000000
+
 // param[120] = 6
-1791 * 9 0D 78 \D= FF 00 \dx00000006
+1799 * 9 0D 78 \D= FF 00 \dx00000006
 
 // param[119] = param[0]
-1792 * 5 0D 77 \D= 00 00
+1800 * 5 0D 77 \D= 00 00
 
-1793 * 9 09 77 04 \7= \dx00000002 01
+1801 * 9 09 77 04 \7= \dx00000002 01
 
 // param[120] = 0
-1794 * 9 0D 78 \D= FF 00 \dx00000000
+1802 * 9 0D 78 \D= FF 00 \dx00000000
 
-1795 * 22 06
+1803 * 22 06
 7B 01 FF \wx0026
 7A 01 FF \wx0028
 79 01 FF \wx0040
 78 01 FF \wx0042
 FF
 
-1796 * 80 00 0A \b17 01 FF \wx0027
+1804 * 80 00 0A \b17 01 FF \wx0027
 08 00
 0A \b1 \d22
 00 00 FE \wx00B4
@@ -8722,21 +8747,21 @@ FF
 1F \wxDC46
 24 \wxDC47
 
-1797 * 11 00 0A \b2 01 FF \wx0027
+1805 * 11 00 0A \b2 01 FF \wx0027
 21 2D
 22 40
 
-1798 * 2 10 10
+1806 * 2 10 10
 
 // Name: @action3_43
-1799 * 23 02 0A EF 89
+1807 * 23 02 0A EF 89
 18 00 \dx000000FF
 \b1
 \wx00EF \dx00000001 \dx00000001 	// RCYC_produce_1_cargo_1;
 \wx00E8 // @CB_FAILED0A;
 
 // Name: @return_action_0
-1800 * 41 02 0A C8 89
+1808 * 41 02 0A C8 89
 1A 20 \dx00000000
 \2psto 1A 20 \dx00000001
 \2r 1A 20 \dx00000010
@@ -8746,7 +8771,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @action3_44
-1801 * 63 02 0A C8 89
+1809 * 63 02 0A C8 89
 0C 00 \dx0000FFFF
 \b5
 \wx00EF \dx00000000 \dx00000000 	// @action3_43;
@@ -8756,75 +8781,75 @@ FF
 \wx00C8 \dx0000015F \dx0000015F 	// return [STORE_PERM(0, 1), STORE_PERM(16, 2), 16]
 \wx00E8 // @CB_FAILED0A;
 
-1802 * 9 07 7C 04 \7= \dx00000000 01
+1810 * 9 07 7C 04 \7= \dx00000000 01
 
-1803 * 7 03 0A 01 27 \b0
+1811 * 7 03 0A 01 27 \b0
 \wx00C8 	// @action3_44;
 
-1804 * 9 09 7C 04 \7= \dx00000000 11
+1812 * 9 09 7C 04 \7= \dx00000000 11
 
 // param[123] = 0
-1805 * 9 0D 7B \D= FF 00 \dx00000000
+1813 * 9 0D 7B \D= FF 00 \dx00000000
 
 // param[122] = 0
-1806 * 9 0D 7A \D= FF 00 \dx00000000
+1814 * 9 0D 7A \D= FF 00 \dx00000000
 
-1807 * 6 09 04 01 \70 00 01
+1815 * 6 09 04 01 \70 00 01
 
 // param[122] = 1
-1808 * 9 0D 7A \D= FF 00 \dx00000001
+1816 * 9 0D 7A \D= FF 00 \dx00000001
 
-1809 * 9 09 7A 04 \7= \dx00000000 01
+1817 * 9 09 7A 04 \7= \dx00000000 01
 
 // param[123] = 4
-1810 * 9 0D 7B \D= FF 00 \dx00000004
+1818 * 9 0D 7B \D= FF 00 \dx00000004
 
 // param[122] = 0
-1811 * 9 0D 7A \D= FF 00 \dx00000000
-
-// param[121] = 0
-1812 * 9 0D 79 \D= FF 00 \dx00000000
-
-1813 * 6 09 06 01 \70 00 01
-
-// param[121] = 1
-1814 * 9 0D 79 \D= FF 00 \dx00000001
-
-1815 * 9 09 79 04 \7= \dx00000000 01
-
-// param[122] = 118
-1816 * 9 0D 7A \D= FF 00 \dx00000076
-
-// param[121] = 3
-1817 * 9 0D 79 \D= FF 00 \dx00000003
-
-// param[120] = param[1]
-1818 * 5 0D 78 \D= 01 00
-
-1819 * 9 09 78 04 \7! \dx00000001 01
+1819 * 9 0D 7A \D= FF 00 \dx00000000
 
 // param[121] = 0
 1820 * 9 0D 79 \D= FF 00 \dx00000000
 
+1821 * 6 09 06 01 \70 00 01
+
+// param[121] = 1
+1822 * 9 0D 79 \D= FF 00 \dx00000001
+
+1823 * 9 09 79 04 \7= \dx00000000 01
+
+// param[122] = 118
+1824 * 9 0D 7A \D= FF 00 \dx00000076
+
+// param[121] = 3
+1825 * 9 0D 79 \D= FF 00 \dx00000003
+
+// param[120] = param[1]
+1826 * 5 0D 78 \D= 01 00
+
+1827 * 9 09 78 04 \7! \dx00000001 01
+
+// param[121] = 0
+1828 * 9 0D 79 \D= FF 00 \dx00000000
+
 // param[120] = 3
-1821 * 9 0D 78 \D= FF 00 \dx00000003
+1829 * 9 0D 78 \D= FF 00 \dx00000003
 
 // param[119] = param[1]
-1822 * 5 0D 77 \D= 01 00
+1830 * 5 0D 77 \D= 01 00
 
-1823 * 9 09 77 04 \7= \dx00000002 01
+1831 * 9 09 77 04 \7= \dx00000002 01
 
 // param[120] = 0
-1824 * 9 0D 78 \D= FF 00 \dx00000000
+1832 * 9 0D 78 \D= FF 00 \dx00000000
 
-1825 * 22 06
+1833 * 22 06
 7B 01 FF \wx0026
 7A 01 FF \wx0028
 79 01 FF \wx0045
 78 01 FF \wx0047
 FF
 
-1826 * 85 00 0A \b17 01 FF \wx0028
+1834 * 85 00 0A \b17 01 FF \wx0028
 08 06
 0A \b1 \d22
 00 00 FE \wx00B8
@@ -8852,15 +8877,15 @@ FF
 24 \wxDC49
 
 // param[123] = (param[131] & 255)
-1827 * 9 0D 7B \D& 83 FF \dx000000FF
+1835 * 9 0D 7B \D& 83 FF \dx000000FF
 
-1828 * 2 10 11
+1836 * 2 10 11
 
-1829 * 9 07 7C 04 \7= \dx00000000 02
+1837 * 9 07 7C 04 \7= \dx00000000 02
 
-1830 * 9 07 7B 04 \7! \dx00000002 01
+1838 * 9 07 7B 04 \7! \dx00000002 01
 
-1831 * 23 00 0A \b4 01 FF \wx0028
+1839 * 23 00 0A \b4 01 FF \wx0028
 25 \b3
 03 14 1E
 26 \b1
@@ -8868,16 +8893,16 @@ FF
 27 \b3
 00 00 00
 28 \b0 \b0
-1832 * 9 09 7C 04 \7= \dx00000000 01
+1840 * 9 09 7C 04 \7= \dx00000000 01
 
 // param[123] = (param[131] & 255)
-1833 * 9 0D 7B \D& 83 FF \dx000000FF
+1841 * 9 0D 7B \D& 83 FF \dx000000FF
 
-1834 * 9 07 7C 04 \7= \dx00000000 03
+1842 * 9 07 7C 04 \7= \dx00000000 03
 
-1835 * 9 07 7B 04 \7! \dx00000001 01
+1843 * 9 07 7B 04 \7! \dx00000001 01
 
-1836 * 23 00 0A \b4 01 FF \wx0028
+1844 * 23 00 0A \b4 01 FF \wx0028
 25 \b3
 11 14 1E
 26 \b1
@@ -8885,19 +8910,19 @@ FF
 27 \b3
 00 00 00
 28 \b0 \b0
-1837 * 11 00 0A \b2 01 FF \wx0028
+1845 * 11 00 0A \b2 01 FF \wx0028
 21 2D
 22 40
 
 // Name: @action3_45
-1838 * 23 02 0A C9 89
+1846 * 23 02 0A C9 89
 18 00 \dx000000FF
 \b1
 \wx00C9 \dx00000001 \dx00000001 	// rcyc_plant_produce_256;
 \wx00E8 // @CB_FAILED0A;
 
 // Name: @return_action_1
-1839 * 27 02 0A C8 89
+1847 * 27 02 0A C8 89
 1A 20 \dx00000000
 \2psto 1A 20 \dx00000001
 \2r 1A 00 \dx00000010
@@ -8905,7 +8930,7 @@ FF
 \wx8000 // Return computed value
 
 // Name: @action3_46
-1840 * 63 02 0A E8 89
+1848 * 63 02 0A E8 89
 0C 00 \dx0000FFFF
 \b5
 \wx00C9 \dx00000000 \dx00000000 	// @action3_45;
@@ -8915,73 +8940,74 @@ FF
 \wx00C8 \dx0000015F \dx0000015F 	// return [STORE_PERM(0, 1), 16]
 \wx00E8 // @CB_FAILED0A;
 
-1841 * 9 07 7C 04 \7= \dx00000000 01
+1849 * 9 07 7C 04 \7= \dx00000000 01
 
-1842 * 7 03 0A 01 28 \b0
+1850 * 7 03 0A 01 28 \b0
 \wx00E8 	// @action3_46;
 
-1843 * 23 00 07 03 01 00 08 00 15 00 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
-1844 * 23 00 07 03 01 01 08 01 15 01 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
-1845 * 23 00 07 03 01 02 08 02 15 02 23 06 12 08 0E 03 09 01 06 01 00 01 1A 01
-1846 * 23 00 07 03 01 04 08 04 15 04 23 06 12 08 0E 04 09 06 06 06 00 06 1A 06
-1847 * 23 00 07 03 01 05 08 05 15 05 23 06 12 08 0E 04 09 06 06 06 00 06 1A 06
-1848 * 23 00 07 03 01 07 08 07 15 07 23 06 12 06 0E 01 09 02 06 02 00 02 1A 02
-1849 * 23 00 07 03 01 08 08 08 15 08 23 06 12 06 0E 01 09 02 06 02 00 02 1A 02
-1850 * 23 00 07 03 01 0D 08 0D 15 0D 23 06 12 08 0E 02 09 04 06 04 00 04 1A 04
-1851 * 23 00 07 03 01 0E 08 0E 15 0E 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
-1852 * 23 00 07 03 01 0F 08 0F 15 0F 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
-1853 * 23 00 07 03 01 10 08 10 15 10 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
-1854 * 23 00 07 03 01 12 08 12 15 12 23 06 12 06 0E 03 09 08 06 08 00 08 1A 08
-1855 * 23 00 07 03 01 13 08 13 15 13 23 06 12 06 0E 02 09 06 06 06 00 06 1A 06
-1856 * 23 00 07 03 01 1B 08 1B 15 1B 23 06 12 07 0E 02 09 02 06 02 00 02 1A 02
-1857 * 23 00 07 03 01 1C 08 1C 15 1C 23 06 12 08 0E 03 09 03 06 03 00 03 1A 03
-1858 * 23 00 07 03 01 1D 08 1D 15 1D 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
-1859 * 23 00 07 03 01 1E 08 1E 15 1E 23 06 12 08 0E 03 09 03 06 03 00 03 1A 03
-1860 * 23 00 07 03 01 1F 08 1F 15 1F 23 06 12 08 0E 02 09 02 06 02 00 02 1A 02
-1861 * 23 00 07 03 01 24 08 24 15 24 23 06 12 08 0E 03 09 02 06 02 00 02 1A 02
-1862 * 23 00 07 03 01 25 08 25 15 25 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
-1863 * 23 00 07 03 01 26 08 26 15 26 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
-1864 * 23 00 07 03 01 27 08 27 15 27 23 06 12 08 0E 02 09 02 06 02 00 02 1A 02
-1865 * 23 00 07 03 01 28 08 28 15 28 23 06 12 08 0E 02 09 03 06 03 00 03 1A 03
-1866 * 23 00 07 03 01 29 08 29 15 29 23 06 12 08 0E 02 09 03 06 03 00 03 1A 03
-1867 * 23 00 07 03 01 2A 08 2A 15 2A 23 06 12 08 0E 02 09 03 06 03 00 03 1A 03
-1868 * 23 00 07 03 01 2B 08 2B 15 2B 23 06 12 08 0E 02 09 03 06 03 00 03 1A 03
-1869 * 23 00 07 03 01 2C 08 2C 15 2C 23 06 12 05 0E 02 09 02 06 02 00 02 1A 02
-1870 * 23 00 07 03 01 2D 08 2D 15 2D 23 06 12 05 0E 02 09 02 06 02 00 02 1A 02
-1871 * 23 00 07 03 01 2E 08 2E 15 2E 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
-1872 * 23 00 07 03 01 2F 08 2F 15 2F 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
-1873 * 23 00 07 03 01 30 08 30 15 30 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
-1874 * 23 00 07 03 01 31 08 31 15 31 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
-1875 * 23 00 07 03 01 38 08 38 15 38 23 06 12 02 0E 01 09 01 06 01 00 01 1A 01
-1876 * 23 00 07 03 01 39 08 39 15 39 23 06 12 02 0E 01 09 01 06 01 00 01 1A 01
-1877 * 23 00 07 03 01 3A 08 3A 15 3A 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
-1878 * 23 00 07 03 01 3B 08 3B 15 3B 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
-1879 * 23 00 07 03 01 3E 08 3E 15 3E 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
-1880 * 23 00 07 03 01 3F 08 3F 15 3F 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
-1881 * 23 00 07 03 01 40 08 40 15 40 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
-1882 * 23 00 07 03 01 41 08 41 15 41 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
-1883 * 23 00 07 03 01 42 08 42 15 42 23 06 12 06 0E 01 09 03 06 03 00 03 1A 03
-1884 * 23 00 07 03 01 43 08 43 15 43 23 06 12 06 0E 01 09 02 06 02 00 02 1A 02
-1885 * 23 00 07 03 01 44 08 44 15 44 23 06 12 06 0E 01 09 03 06 03 00 03 1A 03
-1886 * 23 00 07 03 01 45 08 45 15 45 23 06 12 06 0E 01 09 02 06 02 00 02 1A 02
-1887 * 23 00 07 03 01 46 08 46 15 46 23 06 12 07 0E 02 09 03 06 03 00 03 1A 03
-1888 * 23 00 07 03 01 47 08 47 15 47 23 06 12 07 0E 02 09 03 06 03 00 03 1A 03
-1889 * 23 00 07 03 01 48 08 48 15 48 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
-1890 * 23 00 07 03 01 49 08 49 15 49 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
-1891 * 23 00 07 03 01 4A 08 4A 15 4A 23 06 12 07 0E 02 09 02 06 02 00 02 1A 02
-1892 * 23 00 07 03 01 4B 08 4B 15 4B 23 06 12 07 0E 02 09 02 06 02 00 02 1A 02
-1893 * 23 00 07 03 01 4C 08 4C 15 4C 23 06 12 07 0E 02 09 02 06 02 00 02 1A 02
-1894 * 23 00 07 03 01 4D 08 4D 15 4D 23 06 12 07 0E 02 09 02 06 02 00 02 1A 02
-1895 * 23 00 07 03 01 4E 08 4E 15 4E 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
-1896 * 23 00 07 03 01 4F 08 4F 15 4F 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
-1897 * 23 00 07 03 01 50 08 50 15 50 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
-1898 * 23 00 07 03 01 51 08 51 15 51 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
-1899 * 23 00 07 03 01 52 08 52 15 52 23 06 12 06 0E 02 09 01 06 01 00 01 1A 01
-1900 * 23 00 07 03 01 54 08 54 15 54 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
-1901 * 23 00 07 03 01 55 08 55 15 55 23 06 12 06 0E 02 09 01 06 01 00 01 1A 01
-1902 * 23 00 07 03 01 56 08 56 15 56 23 06 12 06 0E 02 09 01 06 01 00 01 1A 01
-1903 * 23 00 07 03 01 57 08 57 15 57 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
-1904 * 23 00 07 03 01 58 08 58 15 58 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
-1905 * 23 00 07 03 01 59 08 59 15 59 23 06 12 06 0E 02 09 01 06 01 00 01 1A 01
-1906 * 23 00 07 03 01 5A 08 5A 15 5A 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
+1851 * 6 07 0E 01 02 00 00
+1852 * 23 00 07 03 01 00 08 00 15 00 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
+1853 * 23 00 07 03 01 01 08 01 15 01 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
+1854 * 23 00 07 03 01 02 08 02 15 02 23 06 12 08 0E 03 09 01 06 01 00 01 1A 01
+1855 * 23 00 07 03 01 04 08 04 15 04 23 06 12 08 0E 04 09 06 06 06 00 06 1A 06
+1856 * 23 00 07 03 01 05 08 05 15 05 23 06 12 08 0E 04 09 06 06 06 00 06 1A 06
+1857 * 23 00 07 03 01 07 08 07 15 07 23 06 12 06 0E 01 09 02 06 02 00 02 1A 02
+1858 * 23 00 07 03 01 08 08 08 15 08 23 06 12 06 0E 01 09 02 06 02 00 02 1A 02
+1859 * 23 00 07 03 01 0D 08 0D 15 0D 23 06 12 08 0E 02 09 04 06 04 00 04 1A 04
+1860 * 23 00 07 03 01 0E 08 0E 15 0E 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
+1861 * 23 00 07 03 01 0F 08 0F 15 0F 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
+1862 * 23 00 07 03 01 10 08 10 15 10 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
+1863 * 23 00 07 03 01 12 08 12 15 12 23 06 12 06 0E 03 09 08 06 08 00 08 1A 08
+1864 * 23 00 07 03 01 13 08 13 15 13 23 06 12 06 0E 02 09 06 06 06 00 06 1A 06
+1865 * 23 00 07 03 01 1B 08 1B 15 1B 23 06 12 07 0E 02 09 02 06 02 00 02 1A 02
+1866 * 23 00 07 03 01 1C 08 1C 15 1C 23 06 12 08 0E 03 09 03 06 03 00 03 1A 03
+1867 * 23 00 07 03 01 1D 08 1D 15 1D 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
+1868 * 23 00 07 03 01 1E 08 1E 15 1E 23 06 12 08 0E 03 09 03 06 03 00 03 1A 03
+1869 * 23 00 07 03 01 1F 08 1F 15 1F 23 06 12 08 0E 02 09 02 06 02 00 02 1A 02
+1870 * 23 00 07 03 01 24 08 24 15 24 23 06 12 08 0E 03 09 02 06 02 00 02 1A 02
+1871 * 23 00 07 03 01 25 08 25 15 25 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
+1872 * 23 00 07 03 01 26 08 26 15 26 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
+1873 * 23 00 07 03 01 27 08 27 15 27 23 06 12 08 0E 02 09 02 06 02 00 02 1A 02
+1874 * 23 00 07 03 01 28 08 28 15 28 23 06 12 08 0E 02 09 03 06 03 00 03 1A 03
+1875 * 23 00 07 03 01 29 08 29 15 29 23 06 12 08 0E 02 09 03 06 03 00 03 1A 03
+1876 * 23 00 07 03 01 2A 08 2A 15 2A 23 06 12 08 0E 02 09 03 06 03 00 03 1A 03
+1877 * 23 00 07 03 01 2B 08 2B 15 2B 23 06 12 08 0E 02 09 03 06 03 00 03 1A 03
+1878 * 23 00 07 03 01 2C 08 2C 15 2C 23 06 12 05 0E 02 09 02 06 02 00 02 1A 02
+1879 * 23 00 07 03 01 2D 08 2D 15 2D 23 06 12 05 0E 02 09 02 06 02 00 02 1A 02
+1880 * 23 00 07 03 01 2E 08 2E 15 2E 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
+1881 * 23 00 07 03 01 2F 08 2F 15 2F 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
+1882 * 23 00 07 03 01 30 08 30 15 30 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
+1883 * 23 00 07 03 01 31 08 31 15 31 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
+1884 * 23 00 07 03 01 38 08 38 15 38 23 06 12 02 0E 01 09 01 06 01 00 01 1A 01
+1885 * 23 00 07 03 01 39 08 39 15 39 23 06 12 02 0E 01 09 01 06 01 00 01 1A 01
+1886 * 23 00 07 03 01 3A 08 3A 15 3A 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
+1887 * 23 00 07 03 01 3B 08 3B 15 3B 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
+1888 * 23 00 07 03 01 3E 08 3E 15 3E 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
+1889 * 23 00 07 03 01 3F 08 3F 15 3F 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
+1890 * 23 00 07 03 01 40 08 40 15 40 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
+1891 * 23 00 07 03 01 41 08 41 15 41 23 06 12 06 0E 02 09 03 06 03 00 03 1A 03
+1892 * 23 00 07 03 01 42 08 42 15 42 23 06 12 06 0E 01 09 03 06 03 00 03 1A 03
+1893 * 23 00 07 03 01 43 08 43 15 43 23 06 12 06 0E 01 09 02 06 02 00 02 1A 02
+1894 * 23 00 07 03 01 44 08 44 15 44 23 06 12 06 0E 01 09 03 06 03 00 03 1A 03
+1895 * 23 00 07 03 01 45 08 45 15 45 23 06 12 06 0E 01 09 02 06 02 00 02 1A 02
+1896 * 23 00 07 03 01 46 08 46 15 46 23 06 12 07 0E 02 09 03 06 03 00 03 1A 03
+1897 * 23 00 07 03 01 47 08 47 15 47 23 06 12 07 0E 02 09 03 06 03 00 03 1A 03
+1898 * 23 00 07 03 01 48 08 48 15 48 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
+1899 * 23 00 07 03 01 49 08 49 15 49 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
+1900 * 23 00 07 03 01 4A 08 4A 15 4A 23 06 12 07 0E 02 09 02 06 02 00 02 1A 02
+1901 * 23 00 07 03 01 4B 08 4B 15 4B 23 06 12 07 0E 02 09 02 06 02 00 02 1A 02
+1902 * 23 00 07 03 01 4C 08 4C 15 4C 23 06 12 07 0E 02 09 02 06 02 00 02 1A 02
+1903 * 23 00 07 03 01 4D 08 4D 15 4D 23 06 12 07 0E 02 09 02 06 02 00 02 1A 02
+1904 * 23 00 07 03 01 4E 08 4E 15 4E 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
+1905 * 23 00 07 03 01 4F 08 4F 15 4F 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
+1906 * 23 00 07 03 01 50 08 50 15 50 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
+1907 * 23 00 07 03 01 51 08 51 15 51 23 06 12 03 0E 01 09 01 06 01 00 01 1A 01
+1908 * 23 00 07 03 01 52 08 52 15 52 23 06 12 06 0E 02 09 01 06 01 00 01 1A 01
+1909 * 23 00 07 03 01 54 08 54 15 54 23 06 12 03 0E 01 09 02 06 02 00 02 1A 02
+1910 * 23 00 07 03 01 55 08 55 15 55 23 06 12 06 0E 02 09 01 06 01 00 01 1A 01
+1911 * 23 00 07 03 01 56 08 56 15 56 23 06 12 06 0E 02 09 01 06 01 00 01 1A 01
+1912 * 23 00 07 03 01 57 08 57 15 57 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
+1913 * 23 00 07 03 01 58 08 58 15 58 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
+1914 * 23 00 07 03 01 59 08 59 15 59 23 06 12 06 0E 02 09 01 06 01 00 01 1A 01
+1915 * 23 00 07 03 01 5A 08 5A 15 5A 23 06 12 08 0E 03 09 04 06 04 00 04 1A 04
 

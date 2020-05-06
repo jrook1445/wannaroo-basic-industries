@@ -1099,6 +1099,8 @@ spritelayout item_0x36_layout {
 	building { sprite: (construction_state==0 ? 4442 : construction_state==1 ? 4443 : construction_state==2 ? 4444 : terrain_type==TILETYPE_SNOW ? 4576 : 4445); recolour_mode: RECOLOUR_REMAP; palette: PALETTE_USE_DEFAULT; }
 }
 
+if (param_enable_houses) {
+
 item (FEAT_HOUSES, house_0x11, 0x11) {
 	property {
 		substitute:	                0x11;
@@ -1183,4 +1185,6 @@ item (FEAT_HOUSES, house_0x36, 0x36) {
 disable_item (FEAT_HOUSES, 0x33);
 disable_item (FEAT_HOUSES, 0x35);
 disable_item (FEAT_HOUSES, 0x37);
+
+}
 

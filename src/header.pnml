@@ -183,6 +183,15 @@ grf {
 		}
 	}
 
+	param {
+		param_enable_houses {
+			type: bool;
+			name: string(STR_PARAM_ENABLE_HOUSES);
+			desc: string(STR_PARAM_ENABLE_HOUSES_DESC);
+			def_value: 1;
+		}
+	}
+
 }
 
 param_climate_creation = 1;
