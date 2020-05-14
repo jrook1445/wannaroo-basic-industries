@@ -4,11 +4,11 @@ NewGRF for OpenTTD - Industry set based on frosch's Manual Industries 2r5. Suppo
 
 1. About
 
-    Based on frosch's Manual Industries 2-r5, Wannaroo Basic Industries supports 16 cargos in/out and adds some new industries, cargos, and cargo chains in an attempt to make the default industries more interesting. Temperate, Arctic, Tropic industries are updated, no changes to Toyland.
+    Based on frosch's Manual Industries 2-r5, Wannaroo Basic Industries supports 16 cargos in/out and adds some new industries, cargos, and cargo chains in an attempt to make the default industries more interesting. Alternate production parameter allows primary industry production changes without industry closure. Temperate, Arctic, Tropic industries are updated, no changes to Toyland.
 
 1. Compatibility
 
-    Wannaroo Basic Industries is unlikely to be compatible with any other industry set. No checks are carried out when starting a game. Load multiple industry sets at your own risk.
+    Wannaroo Basic Industries is unlikely to be compatible with any other industry set (except other Wannaroo industry sets). No checks are carried out when starting a game. Load multiple industry sets at your own risk.
 
     Compatibility with any newgrf is not guaranteed. No warranties are expressed or implied.
 
@@ -26,14 +26,14 @@ NewGRF for OpenTTD - Industry set based on frosch's Manual Industries 2r5. Suppo
 
         * Temperate: Bank, Coal Mine, Factory, Food Processing Plant, Forest (layouts only), Iron Ore Mine, Lumber Mill, Power Plant, Refinery, Sawmill, Steel Mill
 
-        * Arctic: Bank, Coal Mine, Factory (was Printing Works), Food Processing Plant, Forest (layouts only), Gold Mine, Lumber Mill, Paper Mill, Power Plant, Refinery, Sawmill
+        * Arctic: Bank, Coal Mine, Factory (was Printing Works), Food Processing Plant, Forest (layouts only), Gold Mine, Lumber Mill, Oil Rig, Paper Mill, Power Plant, Refinery, Sawmill
 
-        * Tropic: Bank, Copper Ore Mine, Diamond Mine, Factory, Food Processing Plant, Forest, Power Plant, Refinery
+        * Tropic: Bank, Copper Ore Mine, Diamond Mine, Factory, Food Processing Plant, Forest, Oil Rig, Power Plant, Refinery
 
-    * Other features: Houses can accept Passengers, Mail, Goods, Food, Building Materials, Water. 
+    * Other features: Houses can accept Passengers, Mail, Goods, Food, Building Materials, Water.
 
     * Parameters: hopefully are self-explanatory
-    
+
     * [Industry Matrix](https://htmlpreview.github.io/?https://github.com/jrook1445/wannaroo-basic-industries/blob/master/src/docs/wrbi_industries.html)
 
 1. Development
@@ -43,14 +43,16 @@ NewGRF for OpenTTD - Industry set based on frosch's Manual Industries 2r5. Suppo
     However, house cargo acceptance modifications are done in nfo.
 
     Additional steps to create houses.nfo:
-        
-    1) generate wannaroo-basic-industries-part.nfo code from wannaroo-basic-industries.nml via nmlc        
-    2) update sprite numbers in docs/wrbi_house_defaults_food_good_bdmt_all_climates.ods        
-    3) copy/paste house sprites into houses.nfo        
 
-    I built this newgrf on Linux Mint 19.3 using gcc version 7.5.0, NML version 0.5.0, and grfcodec version 6.0.6 r991.
+    1) generate wannaroo-basic-industries-part.nfo code from wannaroo-basic-industries.nml via nmlc
+    2) update sprite numbers in docs/wrbi_house_defaults_food_good_bdmt_all_climates.ods
+    3) copy/paste house sprites into houses.nfo
 
-1. Licence
+    I built this newgrf on Linux Mint 19.3 using gcc version 7.5.0, NML version master @ 9-May-2020, and grfcodec version 6.0.6 r991.
+
+    Translations gladly accepted. Please open an issue on GitHub (https://github.com/jrook1445/wannaroo-basic-industries) and attach your lang file so I can include it in a release.
+
+1. License
 
     GPL v2
 
@@ -61,7 +63,7 @@ NewGRF for OpenTTD - Industry set based on frosch's Manual Industries 2r5. Suppo
     Source code: https://github.com/jrook1445/wannaroo-basic-industries
 
     Credit and Acknowledgements (with sincere thanks and appreciation):
-    
+
     Manual Industries 2-r5: base industry code: frosch123, https://github.com/frosch123/ManualIndustries2
 
     OpenGFX: re-use of base set sprites: all contributors/developers as listed in 6.0 Credits, https://github.com/OpenTTD/OpenGFX/blob/master/README.md

@@ -1,7 +1,7 @@
 ##grflangid 0x01
 
 STR_GRF_NAME                                                    :Wannaroo Basic Industries (WRBI)
-STR_GRF_DESCRIPTION                                             :{}Based on frosch's Manual Industries 2r5.{}{}Supports 16 cargos in/out. Adds some new industries, cargos, and cargo chains.{}{}License: GPL v2
+STR_GRF_DESCRIPTION                                             :{}Based on frosch's Manual Industries 2r5.{}{}Alternate production parameter allows primary industry production changes without industry closure.{}{}Supports 16 cargos in/out. Adds some new industries, cargos, and cargo chains.{}{}License: GPL v2
 STR_GRF_URL                                                     :https://github.com/jrook1445/wannaroo-basic-industries
 
 STR_PARAM_PRIMARY_CREATION                                      :Random construction of primary industries
@@ -47,7 +47,13 @@ STR_PARAM_ENABLE_RCYC                                           :Recycling Chain
 STR_PARAM_ENABLE_RCYC_DESC                                      :available from 1950
 
 STR_PARAM_ENABLE_HOUSES                                         :Modified Houses
-STR_PARAM_ENABLE_HOUSES_DESC                                    :On: Default houses accept food (temperate), building materials, water (tropic). Muted colours on house IDs 17, 50-55.
+STR_PARAM_ENABLE_HOUSES_DESC                                    :On: Default houses accept food (temperate), building materials (all climates), water (tropic).{}{}Muted colours on house IDs 17, 50-55.
+
+STR_PARAM_ENABLE_ALTPROD                                        :Alternate Production
+STR_PARAM_ENABLE_ALTPROD_DESC                                   :On: Primary industry production will change, but industries will not close.{}{}After the initial cargo pickup at an industry, there is a 1/2 chance of a monthly production change:{}{}Transported % > 64% => 3/8 chance increase, 1/8 chance decrease, 1/2 chance no change.{}{}Otherwise: 3/8 chance decrease, 1/8 chance increase, 1/2 chance no change.{}{}min production = 1/4 default, max production = 8x default{}{}Note: this setting overrides 'Production changes/closure of primary industries' and oil wells settings.
+
+STR_PARAM_MAX_PROD_LEVEL                                        :Max Prod Level
+STR_PARAM_MAX_PROD_LEVEL_DESC                                   :Maximum production level for Alternate Production. 16 is the base production level, 32 = 2x, 48 = 3x, etc.{}{}default 48, max 128, min 32
 
 STR_STATION_NAME			                        			:{STRING} New Station Name
 
@@ -101,6 +107,8 @@ STR_INDUSTRY_NAME_0x25						:Shop
 STR_INDUSTRY_NAME_0x26						:Superstore
 STR_INDUSTRY_NAME_0x27                      :Recycling Depot
 STR_INDUSTRY_NAME_0x28                      :Recycling Plant
+
+STR_PRIMARY_PROD_LEVEL_TXT					:{BLACK}Production Level: {COMMA}{}{TINYFONT}Last change: {DATE_SHORT}{NBSP}{NBSP}{NBSP}Change: {COMMA}
 
 #Validation messages
 

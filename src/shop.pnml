@@ -45,7 +45,7 @@ item(FEAT_INDUSTRIES, industry_shop, 0x25) {
 		remove_cost_multiplier:		    0;
 		min_cargo_distr:                5;
 		cargo_types:                    [accept_cargo("FOOD"), accept_cargo("PETR"), accept_cargo("BEER"), accept_cargo("WATR")];
-		conflicting_ind_types:          [0xA6];
+		conflicting_ind_types:          [0x04, 0x0D, 0x15];
 		prob_map_gen:			        (param_black_creation == 1) ? 0 : 3;
 		prob_in_game:			        (param_black_creation != 2) ? 0 : 5;
 		prospect_chance:                1.0;
@@ -54,7 +54,7 @@ item(FEAT_INDUSTRIES, industry_shop, 0x25) {
 		nearby_station_name:		    string(STR_STATION_NAME_0x25);
 	}
 	graphics {
-		location_check:			        shop_check_location;
+		location_check:			        check_nearby_industry_start_37; //shop_check_location;
 		random_prod_change:             close_if_superstore_in_town; // if a superstore has been built in this town, then close the shop
 	}
 }

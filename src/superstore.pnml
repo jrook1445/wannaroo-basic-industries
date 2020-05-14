@@ -5,6 +5,13 @@
     https://github.com/jrook1445/wannaroo-basic-industries
 */
 
+/* storages
+
+    PERM
+    0x02:   initial production_rate
+
+*/
+
 spritelayout jrsuperstore_tile_N_spritelayout {
 	ground { sprite: 4406; }
 	building { sprite: 4411; }
@@ -75,6 +82,17 @@ tilelayout jrsuperstore_tilelayout1 {
 	1, 0: jrsuperstore_tile_W;
 }
 
+produce(industry_superstore_produce_256_tour, [], [TOUR: LOAD_PERM(0x02)+extra_callback_info1%4;], 0)
+
+produce(industry_superstore_produce_cargo_arrival_no_watr, [FOOD: incoming_cargo_waiting("FOOD"); GOOD: incoming_cargo_waiting("GOOD"); PETR: incoming_cargo_waiting("PETR"); BEER: incoming_cargo_waiting("BEER"); BDMT: incoming_cargo_waiting("BDMT"); TOUR: incoming_cargo_waiting("TOUR");], [TOUR: incoming_cargo_waiting("TOUR")/4;], 0)
+
+produce(industry_superstore_produce_cargo_arrival_watr, [FOOD: incoming_cargo_waiting("FOOD"); GOOD: incoming_cargo_waiting("GOOD"); PETR: incoming_cargo_waiting("PETR"); BEER: incoming_cargo_waiting("BEER"); BDMT: incoming_cargo_waiting("BDMT"); WATR: incoming_cargo_waiting("WATR"); TOUR: incoming_cargo_waiting("TOUR");], [TOUR: incoming_cargo_waiting("TOUR")/4;], 0)
+
+switch (FEAT_INDUSTRIES, SELF, industry_superstore_produce_cargo_arrival, cargotype_available("WATR")) {
+    1: industry_superstore_produce_cargo_arrival_watr;
+    industry_superstore_produce_cargo_arrival_no_watr;
+}
+
 if (climate != CLIMATE_TOYLAND) {
 
 item (FEAT_INDUSTRIES, industry_superstore, 0x26) {
@@ -82,12 +100,12 @@ item (FEAT_INDUSTRIES, industry_superstore, 0x26) {
 		substitute:                 INDUSTRYTYPE_POWER_PLANT;
 		layouts:		            [jrsuperstore_tilelayout1];
 		life_type:		            IND_LIFE_TYPE_BLACK_HOLE;
-		spec_flags:		            bitmask(IND_FLAG_BUILT_NEAR_TOWN);
+		spec_flags:		            bitmask(IND_FLAG_BUILT_NEAR_TOWN, IND_FLAG_RANDOM_BITS_IN_PRODUCTION_CALLBACK, IND_FLAG_LONG_CARGO_TYPE_LISTS);
 		fund_cost_multiplier:	    param_black_cost ? 152 : 0;
 		remove_cost_multiplier:	    0;
 		min_cargo_distr:	        5;
 		cargo_types:                [accept_cargo("FOOD"), accept_cargo("GOOD"), accept_cargo("PETR"), accept_cargo("BEER"), accept_cargo("BDMT"), accept_cargo("WATR")];
-		conflicting_ind_types:	    [0xA5];
+		conflicting_ind_types:	    [0x04, 0x06, 0x0D];
 		prob_map_gen:		        (param_black_creation == 1) ? 0 : 3;
 		prob_in_game:		        (param_black_creation != 2) ? 0 : 5;
 		prospect_chance:	        1.0;
@@ -95,9 +113,27 @@ item (FEAT_INDUSTRIES, industry_superstore, 0x26) {
 		name:			            string(STR_INDUSTRY_NAME_0x26);
 		nearby_station_name:	    string(STR_STATION_NAME_0x26);
 	}
+	if (cargotype_available("TOUR")) {
+	    property {
+	        cargo_types:            [accept_cargo("FOOD"), accept_cargo("GOOD"), accept_cargo("PETR"), accept_cargo("BEER"), accept_cargo("BDMT"), accept_cargo("WATR"), accept_cargo("TOUR"), produce_cargo("TOUR", 0)];
+        }
+    }
+	if (climate == CLIMATE_ARCTIC) { property { conflicting_ind_types: [0x04, 0x07, 0x0D]; } }
+	if (climate == CLIMATE_TROPIC) { property { conflicting_ind_types: [0x04, 0x17, 0x0D]; } }
 	graphics {
-		location_check:		        superstore_check_location;
+		location_check:		        check_nearby_industry_start_38; //superstore_check_location;
 	}
+    if (cargotype_available("TOUR")) {
+	    graphics {
+		    location_check:		        check_nearby_industry_start_38; //superstore_check_location;
+		    produce_256_ticks:		    industry_superstore_produce_256_tour;
+		    produce_cargo_arrival:		industry_superstore_produce_cargo_arrival;
+		    build_prod_change:		    [STORE_PERM(9 + extra_callback_info2%4, 0x02), 16];
+		    monthly_prod_change:		return CB_RESULT_IND_PROD_NO_CHANGE;
+		    random_prod_change:		    return CB_RESULT_IND_PROD_NO_CHANGE;
+		    cargo_subtype_display:		industry_remove_cargo_text;
+	    }
+    }
 }
 
 }

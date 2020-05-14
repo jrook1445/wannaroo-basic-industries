@@ -1,6 +1,7 @@
 #!/bin/bash
 # change the value of NMLC to reference your own nmlc installation
-NMLC="pyrun $HOME/Downloads/openttd/nml-0.5.0/nmlc"
+#NMLC="pyrun $HOME/Downloads/openttd/nml-0.5.0/nmlc"
+NMLC="pyrun $HOME/Downloads/openttd/nml-0.5.1/nmlc"
 ./clean.sh
 mkdir wannaroo-basic-industries
 gcc -C -E -nostdinc -x c-header wannaroo-basic-industries.pnml > wannaroo-basic-industries.nml
@@ -17,8 +18,14 @@ then
     cp changelog.txt wannaroo-basic-industries
     tar cvf wannaroo-basic-industries.tar wannaroo-basic-industries
     cp -i wannaroo-basic-industries.tar $HOME/.openttd/newgrf
-#    cp -i wannaroo-basic-industries.grf $HOME/.openttd/newgrf
+    #cp -i wannaroo-basic-industries.grf $HOME/.openttd/newgrf
+    echo -e "\e[92m*** build successful ***"
 else
-    echo "could not build newgrf"
+    echo -e "\e[91m*** nmlc could not build newgrf ***"
 fi
+echo "NML/grfcodec info:"
+echo "---------------"
+$NMLC --version
+#echo -e "\n"
+grfcodec -v
 

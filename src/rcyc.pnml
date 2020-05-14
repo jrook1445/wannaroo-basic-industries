@@ -143,8 +143,8 @@ switch (FEAT_INDUSTRIES, SELF, rcyc_plant_produce_256, LOAD_PERM(1)) {
     rcyc_plant_produce_climate;
 }
 
-//switch (FEAT_INDUSTRIES, SELF, rcyc_plant_monthly_prod_change, STORE_PERM(transported_last_month_pct("WSTE"), 1)) {
-switch (FEAT_INDUSTRIES, SELF, rcyc_plant_monthly_prod_change, STORE_PERM((last_month_transported("WSTE")*100+50)/last_month_production("WSTE"), 1)) {
+switch (FEAT_INDUSTRIES, SELF, rcyc_plant_monthly_prod_change, STORE_PERM(transported_last_month_pct("WSTE"), 1)) {
+//switch (FEAT_INDUSTRIES, SELF, rcyc_plant_monthly_prod_change, STORE_PERM((last_month_transported("WSTE")*100+50)/last_month_production("WSTE"), 1)) {
     return CB_RESULT_IND_PROD_NO_CHANGE;
 }
 
@@ -166,7 +166,6 @@ if (param_enable_rcyc && (climate != CLIMATE_TOYLAND)) {
 			remove_cost_multiplier:	0;
 			min_cargo_distr:	    5;
 			cargo_types:            [produce_cargo("RCYC", 0)];
-			conflicting_ind_types:	[industry_type(IND_TYPE_NEW, 0x27), industry_type(IND_TYPE_NEW, 0x28)];
 			prob_map_gen:		    (param_primary_creation == 1) ? 0 : 4;
 			prob_in_game:		    (param_primary_creation != 2) ? 0 : 6;
 			prospect_chance:	    1.0;
@@ -176,7 +175,7 @@ if (param_enable_rcyc && (climate != CLIMATE_TOYLAND)) {
 		}
 		graphics {
 		    build_prod_change:          [STORE_PERM(0, 0x01), STORE_PERM(16, 0x02), 16];
-			location_check:		        rcyc_depot_check_location;
+			location_check:		        check_nearby_industry_start_39; //rcyc_depot_check_location;
 			construction_probability:	rcyc_intro_year;
 			produce_256_ticks:          RCYC_produce_1_cargo_1;
 			monthly_prod_change:	    RCYC_production_change_1;
@@ -193,9 +192,7 @@ if (param_enable_rcyc && (climate != CLIMATE_TOYLAND)) {
 			remove_cost_multiplier:	0;
 			min_cargo_distr:	    5;
 			cargo_types:            [accept_cargo("RCYC"), produce_cargo("STEL", 0), produce_cargo("PLST", 0), produce_cargo("WSTE", 0)];
-
-			//conflicting: factories?
-			conflicting_ind_types:	[industry_type(IND_TYPE_NEW, 0x27), industry_type(IND_TYPE_NEW, 0x28), industry_type(IND_TYPE_NEW, 0x01)];
+			conflicting_ind_types:	[0x01, 0x06, 0x0C];
 			prob_map_gen:		    (param_secondary_creation == 1) ? 0 : 3;
 			prob_in_game:		    (param_secondary_creation != 2) ? 0 : 3;
 			prospect_chance:	    1.0;
@@ -203,11 +200,11 @@ if (param_enable_rcyc && (climate != CLIMATE_TOYLAND)) {
 			name:			        string(STR_INDUSTRY_NAME_0x28);
 			nearby_station_name:	string(STR_STATION_NAME_0x28);
 		}
-		if (climate == CLIMATE_TROPIC) { property { cargo_types: [accept_cargo("RCYC"), produce_cargo("COPR", 0), produce_cargo("PLST", 0), produce_cargo("WSTE", 0)]; } }
-		if (climate == CLIMATE_ARCTIC) { property { cargo_types: [accept_cargo("RCYC"), produce_cargo("PAPR", 0), produce_cargo("PLST", 0), produce_cargo("WSTE", 0)]; } }
+		if (climate == CLIMATE_ARCTIC) { property { cargo_types: [accept_cargo("RCYC"), produce_cargo("PAPR", 0), produce_cargo("PLST", 0), produce_cargo("WSTE", 0)]; conflicting_ind_types: [0x01, 0x07, 0x10]; } }
+		if (climate == CLIMATE_TROPIC) { property { cargo_types: [accept_cargo("RCYC"), produce_cargo("COPR", 0), produce_cargo("PLST", 0), produce_cargo("WSTE", 0)]; conflicting_ind_types: [0x01, 0x17, 0x10]; } }
 		graphics {
 		    build_prod_change:          [STORE_PERM(0, 0x01), 16];
-			location_check:		        rcyc_plant_check_location;
+			location_check:		        check_nearby_industry_start_40; //rcyc_plant_check_location;
 			construction_probability:	rcyc_intro_year;
 			produce_256_ticks:	        rcyc_plant_produce_256;
 			monthly_prod_change:        rcyc_plant_monthly_prod_change;

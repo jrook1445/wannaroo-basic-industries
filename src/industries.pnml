@@ -152,15 +152,184 @@ switch (FEAT_INDUSTRIES, SELF, industry_remove_cargo_text, getbits(extra_callbac
 
 // begin industry modifications
 
+// alternate production
+
+/* storages
+
+    PERM
+    0x0C:   random number 0-7 from extra_callback_info2 for a production change
+    //0x0D:   production level (for industry window text)
+    0x0E:   transported %
+    0x0F:   industry initialised? (0 = false, 1 = true)
+    0x10:   production rate of output cargo 1
+    0x11:   production rate of output cargo 2
+    0x13:   industry id (used to select appropriate produce block)
+    0x14:   temp/arctic farm calculated transported %
+    0x15:   date of production level change (for industry window text)
+    0x16:   production level change (for industry window text)
+
+*/
+
+param_show_prod_level = 1;
+
+switch (FEAT_INDUSTRIES, SELF, primary_prod_level_text, [STORE_TEMP(production_level, 256), STORE_TEMP(LOAD_PERM(0x15), 257), STORE_TEMP(LOAD_PERM(0x16), 258), param_show_prod_level]) {
+	1: return string(STR_PRIMARY_PROD_LEVEL_TXT);
+}
+
+produce(produce_256_ticks_0, [], [COAL: LOAD_PERM(0x10)*production_level/16; GRVL: LOAD_PERM(0x11)*production_level/16;], 0)
+produce(produce_256_ticks_3, [], [WOOD: LOAD_PERM(0x10)*production_level/16;], 0)
+produce(produce_256_ticks_5, [], [OIL_: LOAD_PERM(0x10)*production_level/16; PASS: LOAD_PERM(0x11)*production_level/16;], 0)
+produce(produce_256_ticks_9_temp, [], [GRAI: LOAD_PERM(0x10)*production_level/16; LVST: LOAD_PERM(0x11)*production_level/16;], 0)
+produce(produce_256_ticks_9_arctic, [], [WHEA: LOAD_PERM(0x10)*production_level/16; LVST: LOAD_PERM(0x11)*production_level/16;], 0)
+produce(produce_256_ticks_10, [], [CORE: LOAD_PERM(0x10)*production_level/16; GRVL: LOAD_PERM(0x11)*production_level/16;], 0)
+produce(produce_256_ticks_11, [], [OIL_: LOAD_PERM(0x10)*production_level/16;], 0)
+produce(produce_256_ticks_15, [], [GOLD: LOAD_PERM(0x10)*production_level/16; GRVL: LOAD_PERM(0x11)*production_level/16;], 0)
+produce(produce_256_ticks_17, [], [DIAM: LOAD_PERM(0x10)*production_level/16; GRVL: LOAD_PERM(0x11)*production_level/16;], 0)
+produce(produce_256_ticks_18, [], [IORE: LOAD_PERM(0x10)*production_level/16; GRVL: LOAD_PERM(0x11)*production_level/16;], 0)
+produce(produce_256_ticks_19, [], [FRUT: LOAD_PERM(0x10)*production_level/16;], 0)
+produce(produce_256_ticks_20, [], [RUBR: LOAD_PERM(0x10)*production_level/16;], 0)
+produce(produce_256_ticks_21, [], [WATR: LOAD_PERM(0x10)*production_level/16;], 0)
+produce(produce_256_ticks_24, [], [MAIZ: LOAD_PERM(0x10)*production_level/16;], 0)
+
+switch (FEAT_INDUSTRIES, SELF, produce_256_ticks_farm, climate) {
+    CLIMATE_TEMPERATE: produce_256_ticks_9_temp;
+    produce_256_ticks_9_arctic;
+}
+
+// 3/8 chance increase, 1/8 chance decrease, 4/8 chance no change
+// max production_level is param_max_prod_level, max 128
+switch (FEAT_INDUSTRIES, SELF, prod_change_increase_2, LOAD_PERM(0x0C)) {
+    0: return [STORE_PERM(-1, 0x16), CB_RESULT_IND_PROD_DECREMENT_BY_1];
+    1..3: return [STORE_PERM(1, 0x16), CB_RESULT_IND_PROD_INCREMENT_BY_1];
+    return [STORE_PERM(0, 0x16), CB_RESULT_IND_PROD_NO_CHANGE];
+}
+
+switch (FEAT_INDUSTRIES, SELF, prod_change_increase, production_level) {
+    param_max_prod_level: return [STORE_PERM(0, 0x16), CB_RESULT_IND_PROD_NO_CHANGE];
+    prod_change_increase_2;
+}
+
+// 3/8 chance decrease, 1/8 chance increase, 4/8 chance no change
+// min production_level is 4 (1/4 of default) so industry should not close
+switch (FEAT_INDUSTRIES, SELF, prod_change_decrease_2, LOAD_PERM(0x0C)) {
+    0: return [STORE_PERM(1, 0x16), CB_RESULT_IND_PROD_INCREMENT_BY_1];
+    1..3: return [STORE_PERM(-1, 0x16), CB_RESULT_IND_PROD_DECREMENT_BY_1];
+    //1..7: return [STORE_PERM(1, 0x16), CB_RESULT_IND_PROD_DIVIDE_BY_8];
+    return [STORE_PERM(0, 0x16), CB_RESULT_IND_PROD_NO_CHANGE];
+}
+
+switch (FEAT_INDUSTRIES, SELF, prod_change_decrease, production_level) {
+    0..4: return [STORE_PERM(0, 0x16), CB_RESULT_IND_PROD_NO_CHANGE];
+    prod_change_decrease_2;
+}
+
+switch (FEAT_INDUSTRIES, SELF, get_farm_temp_num_transp_cargos, (transported_last_month_pct("GRAI")==0 || transported_last_month_pct("LVST")==0)) {
+    0: return 2; // OR returns 0 if both transported_pct > 0, which means both cargos have been transported
+    return 1; // only 1 cargo has been transported; won't be 0 cargos transported as we only get to this point if the industry has been initialised
+}
+
+switch (FEAT_INDUSTRIES, SELF, get_farm_arctic_num_transp_cargos, (transported_last_month_pct("WHEA")==0 || transported_last_month_pct("LVST")==0)) {
+    0: return 2; // OR returns 0 if both transported_pct > 0, which means both cargos have been transported
+    return 1; // only 1 cargo has been transported; won't be 0 cargos transported as we only get to this point if the industry has been initialised
+}
+
+switch (FEAT_INDUSTRIES, SELF, calc_farm_temp_transp_pct, get_farm_temp_num_transp_cargos()) {
+    1: [STORE_PERM(max(transported_last_month_pct("GRAI"), transported_last_month_pct("LVST")), 0x14), LOAD_PERM(0x14)];
+    2: [STORE_PERM((transported_last_month_pct("GRAI") + transported_last_month_pct("LVST"))/2, 0x14), LOAD_PERM(0x14)];
+}
+
+switch (FEAT_INDUSTRIES, SELF, calc_farm_arctic_transp_pct, get_farm_arctic_num_transp_cargos()) {
+    1: [STORE_PERM(max(transported_last_month_pct("WHEA"), transported_last_month_pct("LVST")), 0x14), LOAD_PERM(0x14)];
+    2: [STORE_PERM((transported_last_month_pct("WHEA") + transported_last_month_pct("LVST"))/2, 0x14), LOAD_PERM(0x14)];
+}
+
+switch (FEAT_INDUSTRIES, SELF, calc_farm_transp_pct, climate) {
+    CLIMATE_TEMPERATE: return calc_farm_temp_transp_pct;
+    return calc_farm_arctic_transp_pct;
+}
+
+// not checking transported GRVL as this is a by-product of main cargo production
+
+/*
+switch (FEAT_INDUSTRIES, SELF, check_last_month_transported, LOAD_PERM(0x13)) {
+    0: return last_month_transported("COAL") > 0; // coal mine
+    3: return last_month_transported("WOOD") > 0; // forest
+    5: return last_month_transported("OIL_") > 0; // oil rig (not testing for transported PASS)
+    9: return (last_month_transported("GRAI") > 0) || (last_month_transported("WHEA") > 0) || (last_month_transported("LVST") > 0); // farm (temp/arctic)
+    10: return last_month_transported("CORE") > 0; // copper ore mine
+    11: return last_month_transported("OIL_") > 0; // oil wells
+    15: return last_month_transported("GOLD") > 0; // gold mine
+    17: return last_month_transported("DIAM") > 0; // diamond mine
+    18: return last_month_transported("IORE") > 0; // iron ore mine
+    19: return last_month_transported("FRUT") > 0; // fruit plantation
+    20: return last_month_transported("RUBR") > 0; // rubber plantation
+    21: return last_month_transported("WATR") > 0; // water supply
+    24: return last_month_transported("MAIZ") > 0; // farm (tropic)
+}
+*/
+
+switch (FEAT_INDUSTRIES, SELF, check_transported_last_month_pct, LOAD_PERM(0x13)) {
+    0: return transported_last_month_pct("COAL"); // coal mine
+    3: return transported_last_month_pct("WOOD"); // forest
+    5: return transported_last_month_pct("OIL_"); // oil rig (not testing for transported PASS)
+    9: return calc_farm_transp_pct; // farm (temp/arctic)
+    10: return transported_last_month_pct("CORE"); // copper ore mine
+    11: return transported_last_month_pct("OIL_"); // oil wells
+    15: return transported_last_month_pct("GOLD"); // gold mine
+    17: return transported_last_month_pct("DIAM"); // diamond mine
+    18: return transported_last_month_pct("IORE"); // iron ore mine
+    19: return transported_last_month_pct("FRUT"); // fruit plantation
+    20: return transported_last_month_pct("RUBR"); // rubber plantation
+    21: return transported_last_month_pct("WATR"); // water supply
+    24: return transported_last_month_pct("MAIZ"); // farm (tropic)
+}
+
+switch (FEAT_INDUSTRIES, SELF, do_prod_change_3, [STORE_PERM(current_date, 0x15), STORE_PERM(0, 0x16), check_transported_last_month_pct()]) {
+    0..64: prod_change_decrease;
+    prod_change_increase;
+    //prod_change_decrease;
+}
+
+// 50% chance of a production change
+switch (FEAT_INDUSTRIES, SELF, do_prod_change_2, extra_callback_info2 < 0) {
+	0: return CB_RESULT_IND_PROD_NO_CHANGE;
+	1: do_prod_change_3;
+	//do_prod_change_3;
+}
+
+// is the industry initialised? (has any cargo been transported?)
+//switch (FEAT_INDUSTRIES, SELF, do_prod_change, [STORE_PERM( abs(getbits(extra_callback_info2, 0, 3)), 0x0C), STORE_PERM(production_level, 0x0D), STORE_PERM(check_transported_last_month_pct(), 0x0E), STORE_PERM(check_last_month_transported(), 0x0F), LOAD_PERM(0x0F)]) {
+//switch (FEAT_INDUSTRIES, SELF, do_prod_change, [STORE_PERM( abs(getbits(extra_callback_info2, 0, 3)), 0x0C), STORE_PERM(production_level, 0x0D), STORE_PERM(check_transported_last_month_pct(), 0x0E), STORE_PERM(check_transported_last_month_pct()>0, 0x0F), LOAD_PERM(0x0F)]) {
+switch (FEAT_INDUSTRIES, SELF, do_prod_change, [STORE_PERM( abs(getbits(extra_callback_info2, 0, 3)), 0x0C), STORE_PERM(check_transported_last_month_pct(), 0x0E), STORE_PERM(check_transported_last_month_pct()>0, 0x0F), LOAD_PERM(0x0F)]) {
+    0: return CB_RESULT_IND_PROD_NO_CHANGE;
+    1: do_prod_change_2;
+    //do_prod_change_2;
+}
+
+// end alternate production
+
 item (FEAT_INDUSTRIES, Coalmine) {
 	property {
-		conflicting_ind_types:	[0x06, 0x07];
-		min_cargo_distr:	5;
+		//min_cargo_distr:	5;
 		cargo_types:            [produce_cargo("COAL", 15), produce_cargo("GRVL", 9)];
 	}
 	graphics {
-		location_check:		coal_mine_check_location;
+		location_check:		check_nearby_industry_start_0; //coal_mine_check_location;
 	}
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("COAL", 0), produce_cargo("GRVL", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_0;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(15+extra_callback_info2%6, 0x10), STORE_PERM(9+extra_callback_info2%4, 0x11), STORE_PERM(0, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_0;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
 }
 
 item (FEAT_INDUSTRYTILES, jrpowerplant_tile_1, 0x07) {
@@ -181,25 +350,25 @@ item (FEAT_INDUSTRYTILES, jrpowerplant_tile_2, 0x09) {
 
 item (FEAT_INDUSTRIES, Powerstation) {
 	property {
-		min_cargo_distr:	5;
+		//min_cargo_distr:	5;
 		cargo_types:        [accept_cargo("COAL"), accept_cargo("OIL_"), accept_cargo("WOOD"), accept_cargo("PETR"), accept_cargo("PLST"), accept_cargo("WSTE")];
 		prob_map_gen:		2;
 		prob_in_game:		2;
 	}
 	graphics {
-		location_check:		power_plant_check_location;
+		location_check:		check_nearby_industry_start_1; //power_plant_check_location;
 	}
 }
 
 item (FEAT_INDUSTRIES, Sawmill) {
 	property {
-		min_cargo_distr:	5;
+		//min_cargo_distr:	5;
 		cargo_types:        [accept_cargo("WOOD", produce_cargo("WDPR", 1))];
 		prob_map_gen:		5; // needed for arctic
 		prob_in_game:		2; // needed for arctic
 	}
 	graphics {
-		location_check:		sawmill_check_location;
+		location_check:		check_nearby_industry_start_2; //sawmill_check_location;
 	}
 }
 
@@ -284,7 +453,7 @@ switch (FEAT_INDUSTRIES, SELF, industry_refinery_produce_256, [STORE_PERM(1, 0),
 
 item (FEAT_INDUSTRIES, Oilrefinery) {
 	property {
-		min_cargo_distr:	    5;
+		//min_cargo_distr:	    5;
         cargo_types:            [
                                 accept_cargo("OIL_", produce_cargo("RFPR", 0.25), produce_cargo("PETR", 0.50), produce_cargo("PLST", 0.25)),
                                 accept_cargo("COAL", produce_cargo("RFPR", 0.50), produce_cargo("PETR", 0.25), produce_cargo("PLST", 0.25)),
@@ -293,7 +462,7 @@ item (FEAT_INDUSTRIES, Oilrefinery) {
 		name:			        string(STR_INDUSTRY_NAME_0x04);
 	}
 	graphics {
-		location_check:		oil_refinery_check_location;
+		location_check:		check_nearby_industry_start_4; //oil_refinery_check_location;
 		colour:			    set_oil_refinery_colour;
 	}
 
@@ -306,7 +475,7 @@ item (FEAT_INDUSTRIES, Oilrefinery) {
                             ];
         }
     	graphics {
-	    	location_check:		oil_refinery_check_location;
+	    	location_check:		check_nearby_industry_start_4; //oil_refinery_check_location;
 	    	produce_256_ticks:  industry_refinery_produce_256;
 	    	colour:			    set_oil_refinery_colour;
 	    }
@@ -319,15 +488,30 @@ item (FEAT_INDUSTRIES, Oilrig) {
 		prob_in_game: 4; // default = 6
 	}
 	graphics {
-		location_check: oil_rig_check_location;
+		location_check: check_nearby_industry_start_5; //oil_rig_check_location;
 	}
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("OIL_", 0), produce_cargo("PASS", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_5;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(15+extra_callback_info2%6, 0x10), STORE_PERM(2, 0x11), STORE_PERM(5, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_5;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
 }
 
 item (FEAT_INDUSTRYTILES, jrfactorytemp_tile_1, 0x27) {
 	property {
 		substitute:			0x27;
 		override:			0x27;
-		special_flags:      bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		//special_flags:      bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		accepted_cargos:    [[STEL, 8], [RFPR, 8], [WDPR, 8], [PLST, 8], [GRVL, 8]];
 	}
 }
 
@@ -335,7 +519,8 @@ item (FEAT_INDUSTRYTILES, jrfactorytemp_tile_2, 0x28) {
 	property {
 		substitute:			0x28;
 		override:			0x28;
-		special_flags:      bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		//special_flags:      bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		accepted_cargos:    [[STEL, 8], [RFPR, 8], [WDPR, 8], [PLST, 8], [GRVL, 8]];
 	}
 }
 
@@ -343,7 +528,8 @@ item (FEAT_INDUSTRYTILES, jrfactorytemp_tile_3, 0x29) {
 	property {
 		substitute:			0x29;
 		override:			0x29;
-		special_flags:      bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		//special_flags:      bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		accepted_cargos:    [[STEL, 8], [RFPR, 8], [WDPR, 8], [PLST, 8], [GRVL, 8]];
 	}
 }
 
@@ -351,13 +537,14 @@ item (FEAT_INDUSTRYTILES, jrfactorytemp_tile_4, 0x2A) {
 	property {
 		substitute:			0x2A;
 		override:			0x2A;
-		special_flags:      bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		//special_flags:      bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		accepted_cargos:    [[STEL, 8], [RFPR, 8], [WDPR, 8], [PLST, 8], [GRVL, 8]];
 	}
 }
 
 item (FEAT_INDUSTRIES, FactoryTemp) {
 	property {
-		min_cargo_distr:	5;
+		//min_cargo_distr:	5;
 		cargo_types:        [
 		                    accept_cargo("STEL", produce_cargo("GOOD", 0.75), produce_cargo("BDMT", 0.75)),
 		                    accept_cargo("RFPR", produce_cargo("GOOD", 0.25), produce_cargo("BDMT", 0.50), produce_cargo("VALU", 0.25)),
@@ -367,7 +554,7 @@ item (FEAT_INDUSTRIES, FactoryTemp) {
 		                    ];
 	}
 	graphics {
-		location_check:		factory_check_location;
+		location_check:		check_nearby_industry_start_6; //factory_check_location;
 		colour:			    (founder == 16) ? COLOUR_PALE_GREEN : founder_colour1;
 	}
 }
@@ -406,7 +593,7 @@ item (FEAT_INDUSTRYTILES, jrfactoryarctic_tile_4, 0x2E) {
 
 item (FEAT_INDUSTRIES, Printingworks) {
 	property {
-		min_cargo_distr:	5;
+		//min_cargo_distr:	5;
 		cargo_types:            [
 		                        accept_cargo("PAPR", produce_cargo("GOOD", 0.75), produce_cargo("BDMT", 0.75)),
 		                        accept_cargo("GOLD", produce_cargo("GOOD", 0.25), produce_cargo("BDMT", 0.25), produce_cargo("VALU", 0.50)),
@@ -418,19 +605,60 @@ item (FEAT_INDUSTRIES, Printingworks) {
 		name:			        string(STR_INDUSTRY_NAME_0x07);
 	}
 	graphics {
-		location_check:		factory_check_location;
+		location_check:		check_nearby_industry_start_7; //factory_check_location;
 		colour:			    (founder == 16) ? COLOUR_GREY : founder_colour1;
 	}
 }
 
-item (FEAT_INDUSTRIES, Farm) { graphics { location_check: farm_check_location; } }
+item (FEAT_INDUSTRIES, Farm) {
+    graphics {
+        location_check: check_nearby_industry_start_9; /*farm_check_location;*/
+    }
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("GRAI", 0), produce_cargo("LVST", 0)];
+        }
+        if (climate == CLIMATE_ARCTIC) {
+            property {
+                cargo_types:    [produce_cargo("WHEA", 0), produce_cargo("LVST", 0)];
+            }
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_9;
+            //build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(10+extra_callback_info2%4, 0x10), STORE_PERM(10+extra_callback_info2%4, 0x11), STORE_PERM(9, 0x13), 16];
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(10+extra_callback_info2%4, 0x10), STORE_PERM((extra_callback_info2>=0?1:-1) * getbits(extra_callback_info2,3,23)%4 + 10, 0x11), STORE_PERM(9, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_farm;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
+}
 
 item (FEAT_INDUSTRIES, Coppermine) {
 	property {
 		conflicting_ind_types:	[0x04, 0x17];
-		min_cargo_distr:	    5;
+		//min_cargo_distr:	    5;
 		cargo_types:            [produce_cargo("CORE", 10), produce_cargo("GRVL", 6)];
 	}
+	graphics {
+	    location_check:         check_nearby_industry_start_10;
+    }
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("CORE", 0), produce_cargo("GRVL", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_10;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(10+extra_callback_info2%4, 0x10), STORE_PERM(6+extra_callback_info2%3, 0x11), STORE_PERM(10, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_10;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
 }
 
 item (FEAT_INDUSTRIES, Oilwells) {
@@ -438,7 +666,22 @@ item (FEAT_INDUSTRIES, Oilwells) {
         prob_in_game:   (climate == CLIMATE_TEMPERATE) ? 3 : (climate == CLIMATE_ARCTIC) ? 5 : 3;
     }
     graphics {
-        location_check: oil_wells_check_location;
+        location_check: check_nearby_industry_start_11; //oil_wells_check_location;
+    }
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        spec_flags:     0;
+	        cargo_types:    [produce_cargo("OIL_", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_11;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(12+extra_callback_info2%5, 0x10), STORE_PERM(0, 0x11), STORE_PERM(11, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_11;
+            extra_text_industry:	primary_prod_level_text;
+        }
     }
 }
 
@@ -447,6 +690,23 @@ item (FEAT_INDUSTRIES, Goldmine) {
 		conflicting_ind_types:	[0x07, 0x10];
 		cargo_types:            [produce_cargo("GOLD", 9), produce_cargo("GRVL", 6)];
 	}
+	graphics {
+	    location_check:         check_nearby_industry_start_15;
+    }
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("GOLD", 0), produce_cargo("GRVL", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_15;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(9+extra_callback_info2%4, 0x10), STORE_PERM(6+extra_callback_info2%3, 0x11), STORE_PERM(15, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_15;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
 }
 
 item (FEAT_INDUSTRYTILES, jrbanksub_tile_1, 0x59) {
@@ -467,10 +727,15 @@ item (FEAT_INDUSTRYTILES, jrbanksub_tile_2, 0x5A) {
 
 item (FEAT_INDUSTRIES, BankSub) {
 	property {
-		conflicting_ind_types:	[0x0F, 0x11, 0x10];
-		min_cargo_distr:	    5;
+		conflicting_ind_types:	[0x07, 0x0E, 0x0F];
+		//min_cargo_distr:	    5;
 		cargo_types:            [accept_cargo("VALU"), accept_cargo("GOLD", produce_cargo("VALU", 0.5)), accept_cargo("DIAM", produce_cargo("VALU", 0.5)), accept_cargo("PAPR", produce_cargo("VALU", 0.5)), accept_cargo("COPR", produce_cargo("VALU", 0.5))];
 	}
+	if (climate == CLIMATE_TROPIC) {
+	    property {
+	        conflicting_ind_types:  [0x04, 0x11, 0x17];
+        }
+    }
 }
 
 item (FEAT_INDUSTRIES, Diamondmine) {
@@ -478,14 +743,48 @@ item (FEAT_INDUSTRIES, Diamondmine) {
 		conflicting_ind_types:	[0x17, 0x10];
 		cargo_types:            [produce_cargo("DIAM", 9), produce_cargo("GRVL", 6)];
 	}
+	graphics {
+	    location_check:         check_nearby_industry_start_17;
+    }
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("DIAM", 0), produce_cargo("GRVL", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_17;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(9+extra_callback_info2%4, 0x10), STORE_PERM(6+extra_callback_info2%3, 0x11), STORE_PERM(17, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_17;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
 }
 
 item (FEAT_INDUSTRIES, Ironmine) {
 	property {
 		conflicting_ind_types:	[0x06, 0x08];
-		min_cargo_distr:	    5;
+		//min_cargo_distr:	    5;
 		cargo_types:            [produce_cargo("IORE", 10), produce_cargo("GRVL", 6)];
 	}
+	graphics {
+	    location_check:         check_nearby_industry_start_18;
+    }
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("IORE", 0), produce_cargo("GRVL", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_18;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(10+extra_callback_info2%4, 0x10), STORE_PERM(6+extra_callback_info2%3, 0x11), STORE_PERM(18, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_18;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
 }
 
 item (FEAT_INDUSTRYTILES, jrfruitfarm_tile_1, 0x74) {
@@ -499,7 +798,25 @@ item (FEAT_INDUSTRYTILES, jrfruitfarm_tile_1, 0x74) {
 	}
 }
 
-item (FEAT_INDUSTRIES, Fruitplant) { graphics { location_check: farm_fruit_check_location; } }
+item (FEAT_INDUSTRIES, Fruitplant) {
+    graphics {
+        location_check: check_nearby_industry_start_19; /*farm_fruit_check_location;*/
+    }
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("FRUT", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_19;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(10+extra_callback_info2%4, 0x10), STORE_PERM(0, 0x11), STORE_PERM(19, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_19;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
+}
 
 item (FEAT_INDUSTRYTILES, jrrubberfarm_tile_1, 0x75) {
 	property {
@@ -517,21 +834,53 @@ item (FEAT_INDUSTRIES, Rubberplant) {
 		conflicting_ind_types:	[0x04];
 	}
 	graphics {
-		location_check:		location_switch_no_desert;
+		location_check:		check_nearby_industry_start_20; //location_switch_no_desert;
 	}
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("RUBR", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_20;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(10+extra_callback_info2%4, 0x10), STORE_PERM(0, 0x11), STORE_PERM(20, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_20;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
 }
 
 item (FEAT_INDUSTRIES, Watersupply) {
+    property {
+        conflicting_ind_types:	[0xA5, 0xA6];
+    }
 	graphics {
-		location_check:		location_switch_desert;
-		colour:			(founder == 16) ? COLOUR_LIGHT_BLUE : founder_colour1;
+		location_check:		check_nearby_industry_start_21; //location_switch_desert;
+		colour: 			(founder == 16) ? COLOUR_LIGHT_BLUE : founder_colour1;
 	}
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("WATR", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_21;
+            colour: 			    (founder == 16) ? COLOUR_LIGHT_BLUE : founder_colour1;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(12+extra_callback_info2%5, 0x10), STORE_PERM(0, 0x11), STORE_PERM(21, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_21;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
 }
 
 /*
 item (FEAT_INDUSTRIES, Watertower) {
 	graphics {
-		location_check:		location_switch_desert;
+		location_check:		check_nearby_industry_start_22; //location_switch_desert;
 		colour:			(founder == 16) ? COLOUR_LIGHT_BLUE : founder_colour1;
 	}
 }
@@ -541,7 +890,8 @@ item (FEAT_INDUSTRYTILES, jrfactorytropic_tile_1, 0x79) {
 	property {
 		substitute:		0x79;
 		override:		0x79;
-		special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		//special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		accepted_cargos:    [[DIAM, 8], [COPR, 8], [RFPR, 8], [WOOD, 8], [PLST, 8], [GRVL, 8]];
 	}
 }
 
@@ -549,7 +899,8 @@ item (FEAT_INDUSTRYTILES, jrfactorytropic_tile_2, 0x7A) {
 	property {
 		substitute:		0x7A;
 		override:		0x7A;
-		special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		//special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		accepted_cargos:    [[DIAM, 8], [COPR, 8], [RFPR, 8], [WOOD, 8], [PLST, 8], [GRVL, 8]];
 	}
 }
 
@@ -557,7 +908,8 @@ item (FEAT_INDUSTRYTILES, jrfactorytropic_tile_3, 0x7B) {
 	property {
 		substitute:		0x7B;
 		override:		0x7B;
-		special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		//special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		accepted_cargos:    [[DIAM, 8], [COPR, 8], [RFPR, 8], [WOOD, 8], [PLST, 8], [GRVL, 8]];
 	}
 }
 
@@ -565,13 +917,14 @@ item (FEAT_INDUSTRYTILES, jrfactorytropic_tile_4, 0x7C) {
 	property {
 		substitute:		0x7C;
 		override:		0x7C;
-		special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		//special_flags:  bitmask(INDTILE_FLAG_ACCEPT_ALL);
+		accepted_cargos:    [[DIAM, 8], [COPR, 8], [RFPR, 8], [WOOD, 8], [PLST, 8], [GRVL, 8]];
 	}
 }
 
 item (FEAT_INDUSTRIES, FactoryTrop) {
 	property {
-		min_cargo_distr:	5;
+		//min_cargo_distr:	5;
 		cargo_types:        [
 		                    accept_cargo("DIAM", produce_cargo("GOOD", 0.25), produce_cargo("BDMT", 0.25), produce_cargo("VALU", 0.50)),
 		                    accept_cargo("COPR", produce_cargo("GOOD", 0.75), produce_cargo("BDMT", 0.75)),
@@ -582,19 +935,37 @@ item (FEAT_INDUSTRIES, FactoryTrop) {
 		                    ];
 	}
 	graphics {
-		location_check:		factory_check_location;
+		location_check:		check_nearby_industry_start_23; //factory_check_location;
 		colour:			    (founder == 16) ? COLOUR_GREEN : founder_colour1;
 	}
 }
 
-item (FEAT_INDUSTRIES, FarmTrop) { graphics { location_check: farm_fruit_check_location; } }
+item (FEAT_INDUSTRIES, FarmTrop) {
+    graphics {
+        location_check: check_nearby_industry_start_24; /*farm_fruit_check_location;*/
+    }
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("MAIZ", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_24;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(11+extra_callback_info2%4, 0x10), STORE_PERM(0, 0x11), STORE_PERM(24, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_24;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
+}
 
 item (FEAT_INDUSTRIES, Lumbermill) {
 	property {
 		conflicting_ind_types:	[0x01, 0x04, 0x17];
 	}
 	graphics {
-		location_check:		location_switch_lumber_mill;
+		location_check:		check_nearby_industry_start_25; //location_switch_lumber_mill;
 	}
 }
 
@@ -668,7 +1039,7 @@ switch (FEAT_INDUSTRIES, SELF, industry_foodplant_produce_256, climate) {
 
 item (FEAT_INDUSTRIES, Foodplant) {
 	property {
-		min_cargo_distr:	5;
+		//min_cargo_distr:	5;
 		cargo_types:        [accept_cargo("GRAI"), accept_cargo("RFPR"), accept_cargo("LVST"), produce_cargo("FOOD", 0), produce_cargo("BEER", 0)];
 		prob_map_gen:		5; // needed for temperate
 		prob_in_game:		5; // needed for temperate
@@ -684,7 +1055,7 @@ item (FEAT_INDUSTRIES, Foodplant) {
 		}
 	}
 	graphics {
-		location_check:		food_proc_plant_check_location;
+		location_check:		check_nearby_industry_start_13; //food_proc_plant_check_location;
 		produce_256_ticks:  industry_foodplant_produce_256;
 		colour:			    (founder == 16) ? COLOUR_DARK_GREEN : founder_colour1;
 	}
@@ -705,7 +1076,8 @@ produce(industry_steelmill_burn_coal, [COAL: param_burn_rate;], [], 0)
 
 produce(industry_steelmill_produce, [IORE: [STORE_PERM(LOAD_PERM(8)+LOAD_PERM(4), 8), LOAD_PERM(4)]; COAL: [STORE_PERM(LOAD_PERM(9)+LOAD_PERM(4)/2, 9), LOAD_PERM(4)/2];], [STEL: [STORE_PERM(LOAD_PERM(10)+(125*LOAD_PERM(4)+50)/100, 10), (125*LOAD_PERM(4)+50)/100];], 0)
 
-switch (FEAT_INDUSTRIES, SELF, industry_steelmill_produce_256, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("IORE"), incoming_cargo_waiting("COAL")*2), 4), incoming_cargo_waiting("IORE")*incoming_cargo_waiting("COAL")]) {
+//switch (FEAT_INDUSTRIES, SELF, industry_steelmill_produce_256, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("IORE"), incoming_cargo_waiting("COAL")*2), 4), incoming_cargo_waiting("IORE")*incoming_cargo_waiting("COAL")]) {
+switch (FEAT_INDUSTRIES, SELF, industry_steelmill_produce_256, [STORE_PERM(min(incoming_cargo_waiting("IORE"), incoming_cargo_waiting("COAL")*2), 4), incoming_cargo_waiting("IORE")*incoming_cargo_waiting("COAL")]) {
     0: industry_steelmill_burn_coal;
     industry_steelmill_produce;
 }
@@ -731,11 +1103,11 @@ item (FEAT_INDUSTRYTILES, jrsteelmillcoal_tile_1, 0x38) {
 
 item (FEAT_INDUSTRIES, Steelmill) {
 	property {
-		min_cargo_distr:	5;
+		//min_cargo_distr:	5;
 		cargo_types:        [accept_cargo("IORE"), accept_cargo("COAL"), produce_cargo("STEL", 0)];
 	}
 	graphics {
-		location_check:		steel_mill_check_location;
+		location_check:		check_nearby_industry_start_8; //steel_mill_check_location;
 		produce_256_ticks:  industry_steelmill_produce_256;
 		colour:			    (founder == 16) ? COLOUR_GREY : founder_colour1;
 	}
@@ -762,11 +1134,11 @@ item (FEAT_INDUSTRYTILES, jrpapermillrfpr_tile_2, 0x47) {
 item (FEAT_INDUSTRIES, Papermill) {
 	property {
 		conflicting_ind_types:	[0x03, 0x04, 0x07];
-		min_cargo_distr:	    5;
+		//min_cargo_distr:	    5;
 		cargo_types:            [accept_cargo("WOOD"), accept_cargo("RFPR"), produce_cargo("PAPR", 0)];
 	}
 	graphics {
-		location_check:		paper_mill_check_location;
+		location_check:		check_nearby_industry_start_14; //paper_mill_check_location;
 		produce_256_ticks:  industry_papermill_produce_256;
 	}
 }
@@ -808,8 +1180,8 @@ item (FEAT_INDUSTRYTILES, jrbanktemp_tile_2, 0x3B) {
 
 item (FEAT_INDUSTRIES, BankTemp) {
 	property {
-		conflicting_ind_types:	[0x06, 0x0C];
-		min_cargo_distr:	    5;
+		conflicting_ind_types:	[0x06, 0x08, 0x0C];
+		//min_cargo_distr:	    5;
 		cargo_types:            [accept_cargo("VALU"), accept_cargo("STEL"), produce_cargo("VALU", 0)];
 		prob_map_gen:		    1; // default = 0
 	}
@@ -1067,8 +1439,22 @@ item (FEAT_INDUSTRIES, Forest) {
 		prob_in_game:   (climate == CLIMATE_TROPIC) ? 2 : 5; // default = 3 temperate, 4 arctic, 0 tropic
 	}
 	graphics {
-		location_check:		forest_check_location;
+		location_check:		check_nearby_industry_start_3; //forest_check_location;
 	}
+	if (param_enable_altprod) {
+	    property {
+	        life_type:      IND_LIFE_TYPE_BLACK_HOLE;
+	        cargo_types:    [produce_cargo("WOOD", 0)];
+        }
+        graphics {
+            location_check:		    check_nearby_industry_start_3;
+            build_prod_change:      [STORE_PERM(0, 0x0F), STORE_PERM(13+extra_callback_info2%5, 0x10), STORE_PERM(0, 0x11), STORE_PERM(3, 0x13), 16];
+            monthly_prod_change:    do_prod_change;
+            random_prod_change:     return CB_RESULT_IND_PROD_NO_CHANGE;
+            produce_256_ticks:      produce_256_ticks_3;
+            extra_text_industry:	primary_prod_level_text;
+        }
+    }
 }
 
 // jrook 20200306
