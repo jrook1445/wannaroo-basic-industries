@@ -300,8 +300,8 @@ switch (FEAT_INDUSTRIES, SELF, do_prod_change_2, extra_callback_info2 < 0) {
 // is the industry initialised? (has any cargo been transported?)
 //switch (FEAT_INDUSTRIES, SELF, do_prod_change, [STORE_PERM( abs(getbits(extra_callback_info2, 0, 3)), 0x0C), STORE_PERM(production_level, 0x0D), STORE_PERM(check_transported_last_month_pct(), 0x0E), STORE_PERM(check_last_month_transported(), 0x0F), LOAD_PERM(0x0F)]) {
 //switch (FEAT_INDUSTRIES, SELF, do_prod_change, [STORE_PERM( abs(getbits(extra_callback_info2, 0, 3)), 0x0C), STORE_PERM(production_level, 0x0D), STORE_PERM(check_transported_last_month_pct(), 0x0E), STORE_PERM(check_transported_last_month_pct()>0, 0x0F), LOAD_PERM(0x0F)]) {
-switch (FEAT_INDUSTRIES, SELF, do_prod_change, [STORE_PERM( abs(getbits(extra_callback_info2, 0, 3)), 0x0C), STORE_PERM(check_transported_last_month_pct(), 0x0E), STORE_PERM(check_transported_last_month_pct()>0, 0x0F), LOAD_PERM(0x0F)]) {
-    0: return CB_RESULT_IND_PROD_NO_CHANGE;
+switch (FEAT_INDUSTRIES, SELF, do_prod_change, [STORE_PERM( abs(getbits(extra_callback_info2, 0, 3)), 0x0C), STORE_PERM(check_transported_last_month_pct(), 0x0E), ( LOAD_PERM(0x0F)==0 ? STORE_PERM(check_transported_last_month_pct()>0, 0x0F) : 0 ), LOAD_PERM(0x0F)]) {
+    0: return CB_RESULT_IND_PROD_NO_CHANGE; // industry not initialised, so no need to do a production change
     1: do_prod_change_2;
     //do_prod_change_2;
 }
@@ -446,7 +446,8 @@ produce(industry_refinery_produce_copr, [CORE: [STORE_PERM(LOAD_PERM(8)+LOAD_PER
                                          PETR: incoming_cargo_waiting("WOOD")/4;
                                          PLST: incoming_cargo_waiting("WOOD")/2 + incoming_cargo_waiting("RUBR")/2;], 0)
 
-switch (FEAT_INDUSTRIES, SELF, industry_refinery_produce_256, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("CORE"), incoming_cargo_waiting("OIL_")*2), 4), incoming_cargo_waiting("CORE")*incoming_cargo_waiting("OIL_")]) {
+//switch (FEAT_INDUSTRIES, SELF, industry_refinery_produce_256, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("CORE"), incoming_cargo_waiting("OIL_")*2), 4), incoming_cargo_waiting("CORE")*incoming_cargo_waiting("OIL_")]) {
+switch (FEAT_INDUSTRIES, SELF, industry_refinery_produce_256, [STORE_PERM(min(incoming_cargo_waiting("CORE"), incoming_cargo_waiting("OIL_")*2), 4), incoming_cargo_waiting("CORE")*incoming_cargo_waiting("OIL_")]) {
     0: industry_refinery_produce_no_copr;
     industry_refinery_produce_copr;
 }
@@ -1008,7 +1009,8 @@ produce(industry_foodplant_temp_produce_food, [GRAI: incoming_cargo_waiting("GRA
 
 produce(industry_foodplant_temp_produce_beer, [GRAI: LOAD_PERM(4); RFPR: LOAD_PERM(4)/2; LVST: incoming_cargo_waiting("LVST");], [BEER: (125*LOAD_PERM(4)+50)/100; FOOD: incoming_cargo_waiting("LVST");], 0)
 
-switch (FEAT_INDUSTRIES, SELF, industry_foodplant_temp_produce_1, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("GRAI"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("GRAI")*incoming_cargo_waiting("RFPR")]) {
+//switch (FEAT_INDUSTRIES, SELF, industry_foodplant_temp_produce_1, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("GRAI"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("GRAI")*incoming_cargo_waiting("RFPR")]) {
+switch (FEAT_INDUSTRIES, SELF, industry_foodplant_temp_produce_1, [STORE_PERM(min(incoming_cargo_waiting("GRAI"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("GRAI")*incoming_cargo_waiting("RFPR")]) {
     0: industry_foodplant_temp_produce_food;
     industry_foodplant_temp_produce_beer;
 }
@@ -1017,7 +1019,8 @@ produce(industry_foodplant_arctic_produce_food, [LVST: incoming_cargo_waiting("L
 
 produce(industry_foodplant_arctic_produce_beer, [WHEA: LOAD_PERM(4); RFPR: LOAD_PERM(4)/2; LVST: incoming_cargo_waiting("LVST");], [BEER: (125*LOAD_PERM(4)+50)/100; FOOD: incoming_cargo_waiting("LVST");], 0)
 
-switch (FEAT_INDUSTRIES, SELF, industry_foodplant_arctic_produce_1, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("WHEA"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("WHEA")*incoming_cargo_waiting("RFPR")]) {
+//switch (FEAT_INDUSTRIES, SELF, industry_foodplant_arctic_produce_1, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("WHEA"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("WHEA")*incoming_cargo_waiting("RFPR")]) {
+switch (FEAT_INDUSTRIES, SELF, industry_foodplant_arctic_produce_1, [STORE_PERM(min(incoming_cargo_waiting("WHEA"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("WHEA")*incoming_cargo_waiting("RFPR")]) {
     0: industry_foodplant_arctic_produce_food;
     industry_foodplant_arctic_produce_beer;
 }
@@ -1026,7 +1029,8 @@ produce(industry_foodplant_tropic_produce_food, [RFPR: param_burn_rate; MAIZ: in
 
 produce(industry_foodplant_tropic_produce_beer, [MAIZ: LOAD_PERM(4); RFPR: LOAD_PERM(4)/2; FRUT: incoming_cargo_waiting("FRUT");], [BEER: (125*LOAD_PERM(4)+50)/100; FOOD: incoming_cargo_waiting("FRUT");], 0)
 
-switch (FEAT_INDUSTRIES, SELF, industry_foodplant_tropic_produce_1, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("MAIZ"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("MAIZ")*incoming_cargo_waiting("RFPR")]) {
+//switch (FEAT_INDUSTRIES, SELF, industry_foodplant_tropic_produce_1, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("MAIZ"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("MAIZ")*incoming_cargo_waiting("RFPR")]) {
+switch (FEAT_INDUSTRIES, SELF, industry_foodplant_tropic_produce_1, [STORE_PERM(min(incoming_cargo_waiting("MAIZ"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("MAIZ")*incoming_cargo_waiting("RFPR")]) {
     0: industry_foodplant_tropic_produce_food;
     industry_foodplant_tropic_produce_beer;
 }
@@ -1086,7 +1090,8 @@ produce(industry_papermill_burn_rfpr, [RFPR: param_burn_rate;], [], 0)
 
 produce(industry_papermill_produce, [WOOD: [STORE_PERM(LOAD_PERM(8)+LOAD_PERM(4), 8), LOAD_PERM(4)]; RFPR: [STORE_PERM(LOAD_PERM(9)+LOAD_PERM(4)/2, 9), LOAD_PERM(4)/2];], [PAPR: [STORE_PERM(LOAD_PERM(10)+(125*LOAD_PERM(4)+50)/100, 10), (125*LOAD_PERM(4)+50)/100];], 0)
 
-switch (FEAT_INDUSTRIES, SELF, industry_papermill_produce_256, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("WOOD"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("WOOD")*incoming_cargo_waiting("RFPR")]) {
+//switch (FEAT_INDUSTRIES, SELF, industry_papermill_produce_256, [STORE_PERM(1, 0), STORE_PERM(min(incoming_cargo_waiting("WOOD"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("WOOD")*incoming_cargo_waiting("RFPR")]) {
+switch (FEAT_INDUSTRIES, SELF, industry_papermill_produce_256, [STORE_PERM(min(incoming_cargo_waiting("WOOD"), incoming_cargo_waiting("RFPR")*2), 4), incoming_cargo_waiting("WOOD")*incoming_cargo_waiting("RFPR")]) {
     0: industry_papermill_burn_rfpr;
     industry_papermill_produce;
 }

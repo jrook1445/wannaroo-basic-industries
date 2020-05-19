@@ -19,6 +19,7 @@ max_industries = max((map_size / (256 * 256)) * 3, 2);
 #define IND_LUMBER_MILL		0x01, str2number("jdr\04")
 #define IND_DISTILLERY		0x02, str2number("jdr\04")
 #define IND_PETROL_PLANT	0x03, str2number("jdr\04")
+//#define IND_DESAL_PLANT - do this one later if needed; tile_check: tile_industry_check_1 already being done on wide tank tile
 #define IND_HOTEL		    0x00, str2number("jdr\02")
 
 switch (FEAT_INDUSTRIES, PARENT, town_below_500, population) {
@@ -624,14 +625,16 @@ switch (FEAT_INDUSTRIES, SELF, forest_min_distance_petrol_plant, industry_distan
         location_switch_no_desert;
 }
 
+/*
 switch (FEAT_INDUSTRIES, SELF, forest_min_distance_dist_center, industry_distance(IND_DIST_CENTER)) {
         0..16: return CB_RESULT_LOCATION_DISALLOW;
         forest_min_distance_petrol_plant;
 }
+*/
 
 switch (FEAT_INDUSTRIES, SELF, forest_min_distance_factory_tropic, industry_distance(0x17)) {
         0..16: return CB_RESULT_LOCATION_DISALLOW;
-        forest_min_distance_dist_center;
+        forest_min_distance_petrol_plant;
 }
 
 switch (FEAT_INDUSTRIES, SELF, forest_min_distance_power_plant, industry_distance(0x01)) {

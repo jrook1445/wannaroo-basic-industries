@@ -179,6 +179,7 @@ if (param_enable_rcyc && (climate != CLIMATE_TOYLAND)) {
 			construction_probability:	rcyc_intro_year;
 			produce_256_ticks:          RCYC_produce_1_cargo_1;
 			monthly_prod_change:	    RCYC_production_change_1;
+			random_prod_change:         return CB_RESULT_IND_PROD_NO_CHANGE;
 		}
 	}
 
@@ -208,6 +209,7 @@ if (param_enable_rcyc && (climate != CLIMATE_TOYLAND)) {
 			construction_probability:	rcyc_intro_year;
 			produce_256_ticks:	        rcyc_plant_produce_256;
 			monthly_prod_change:        rcyc_plant_monthly_prod_change;
+			random_prod_change:         return CB_RESULT_IND_PROD_NO_CHANGE;
 		}
 	}
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # change the value of NMLC to reference your own nmlc installation
 #NMLC="pyrun $HOME/Downloads/openttd/nml-0.5.0/nmlc"
-NMLC="pyrun $HOME/Downloads/openttd/nml-0.5.1/nmlc"
+NMLC="pyrun $HOME/Downloads/openttd/nml-0.5.2/nmlc"
 ./clean.sh
 mkdir wannaroo-basic-industries
 gcc -C -E -nostdinc -x c-header wannaroo-basic-industries.pnml > wannaroo-basic-industries.nml

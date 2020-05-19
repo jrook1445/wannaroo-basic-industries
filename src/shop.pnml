@@ -55,6 +55,7 @@ item(FEAT_INDUSTRIES, industry_shop, 0x25) {
 	}
 	graphics {
 		location_check:			        check_nearby_industry_start_37; //shop_check_location;
+		monthly_prod_change:            return CB_RESULT_IND_PROD_NO_CHANGE;
 		random_prod_change:             close_if_superstore_in_town; // if a superstore has been built in this town, then close the shop
 	}
 }
