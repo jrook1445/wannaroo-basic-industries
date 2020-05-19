@@ -48,7 +48,7 @@ NewGRF for OpenTTD - Industry set based on frosch's Manual Industries 2r5. Suppo
     2) update sprite numbers in docs/wrbi_house_defaults_food_good_bdmt_all_climates.ods
     3) copy/paste house sprites into houses.nfo
 
-    I built this newgrf on Linux Mint 19.3 using gcc version 7.5.0, NML version master @ 9-May-2020, and grfcodec version 6.0.6 r991.
+    I built this newgrf on Linux Mint 19.3 using gcc version 7.5.0, NML version 0.5.2, and grfcodec version 6.0.6 r991.
 
     Translations gladly accepted. Please open an issue on GitHub (https://github.com/jrook1445/wannaroo-basic-industries) and attach your lang file so I can include it in a release.
 
