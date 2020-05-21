@@ -47,7 +47,7 @@ STR_PARAM_ENABLE_RCYC                                           :Recycling Chain
 STR_PARAM_ENABLE_RCYC_DESC                                      :available from 1950
 
 STR_PARAM_ENABLE_HOUSES                                         :Modified Houses
-STR_PARAM_ENABLE_HOUSES_DESC                                    :On: Default houses accept food (temperate), building materials (all climates), water (tropic).{}{}Muted colours on house IDs 17, 50-55.
+STR_PARAM_ENABLE_HOUSES_DESC                                    :On: Default houses accept food (all climates), building materials (all climates), water (tropic).{}Muted colours on house IDs 17, 50-55.{}{}Off: Water in tropic is only accepted by Shop & Superstore. Also if you want to use other town sets exclusively.
 
 STR_PARAM_ENABLE_ALTPROD                                        :Alternate Production
 STR_PARAM_ENABLE_ALTPROD_DESC                                   :On: Primary industry production will change, but industries will not close.{}{}After the initial cargo pickup at an industry, there is a 1/2 chance of a monthly production change:{}{}Transported % > 64% => 3/8 chance increase, 1/8 chance decrease, 1/2 chance no change.{}{}Otherwise: 3/8 chance decrease, 1/8 chance increase, 1/2 chance no change.{}{}min production = 1/4 default, max production = 8x default{}{}Note: this setting overrides 'Production changes/closure of primary industries' and oil wells settings.

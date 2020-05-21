@@ -1,5 +1,14 @@
 Wannaroo Basic Industries (WRBI)
 
+1.1.0 - 2020-05-20
+-----------------------------------------------------------
+* Alternate Production: allow primary production changes without industry closure
+* Superstore: produce/accept tourists (if tourists available in-game)
+* Houses: parameter to disable modified houses
+* Recycling Chain: either Depot or Plant in a town, but not both
+* Improved minimum distance between industries
+* bug fixes
+
 1.0 - 2020-04-29
 -----------------------------------------------------------
 Initial release
