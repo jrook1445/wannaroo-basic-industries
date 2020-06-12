@@ -36,13 +36,13 @@ tilelayout jrrcycplant_tilelayout1 {
 
 /* RCYC production */
 
-produce (RCYC_produce_1_cargo_a, [], [RCYC: LOAD_PERM(0x02);], 0)
-produce (RCYC_produce_1_cargo_b, [], [RCYC: LOAD_PERM(0x02)-3;], 0)
-produce (RCYC_produce_1_cargo_c, [], [RCYC: LOAD_PERM(0x02)-2;], 0)
-produce (RCYC_produce_1_cargo_d, [], [RCYC: LOAD_PERM(0x02)-1;], 0)
-produce (RCYC_produce_1_cargo_e, [], [RCYC: LOAD_PERM(0x02)+1;], 0)
-produce (RCYC_produce_1_cargo_f, [], [RCYC: LOAD_PERM(0x02)+2;], 0)
-produce (RCYC_produce_1_cargo_g, [], [RCYC: LOAD_PERM(0x02)+3;], 0)
+produce (RCYC_produce_1_cargo_a, [], [RCYC: min(LOAD_PERM(0x02), param_max_rcyc_prod_rate);], 0)
+produce (RCYC_produce_1_cargo_b, [], [RCYC: min(LOAD_PERM(0x02)-3, param_max_rcyc_prod_rate-3);], 0)
+produce (RCYC_produce_1_cargo_c, [], [RCYC: min(LOAD_PERM(0x02)-2, param_max_rcyc_prod_rate-2);], 0)
+produce (RCYC_produce_1_cargo_d, [], [RCYC: min(LOAD_PERM(0x02)-1, param_max_rcyc_prod_rate-1);], 0)
+produce (RCYC_produce_1_cargo_e, [], [RCYC: min(LOAD_PERM(0x02)+1, param_max_rcyc_prod_rate+1);], 0)
+produce (RCYC_produce_1_cargo_f, [], [RCYC: min(LOAD_PERM(0x02)+2, param_max_rcyc_prod_rate+2);], 0)
+produce (RCYC_produce_1_cargo_g, [], [RCYC: min(LOAD_PERM(0x02)+3, param_max_rcyc_prod_rate+3);], 0)
 
 // RCYC depot produce_256_ticks
 switch (FEAT_INDUSTRIES, SELF, RCYC_produce_1_cargo_1, LOAD_PERM(0x01)) {
@@ -139,7 +139,7 @@ switch (FEAT_INDUSTRIES, SELF, rcyc_plant_produce_climate, climate) {
 
 switch (FEAT_INDUSTRIES, SELF, rcyc_plant_produce_256, LOAD_PERM(1)) {
     0..49:  rcyc_plant_produce_waste;
-    50..66: rcyc_plant_produce_plastic;
+    50..64: rcyc_plant_produce_plastic;
     rcyc_plant_produce_climate;
 }
 

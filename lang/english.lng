@@ -55,6 +55,12 @@ STR_PARAM_ENABLE_ALTPROD_DESC                                   :On: Primary ind
 STR_PARAM_MAX_PROD_LEVEL                                        :Max Prod Level
 STR_PARAM_MAX_PROD_LEVEL_DESC                                   :Maximum production level for Alternate Production. 16 is the base production level, 32 = 2x, 48 = 3x, etc.{}{}default 48, max 128, min 32
 
+STR_PARAM_NAME_BANK_TEMP_MAX_PROD                               :Max Temperate Bank prod rate
+STR_PARAM_DESC_BANK_TEMP_MAX_PROD                               :Maximum valuables produced each production tick: default 32, max 255, min 16.{}{}VALU production will be the minimum of either the population-based rate or this parameter.
+
+STR_PARAM_NAME_RCYC_MAX_PROD                                    :Max RCYC prod rate
+STR_PARAM_DESC_RCYC_MAX_PROD                                    :Maximum recyclables produced each production tick: default 64, max 255, min 16.{}{}RCYC production will be the minimum of either the population-based rate or this parameter.
+
 STR_STATION_NAME			                        			:{STRING} New Station Name
 
 STR_STATION_NAME_0x00		                                    :{STRING} Coal Mine

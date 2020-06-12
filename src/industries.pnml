@@ -198,6 +198,11 @@ switch (FEAT_INDUSTRIES, SELF, produce_256_ticks_farm, climate) {
 
 // 3/8 chance increase, 1/8 chance decrease, 4/8 chance no change
 // max production_level is param_max_prod_level, max 128
+switch (FEAT_INDUSTRIES, SELF, prod_change_increase_3, LOAD_PERM(0x0C)) {
+    0: return [STORE_PERM(-1, 0x16), CB_RESULT_IND_PROD_DECREMENT_BY_1];
+    return [STORE_PERM(0, 0x16), CB_RESULT_IND_PROD_NO_CHANGE];
+}
+
 switch (FEAT_INDUSTRIES, SELF, prod_change_increase_2, LOAD_PERM(0x0C)) {
     0: return [STORE_PERM(-1, 0x16), CB_RESULT_IND_PROD_DECREMENT_BY_1];
     1..3: return [STORE_PERM(1, 0x16), CB_RESULT_IND_PROD_INCREMENT_BY_1];
@@ -205,12 +210,19 @@ switch (FEAT_INDUSTRIES, SELF, prod_change_increase_2, LOAD_PERM(0x0C)) {
 }
 
 switch (FEAT_INDUSTRIES, SELF, prod_change_increase, production_level) {
-    param_max_prod_level: return [STORE_PERM(0, 0x16), CB_RESULT_IND_PROD_NO_CHANGE];
+    (param_max_prod_level+1)..128: return [STORE_PERM(-1, 0x16), CB_RESULT_IND_PROD_DECREMENT_BY_1];
+    //param_max_prod_level: return [STORE_PERM(0, 0x16), CB_RESULT_IND_PROD_NO_CHANGE];
+    param_max_prod_level: prod_change_increase_3;
     prod_change_increase_2;
 }
 
 // 3/8 chance decrease, 1/8 chance increase, 4/8 chance no change
 // min production_level is 4 (1/4 of default) so industry should not close
+switch (FEAT_INDUSTRIES, SELF, prod_change_decrease_3, LOAD_PERM(0x0C)) {
+    0: return [STORE_PERM(1, 0x16), CB_RESULT_IND_PROD_INCREMENT_BY_1];
+    return [STORE_PERM(0, 0x16), CB_RESULT_IND_PROD_NO_CHANGE];
+}
+
 switch (FEAT_INDUSTRIES, SELF, prod_change_decrease_2, LOAD_PERM(0x0C)) {
     0: return [STORE_PERM(1, 0x16), CB_RESULT_IND_PROD_INCREMENT_BY_1];
     1..3: return [STORE_PERM(-1, 0x16), CB_RESULT_IND_PROD_DECREMENT_BY_1];
@@ -219,7 +231,8 @@ switch (FEAT_INDUSTRIES, SELF, prod_change_decrease_2, LOAD_PERM(0x0C)) {
 }
 
 switch (FEAT_INDUSTRIES, SELF, prod_change_decrease, production_level) {
-    0..4: return [STORE_PERM(0, 0x16), CB_RESULT_IND_PROD_NO_CHANGE];
+    //0..4: return [STORE_PERM(0, 0x16), CB_RESULT_IND_PROD_NO_CHANGE];
+    0..4: prod_change_decrease_3;
     prod_change_decrease_2;
 }
 
@@ -730,7 +743,8 @@ item (FEAT_INDUSTRIES, BankSub) {
 	property {
 		conflicting_ind_types:	[0x07, 0x0E, 0x0F];
 		//min_cargo_distr:	    5;
-		cargo_types:            [accept_cargo("VALU"), accept_cargo("GOLD", produce_cargo("VALU", 0.5)), accept_cargo("DIAM", produce_cargo("VALU", 0.5)), accept_cargo("PAPR", produce_cargo("VALU", 0.5)), accept_cargo("COPR", produce_cargo("VALU", 0.5))];
+		//cargo_types:            [accept_cargo("VALU"), accept_cargo("GOLD", produce_cargo("VALU", 0.5)), accept_cargo("DIAM", produce_cargo("VALU", 0.5)), accept_cargo("PAPR", produce_cargo("VALU", 0.5)), accept_cargo("COPR", produce_cargo("VALU", 0.5))];
+		cargo_types:            [accept_cargo("VALU", produce_cargo("VALU", 0.25)), accept_cargo("GOLD", produce_cargo("VALU", 0.5)), accept_cargo("DIAM", produce_cargo("VALU", 0.5)), accept_cargo("PAPR", produce_cargo("VALU", 0.5)), accept_cargo("COPR", produce_cargo("VALU", 0.5))];
 	}
 	if (climate == CLIMATE_TROPIC) {
 	    property {
@@ -1161,7 +1175,7 @@ produce(industry_banktemp_produce_cargo_arrival, [VALU: incoming_cargo_waiting("
 // min monthly prod = 32
 // store population in 0x01 for debug
 //produce(industry_banktemp_do_produce_256, 0, 0, 0, max((LOAD_TEMP(1)+1)/1024, 4), 0, [STORE_PERM(LOAD_TEMP(1), 0x01), 0]);
-produce(industry_banktemp_do_produce_256, [], [VALU: max((LOAD_TEMP(1)+1)/1024, 4);], 0)
+produce(industry_banktemp_do_produce_256, [], [VALU: min(max((LOAD_TEMP(1)+1)/1024, 4), param_max_bank_temp_prod_rate);], 0)
 
 switch (FEAT_INDUSTRIES, PARENT, industry_banktemp_produce_256, STORE_TEMP(population, 1)) {
 	industry_banktemp_do_produce_256;

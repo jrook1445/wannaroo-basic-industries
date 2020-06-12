@@ -1,5 +1,16 @@
 Wannaroo Basic Industries (WRBI)
 
+1.2.0 - 2020-06-12
+-----------------------------------------------------------
+* Arctic/Tropic Bank: 4 VALU in => 1 VALU out, to be consistent with Temperate Bank
+* Temperate Bank: new parameter to cap population-based VALU production
+* Recycling Depot: new parameter to cap population-based RCYC production
+* Recycling Plant: WSTE transported % must be at least 65% to enable 3rd cargo production (was 67%)
+* Secondary/Black Hole Industries: try to ensure at least 1 industry each type
+  is built on map generation to avoid broken cargo chains (1 per 256x256 grid). Helpful for early
+  games and town sets that reduce town population.
+* Alternate Production: fix Max Prod Level parameter not being observed
+
 1.1.0 - 2020-05-20
 -----------------------------------------------------------
 * Alternate Production: allow primary production changes without industry closure

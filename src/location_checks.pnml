@@ -14,6 +14,10 @@
 // affects: shop, superstore, recycling chain
 max_industries = max((map_size / (256 * 256)) * 3, 2);
 
+// min number of secondary/black hole industries
+// used in population checks
+min_industries = max((map_size / (256 * 256)), 1) - 1;
+
 #define IND_DIST_CENTER		0x00, str2number("jdr\04")
 // jrook 20200513 - no min_distance checks yet for IND_LUMBER_MILL: TMWFTLB
 #define IND_LUMBER_MILL		0x01, str2number("jdr\04")
@@ -37,9 +41,14 @@ switch (FEAT_INDUSTRIES, PARENT, town_below_2000, population) {
 	return CB_RESULT_LOCATION_ALLOW;
 }
 
-switch (FEAT_INDUSTRIES, SELF, industry_population_check, climate) {
+switch (FEAT_INDUSTRIES, SELF, industry_population_check_2, climate) {
 	CLIMATE_TEMPERATE: town_below_1200;
 	town_below_500;
+}
+
+switch (FEAT_INDUSTRIES, SELF, industry_population_check, industry_count(LOAD_TEMP(15))) {
+    0..min_industries: return CB_RESULT_LOCATION_ALLOW;
+    industry_population_check_2;
 }
 
 switch (FEAT_INDUSTRIES, SELF, town_distance_check_30_40, town_euclidean_dist(0, 0)) {
@@ -66,7 +75,7 @@ switch (FEAT_INDUSTRIES, SELF, town_distance_check_20, town_euclidean_dist(0, 0)
 
 // location checks to replace default OpenTTD CHECK_FOREST, CHECK_OIL_RIG, CHECK_FARM, CHECK_PLANTATION, CHECK_WATER, CHECK_LUMBERMILL in industry_cmd.cpp
 // CHECK_REFINERY replaced by oil_refinery_water_distance
-// (oil_refinery_water_distance commented-out @ 20200513)
+// (oil_refinery_water_distance commented-out @ 20200513 => refineries can appear far from water)
 
 // CHECK_FOREST, CHECK_PLANTATION
 // we are allowing arctic forests below the snow line (to play very flat maps)
@@ -111,9 +120,14 @@ switch (FEAT_INDUSTRIES, SELF, location_switch_lumber_mill, ((extra_callback_inf
 }
 
 // Superstore location checks
-switch (FEAT_INDUSTRIES, SELF, superstore_town_population_check, climate) {
+switch (FEAT_INDUSTRIES, SELF, superstore_town_population_check_2, climate) {
 	CLIMATE_TEMPERATE: town_below_2000;
 	town_below_1200;
+}
+
+switch (FEAT_INDUSTRIES, SELF, superstore_town_population_check, industry_count(LOAD_TEMP(15))) {
+    0..min_industries: return CB_RESULT_LOCATION_ALLOW;
+    superstore_town_population_check_2;
 }
 
 /*
@@ -135,8 +149,10 @@ switch (FEAT_INDUSTRIES, SELF, superstore_check_location, ((extra_callback_info2
 }
 
 // Shop location checks
-switch (FEAT_INDUSTRIES, SELF, shop_town_population_check, climate) {
-	CLIMATE_TEMPERATE: town_below_500;
+//switch (FEAT_INDUSTRIES, SELF, shop_town_population_check, climate) {
+switch (FEAT_INDUSTRIES, SELF, shop_town_population_check, industry_count(LOAD_TEMP(15))) {
+	//CLIMATE_TEMPERATE: town_below_500;
+	0..min_industries: return CB_RESULT_LOCATION_ALLOW;
 	town_below_500;
 }
 
