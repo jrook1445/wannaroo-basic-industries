@@ -300,23 +300,22 @@ switch (FEAT_INDUSTRIES, SELF, check_transported_last_month_pct, LOAD_PERM(0x13)
 switch (FEAT_INDUSTRIES, SELF, do_prod_change_3, [STORE_PERM(current_date, 0x15), STORE_PERM(0, 0x16), check_transported_last_month_pct()]) {
     0..64: prod_change_decrease;
     prod_change_increase;
-    //prod_change_decrease;
 }
 
 // 50% chance of a production change
 switch (FEAT_INDUSTRIES, SELF, do_prod_change_2, extra_callback_info2 < 0) {
 	0: return CB_RESULT_IND_PROD_NO_CHANGE;
 	1: do_prod_change_3;
-	//do_prod_change_3;
+}
+
+switch (FEAT_INDUSTRIES, SELF, do_prod_change_1, [STORE_PERM( abs(getbits(extra_callback_info2, 0, 3)), 0x0C), STORE_PERM(check_transported_last_month_pct(), 0x0E), 1]) {
+    do_prod_change_2;
 }
 
 // is the industry initialised? (has any cargo been transported?)
-//switch (FEAT_INDUSTRIES, SELF, do_prod_change, [STORE_PERM( abs(getbits(extra_callback_info2, 0, 3)), 0x0C), STORE_PERM(production_level, 0x0D), STORE_PERM(check_transported_last_month_pct(), 0x0E), STORE_PERM(check_last_month_transported(), 0x0F), LOAD_PERM(0x0F)]) {
-//switch (FEAT_INDUSTRIES, SELF, do_prod_change, [STORE_PERM( abs(getbits(extra_callback_info2, 0, 3)), 0x0C), STORE_PERM(production_level, 0x0D), STORE_PERM(check_transported_last_month_pct(), 0x0E), STORE_PERM(check_transported_last_month_pct()>0, 0x0F), LOAD_PERM(0x0F)]) {
-switch (FEAT_INDUSTRIES, SELF, do_prod_change, [STORE_PERM( abs(getbits(extra_callback_info2, 0, 3)), 0x0C), STORE_PERM(check_transported_last_month_pct(), 0x0E), ( LOAD_PERM(0x0F)==0 ? STORE_PERM(check_transported_last_month_pct()>0, 0x0F) : 0 ), LOAD_PERM(0x0F)]) {
-    0: return CB_RESULT_IND_PROD_NO_CHANGE; // industry not initialised, so no need to do a production change
-    1: do_prod_change_2;
-    //do_prod_change_2;
+switch (FEAT_INDUSTRIES, SELF, do_prod_change, [ STORE_PERM( (LOAD_PERM(0x0F)==1 ? 1 : check_transported_last_month_pct()>0), 0x0F), LOAD_PERM(0x0F) ] ) {
+    1: do_prod_change_1; // industry is initialised
+    return CB_RESULT_IND_PROD_NO_CHANGE; // industry is not initialised, so no need to do a production change
 }
 
 // end alternate production
